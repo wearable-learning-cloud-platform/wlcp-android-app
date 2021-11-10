@@ -39,7 +39,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:autofillHints=""
         android:ems="10"
         android:hint="@string/game_pin_hint"
         android:inputType="number"
@@ -48,6 +47,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
         tools:ignore="TextContrastCheck,TextContrastCheck" />
+    <!--
+    Note - Francisco:
+    EditText autofillHints attribute is buggy in the current API level. Do not use at this time.
+    android:autofillHints=""
+    -->
 
     <Button
         android:id="@+id/button"
