@@ -10,6 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WearableLearning">
         <activity
+            android:name=".GameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.WearableLearning.NoActionBar" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

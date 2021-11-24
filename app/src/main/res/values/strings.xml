@@ -1,7 +1,25 @@
 <resources>
+    <!-- MainActivity -->
     <string name="app_name">WearableLearning</string>
     <string name="app_welcome_message">Welcome to WearableLearning!</string>
     <string name="game_pin_prompt">Enter a game PIN to get started</string>
     <string name="game_pin_hint">Game PIN</string>
+    <string name="game_pin_missing_error">Missing input. If you are a student, kindly ask your instructor for the game PIN. If you are an instructor, you can locate your game PIN using the Game Manager.</string>
+    <string name="game_pin_invalid_error">Invalid input. If you are a student, kindly ask your instructor for the game PIN. If you are an instructor, you can locate your game PIN using the Game Manager.</string>
     <string name="join_game_button_text">Join game</string>
+
+    <!-- LoginActivity -->
+    <string name="login_message">Join game with your:</string>
+    <string name="new_name_prompt">Enter your name</string>
+    <string name="new_name_hint">Name</string>
+    <string name="new_name_missing_error">Missing input. You must enter your name.</string>
+    <string name="existing_account_prompt">Enter your WearableLearning.org credentials</string>
+    <string name="user_name_hint">Username</string>
+    <string name="username_missing_error">Missing input. You must enter a valid username. If you do not have an account, you can play without an account by entering a name under the Name tab.</string>
+    <string name="password_hint">Password</string>
+    <string name="password_missing_error">Missing input. You must enter your password. If you do not have an account, you can play without an account by entering a name using the Name tab.</string>
+    <string name="username_password_error">Invalid username or password. Reenter your username and password, or play without an account by entering a name under the Name tab.</string>
+    <string name="login_tab_name">Name</string>
+    <string name="login_tab_account">WearableLearning account</string>
+    <string name="enter_game_button_text">Enter game</string>
 </resources>

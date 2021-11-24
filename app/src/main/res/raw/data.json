@@ -1,0 +1,13 @@
+{
+  "game_pins": [11,22],
+  "accounts": [
+    {
+      "username": "user1",
+      "password": "password1"
+    },
+    {
+      "username": "user2",
+      "password": "password2"
+    }
+  ]
+}
