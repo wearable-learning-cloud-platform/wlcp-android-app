@@ -16,6 +16,7 @@ import java.io.*
  * enter a game pin' screen).
  */
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // When a gamepin is being entered, hide all error messages.
+        // When a game pin is being entered, hide all error messages.
         editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
                 errorText.visibility = TextView.INVISIBLE
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Checks if the inputted value of the edit text is valid.
+     * Checks if the user input value of the edit text is valid.
      * @param editText: EditText
      * @return true if valid
      */
@@ -75,13 +76,13 @@ class MainActivity : AppCompatActivity() {
          */
         val validInputs: List<String> = StringUtils.getValuesFromJSON(resources, R.raw.data, "game_pins")
 
-        // Gamepin missing error.
+        // Game pin missing error.
         if(StringUtils.isEmptyOrBlank(input)) {
             errorText.text = getString(R.string.game_pin_missing_error)
             errorText.visibility = TextView.VISIBLE
             return false
         }
-        // Gamepin incorrect error.
+        // Game pin incorrect error.
         else if(!StringUtils.isStringInList(input, validInputs)) {
             errorText.text = getString(R.string.game_pin_invalid_error)
             errorText.visibility = TextView.VISIBLE
