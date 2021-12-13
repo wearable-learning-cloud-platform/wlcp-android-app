@@ -42,6 +42,20 @@
             app:layout_constraintTop_toBottomOf="@+id/loginNameText"
             tools:ignore="TextContrastCheck,TextContrastCheck" />
 
+        <TextView
+            android:id="@+id/error_tv2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/new_name_missing_error"
+            android:textAlignment="center"
+            android:textColor="#FF0000"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginNameEditText" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

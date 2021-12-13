@@ -1,6 +1,7 @@
 package com.example.wearablelearning
 
 import android.content.res.Resources
+import com.google.gson.Gson
 
 /**
  * String utility object.
@@ -84,5 +85,13 @@ object StringUtils {
         }
 
         return substr.split(delimiter)
+    }
+
+    @JvmStatic
+    fun parseJsonWithGson(jsonString: String): Map<String, Any> {
+        var map: Map<String, Any> = HashMap()
+        map = Gson().fromJson(jsonString, map.javaClass)
+
+        return map
     }
 }

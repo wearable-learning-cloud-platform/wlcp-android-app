@@ -3,8 +3,11 @@ package com.example.wearablelearning
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import java.io.*
 
 /**
@@ -20,15 +23,21 @@ class MainActivity : AppCompatActivity() {
         /**
          * The 'Join Game' button that triggers a switch from MainActivity to LoginActivity.
          */
-        val button: Button = findViewById(R.id.button)
+        val button: Button = findViewById(R.id.join_game_btn)
 
         /**
          * The edit text that accepts a number as the game pin.
          */
         val editText: EditText = findViewById(R.id.editText)
 
+        /**
+         * The error text that displays only if input is incorrect.
+         */
+        val errorText: TextView = findViewById(R.id.error_tv)
+
+        // When Join Game button is selected, check editText input and, if correct, switch activities.
         button.setOnClickListener {
-            if(checkInput(editText)) {
+            if(checkInput(editText, errorText)) {
                 /**
                  * The intent to switch activities from MainActivity to LoginActivity.
                  */
@@ -37,6 +46,17 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+
+        // When a gamepin is being entered, hide all error messages.
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                errorText.visibility = TextView.INVISIBLE
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+        })
     }
 
     /**
@@ -44,7 +64,7 @@ class MainActivity : AppCompatActivity() {
      * @param editText: EditText
      * @return true if valid
      */
-    private fun checkInput(editText: EditText): Boolean {
+    private fun checkInput(editText: EditText, errorText: TextView): Boolean {
         /**
          * The value of editText converted to a string.
          */
@@ -55,12 +75,16 @@ class MainActivity : AppCompatActivity() {
          */
         val validInputs: List<String> = StringUtils.getValuesFromJSON(resources, R.raw.data, "game_pins")
 
+        // Gamepin missing error.
         if(StringUtils.isEmptyOrBlank(input)) {
-            editText.error = getString(R.string.game_pin_missing_error)
+            errorText.text = getString(R.string.game_pin_missing_error)
+            errorText.visibility = TextView.VISIBLE
             return false
         }
+        // Gamepin incorrect error.
         else if(!StringUtils.isStringInList(input, validInputs)) {
-            editText.error = getString(R.string.game_pin_invalid_error)
+            errorText.text = getString(R.string.game_pin_invalid_error)
+            errorText.visibility = TextView.VISIBLE
             return false
         }
 
