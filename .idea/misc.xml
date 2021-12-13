@@ -14,7 +14,10 @@
         <entry key="..\:/Users/pohal/wlcp-android-app/app/src/main/res/layout/activity_login.xml" value="0.2765625" />
         <entry key="..\:/Users/pohal/wlcp-android-app/app/src/main/res/layout/activity_main.xml" value="0.290625" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.19739583333333333" />
+        <entry key="app/src/main/res/layout/activity_game.xml" value="0.1921875" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_login_with_account.xml" value="0.375" />
       </map>
     </option>
   </component>
