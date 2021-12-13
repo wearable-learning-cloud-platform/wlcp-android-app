@@ -3,6 +3,7 @@ package com.example.wearablelearning
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import java.io.*

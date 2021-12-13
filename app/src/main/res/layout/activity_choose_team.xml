@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ChooseTeamActivity">
 
     <TextView
         android:id="@+id/textView"
@@ -13,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
         android:fontFamily="sans-serif-black"
-        android:text="@string/app_welcome_message"
+        android:text="@string/team_message"
         android:textAlignment="center"
         android:textColor="@color/purple_500"
         android:textSize="24sp"
@@ -28,27 +27,23 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:fontFamily="sans-serif-medium"
-        android:text="@string/game_pin_prompt"
+        android:text="@string/team_prompt"
         android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <EditText
-        android:id="@+id/editText"
+    <Spinner
+        android:id="@+id/spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="@string/game_pin_hint"
-        android:importantForAutofill="no"
-        android:inputType="number"
         android:minHeight="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        tools:ignore="TextContrastCheck,TextContrastCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
     <!--
     Note - Francisco:
     EditText autofillHints attribute is buggy in the current API level. Do not use at this time.
@@ -60,9 +55,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/enter_game_button_text"
+        android:text="@string/join_team_button_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

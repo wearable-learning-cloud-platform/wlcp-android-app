@@ -90,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
                 /**
                  * The intent to switch activities from LoginActivity to GameActivity.
                  */
-                val intent = Intent(this@LoginActivity, GameActivity::class.java)
+                val intent = Intent(this@LoginActivity, ChooseTeamActivity::class.java)
 
                 startActivity(intent)
             }

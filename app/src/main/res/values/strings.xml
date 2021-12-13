@@ -4,8 +4,8 @@
     <string name="app_welcome_message">Welcome to WearableLearning!</string>
     <string name="game_pin_prompt">Enter a game PIN to get started</string>
     <string name="game_pin_hint">Game PIN</string>
-    <string name="game_pin_missing_error">Missing input. If you are a student, kindly ask your instructor for the game PIN. If you are an instructor, you can locate your game PIN using the Game Manager.</string>
-    <string name="game_pin_invalid_error">Invalid input. If you are a student, kindly ask your instructor for the game PIN. If you are an instructor, you can locate your game PIN using the Game Manager.</string>
+    <string name="game_pin_missing_error">Please enter a game PIN.</string>
+    <string name="game_pin_invalid_error">Invalid game PIN. Please enter a valid game PIN.</string>
     <string name="join_game_button_text">Join game</string>
 
     <!-- LoginActivity -->
@@ -15,11 +15,39 @@
     <string name="new_name_missing_error">Missing input. You must enter your name.</string>
     <string name="existing_account_prompt">Enter your WearableLearning.org credentials</string>
     <string name="user_name_hint">Username</string>
-    <string name="username_missing_error">Missing input. You must enter a valid username. If you do not have an account, you can play without an account by entering a name under the Name tab.</string>
+    <string name="username_missing_error">Please enter a username or you can join a game without an account by entering your name.</string>
     <string name="password_hint">Password</string>
-    <string name="password_missing_error">Missing input. You must enter your password. If you do not have an account, you can play without an account by entering a name using the Name tab.</string>
-    <string name="username_password_error">Invalid username or password. Reenter your username and password, or play without an account by entering a name under the Name tab.</string>
+    <string name="password_missing_error">Please enter a password.</string>
+    <string name="username_password_error">Incorrect username and/or password. Please try again or you can join a game without an account by entering your name.</string>
     <string name="login_tab_name">Name</string>
     <string name="login_tab_account">WearableLearning account</string>
     <string name="enter_game_button_text">Enter game</string>
+
+    <!-- ChooseTeamActivity -->
+    <string name="team_message">Team Selection</string>
+    <string name="team_prompt">Choose a team and a player:</string>
+    <string name="join_team_button_text">Join team</string>
+
+    <string-array name="team_player_list">
+        <item>Team 1 Player 1</item>
+        <item>Team 1 Player 2</item>
+        <item>Team 1 Player 3</item>
+        <item>Team 2 Player 1</item>
+        <item>Team 2 Player 2</item>
+        <item>Team 2 Player 3</item>
+        <item>Team 3 Player 1</item>
+        <item>Team 3 Player 2</item>
+        <item>Team 3 Player 3</item>
+    </string-array>
+
+    <!-- GameActivity -->
+    <string name="question_txt">No state.</string>
+    <string name="submit_btn_text">Submit</string>
+    <string name="clear_btn_text">Clear</string>
+    <string name="red_block_text">R</string>
+    <string name="green_block_text">G</string>
+    <string name="blue_block_text">B</string>
+    <string name="block_text" />
+
+    <string name="final_btn">Return to login</string>
 </resources>
