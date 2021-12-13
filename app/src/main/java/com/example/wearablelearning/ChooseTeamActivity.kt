@@ -3,7 +3,6 @@ package com.example.wearablelearning
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
@@ -18,10 +17,16 @@ class ChooseTeamActivity : AppCompatActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
 
-        val button: Button = findViewById(R.id.button)
+        val joinTeamBtn: Button = findViewById(R.id.join_game_btn)
+        val backBtn: Button = findViewById(R.id.back_btn)
 
-        button.setOnClickListener {
+        joinTeamBtn.setOnClickListener {
             val intent = Intent(this@ChooseTeamActivity, GameActivity::class.java)
+            startActivity(intent)
+        }
+
+        backBtn.setOnClickListener {
+            val intent = Intent(this@ChooseTeamActivity, LoginActivity::class.java)
             startActivity(intent)
         }
     }

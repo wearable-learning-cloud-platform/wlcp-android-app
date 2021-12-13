@@ -57,6 +57,20 @@
             app:layout_constraintTop_toBottomOf="@+id/loginUsernameEditText"
             tools:ignore="TextContrastCheck,TextContrastCheck" />
 
+        <TextView
+            android:id="@+id/error_tv3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/username_password_error"
+            android:textAlignment="center"
+            android:textColor="#FF0000"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginPasswordEditText" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -3,9 +3,9 @@ package com.example.wearablelearning
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.tabs.TabLayout
@@ -23,9 +23,14 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         /**
-         * The 'Begin Game' button that triggers a switch from LoginActivity to GameActivity.
+         * The 'Join Game' button that triggers a switch from LoginActivity to GameActivity.
          */
-        val button: Button = findViewById(R.id.button)
+        val joinGameBtn: Button = findViewById(R.id.join_game_btn)
+
+        /**
+         * The 'Back' button that triggers a switch from LoginActivity to MainActivity.
+         */
+        val backBtn: Button = findViewById(R.id.back_btn)
 
         /**
          * tabPos is the integer value of the index position of a tab (leftmost tab is 0).
@@ -79,7 +84,7 @@ class LoginActivity : AppCompatActivity() {
         })
 
         //when user selects 'Begin game' button
-        button.setOnClickListener {
+        joinGameBtn.setOnClickListener {
             /**
              * Inputs is an array of the user inputs retrieved from fragment associated to the opened
              * tab. Has size of 1 if tabPos=0 or 2 if tabPos=1.
@@ -94,6 +99,15 @@ class LoginActivity : AppCompatActivity() {
 
                 startActivity(intent)
             }
+        }
+
+        backBtn.setOnClickListener{
+            /**
+             * The intent to switch activities from LoginActivity to MainActivity.
+             */
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+
+            startActivity(intent)
         }
     }
 
@@ -133,8 +147,9 @@ class LoginActivity : AppCompatActivity() {
         //left tab (name)
         if(tabPos == 0) {
             if(StringUtils.isEmptyOrBlank(inputs[0])) {
-                val editTextName: EditText = findViewById(R.id.loginNameEditText)
-                editTextName.error = getString(R.string.new_name_missing_error)
+                val errorText: TextView = findViewById(R.id.error_tv2)
+                errorText.text = getString(R.string.new_name_missing_error)
+                errorText.visibility = TextView.VISIBLE
                 return false
             }
         }
@@ -145,27 +160,31 @@ class LoginActivity : AppCompatActivity() {
 
             //no username or password
             if(StringUtils.isEmptyOrBlank(inputs[0]) and StringUtils.isEmptyOrBlank(inputs[1])) {
-                editTextUsername.error = getString(R.string.username_missing_error)
-                editTextPassword.error = getString(R.string.password_missing_error)
+                val errorText: TextView = findViewById(R.id.error_tv3)
+                errorText.text = getString(R.string.username_missing_error)
+                errorText.visibility = TextView.VISIBLE
                 return false
             }
             //username but no password
             else if(StringUtils.isEmptyOrBlank(inputs[1])) {
-                editTextUsername.error = null
-                editTextPassword.error = getString(R.string.password_missing_error)
+                val errorText: TextView = findViewById(R.id.error_tv3)
+                errorText.text = getString(R.string.password_missing_error)
+                errorText.visibility = TextView.VISIBLE
                 return false
             }
             //password but no username
             else if(StringUtils.isEmptyOrBlank(inputs[0])) {
-                editTextUsername.error = getString(R.string.username_missing_error)
-                editTextPassword.error = null
+                val errorText: TextView = findViewById(R.id.error_tv3)
+                errorText.text = getString(R.string.username_missing_error)
+                errorText.visibility = TextView.VISIBLE
                 return false
             }
 
             //username and password input but are invalid
             if(!StringUtils.isEmptyOrBlank(inputs[0]) and !StringUtils.isEmptyOrBlank(inputs[1]) and !isValidCredentials(inputs[0], inputs[1])) {
-                editTextUsername.error = getString(R.string.username_password_error)
-                editTextPassword.error = getString(R.string.username_password_error)
+                val errorText: TextView = findViewById(R.id.error_tv3)
+                errorText.text = getString(R.string.username_password_error)
+                errorText.visibility = TextView.VISIBLE
                 return false
             }
         }
