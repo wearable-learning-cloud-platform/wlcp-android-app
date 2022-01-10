@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayoutTransition"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TransitionSequenceFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_side"
+            android:paddingTop="@dimen/padding_top"
+            android:paddingRight="@dimen/padding_side"
+            android:paddingBottom="@dimen/padding_top">
+
+            <Button
+                android:id="@+id/question_red_btn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@color/red"
+                android:text="@string/block_text" />
+
+            <Button
+                android:id="@+id/question_green_btn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/button_half_space"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@color/green"
+                android:text="@string/block_text" />
+
+            <Button
+                android:id="@+id/question_blue_btn"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/button_half_space"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@color/blue"
+                android:text="@string/block_text" />
+
+            <Button
+                android:id="@+id/question_black_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@color/black"
+                android:text="@string/block_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_side"
+            android:paddingTop="@dimen/padding_top"
+            android:paddingRight="@dimen/padding_side"
+            android:paddingBottom="@dimen/padding_top">
+
+            <Button
+                android:id="@+id/question_temp_btn_1"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                android:text="@string/block_text" />
+
+            <Button
+                android:id="@+id/question_temp_btn_2"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                android:text="@string/block_text" />
+
+            <Button
+                android:id="@+id/question_temp_btn_3"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                android:text="@string/block_text" />
+
+            <Button
+                android:id="@+id/question_temp_btn_4"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                android:text="@string/block_text" />
+
+            <Button
+                android:id="@+id/question_temp_btn_5"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                android:text="@string/block_text" />
+
+            <Button
+                android:id="@+id/question_temp_btn_6"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                android:text="@string/block_text" />
+
+            <Button
+                android:id="@+id/question_temp_btn_7"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                android:text="@string/block_text" />
+
+            <Button
+                android:id="@+id/question_temp_btn_8"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/transparent"
+                android:text="@string/block_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_side"
+            android:paddingTop="@dimen/padding_top"
+            android:paddingRight="@dimen/padding_side"
+            android:paddingBottom="@dimen/transition_padding_bot">
+
+            <Button
+                android:id="@+id/transition_submit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/padding_side"
+                android:layout_weight="1"
+                android:text="@string/submit_btn_text" />
+
+            <Button
+                android:id="@+id/transition_clear_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/clear_btn_text" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

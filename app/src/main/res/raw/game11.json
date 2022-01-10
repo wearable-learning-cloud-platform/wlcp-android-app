@@ -1,0 +1,50 @@
+{
+  "game": {
+    "game_pin": 11,
+    "game_name": "Simple Game",
+    "team_cnt": 2,
+    "players_per_team": 1,
+    "visibility": "public"
+  },
+  "states": [
+    {
+      "id": "state_1",
+      "name": "Welcome!",
+      "players": "game_wide",
+      "type": "text",
+      "content": "WELCOME TO SIMPLE GAME! Push a button to start.",
+      "trans_inputs": "",
+      "trans_outputs": "trans_1"
+    },
+    {
+      "id": "state_2",
+      "name": "Question",
+      "players": "game_wide",
+      "type": "text",
+      "content": "This is the only question. Can you input sequence black, blue?",
+      "trans_inputs": "trans_1",
+      "trans_outputs": "trans_2"
+    },
+    {
+      "id": "state_3",
+      "name": "Game Over!",
+      "players": "game_wide",
+      "type": "text",
+      "content": "Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "trans_inputs": "trans_2",
+      "trans_outputs": ""
+    }
+  ],
+  "transitions": [
+    {
+      "id": "trans_1",
+      "type": "button_press",
+      "content": "RD|GR|BL|BK"
+    },
+    {
+      "id": "trans_2",
+      "type": "color_sequence",
+      "content": "BK&BL"
+    }
+  ]
+}

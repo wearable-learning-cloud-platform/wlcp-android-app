@@ -1,0 +1,285 @@
+{
+  "game": {
+    "game_pin": 22,
+    "game_name": "Simple EstimateItFinal",
+    "team_cnt": 3,
+    "players_per_team": 3,
+    "visibility": "public"
+  },
+  "states": [
+    {
+      "id": "state_1",
+      "name": "Welcome!",
+      "players": "game_wide",
+      "type": "text",
+      "content": "WELCOME TO ESTIMATE IT! Push a button to start.",
+      "trans_inputs": "",
+      "trans_outputs": "trans_1"
+    },
+    {
+      "id": "state_2",
+      "name": "Instructions",
+      "players": "game_wide",
+      "type": "text",
+      "content": "Your job is to find shapes scattered in the game area. When you find the right shape you will be asked to input a button sequence. Drag and drop the buttons in the correct order and submit. Enter the sequence red green to continue.",
+      "trans_inputs": "trans_1, trans_4",
+      "trans_outputs": "trans_2, trans_3"
+    },
+    {
+      "id": "state_3",
+      "name": "Correct Sequence",
+      "players": "game_wide",
+      "type": "text",
+      "content": "That was the correct sequence! Push any button to continue.",
+      "trans_inputs": "trans_2",
+      "trans_outputs": "trans_5"
+    },
+    {
+      "id": "state_4",
+      "name": "Wrong Sequence",
+      "players": "game_wide",
+      "type": "text",
+      "content": "That was the wrong sequence! Push any button to try again!",
+      "trans_inputs": "trans_3",
+      "trans_outputs": "trans_4"
+    },
+    {
+      "id": "state_5",
+      "name": "HelpfulHints",
+      "players": "game_wide",
+      "type": "text",
+      "content": "Knowing the size of an inch helps with measurement, an inch is about the size of a quarter or a postage stamp. Press any button.",
+      "trans_inputs": "trans_5",
+      "trans_outputs": "trans_6"
+    },
+    {
+      "id": "state_6",
+      "name": "Helpful Hints",
+      "players": "game_wide",
+      "type": "text",
+      "content": "When measuring objects line up the dowel so its straight against the same flat surface as the object you're measuring. Press any button to start.",
+      "trans_inputs": "trans_6",
+      "trans_outputs": "trans_7"
+    },
+    {
+      "id": "state_7",
+      "name": "Instructions",
+      "players": "game_wide",
+      "type": "text",
+      "content": "Each person in your team will look for a different object. Ready to start? Push any button to get your first clue.",
+      "trans_inputs": "trans_7",
+      "trans_outputs": "trans_8"
+    },
+    {
+      "id": "state_8",
+      "name": "Level 1 Question 1",
+      "players": "team_1_player_1",
+      "type": "text",
+      "content": "Find a cube with a face 6 inches long. Drag only black for a hint.",
+      "trans_inputs": "trans_8, trans_12, trans_13",
+      "trans_outputs": "trans_9, trans_10, trans_11"
+    },
+    {
+      "id": "state_9",
+      "name": "Hint",
+      "players": "team_1_player_1",
+      "type": "text",
+      "content": "A cube is a box with 6 square faces (a face is a side). Push any button to continue.",
+      "trans_inputs": "trans_9",
+      "trans_outputs": "trans_12"
+    },
+    {
+      "id": "state_10",
+      "name": "Correct",
+      "players": "team_1_player_1",
+      "type": "text",
+      "content": "Congratulations! You have found the cube. Press any button to continue.",
+      "trans_inputs": "trans_10",
+      "trans_outputs": "trans_14"
+    },
+    {
+      "id": "state_11",
+      "name": "Incorrect",
+      "players": "team_1_player_1",
+      "type": "text",
+      "content": "That is incorrect, press any button to try again!",
+      "trans_inputs": "trans_11",
+      "trans_outputs": "trans_13"
+    },
+    {
+      "id": "state_12",
+      "name": "Level 2 Instructions",
+      "players": "game_wide",
+      "type": "text",
+      "content": "Bring the objects as a group to the organizers. Listen carefully to the organizers as they tell you about the 2nd part. Wait and do not push any buttons until you are told.",
+      "trans_inputs": "trans_14",
+      "trans_outputs": "trans_15"
+    },
+    {
+      "id": "state_13",
+      "name": "Level 2 Instructions",
+      "players": "game_wide",
+      "type": "text",
+      "content": "Work as a team to find shapes scattered across the room. Push the black button to continue.",
+      "trans_inputs": "trans_15",
+      "trans_outputs": "trans_16"
+    },
+    {
+      "id": "state_14",
+      "name": "Level 2 Question 1",
+      "players": "team_1",
+      "type": "text",
+      "content": "Find a volume about 6 inches wide, with no flat faces. Drag only black for a hint.",
+      "trans_inputs": "trans_16, trans_20, trans_21",
+      "trans_outputs": "trans_17, trans_18, trans_19"
+    },
+    {
+      "id": "state_15",
+      "name": "Hint",
+      "players": "team_1",
+      "type": "text",
+      "content": "I am a sphere, like a ball 6 inches tall. Push any button to continue.",
+      "trans_inputs": "trans_17",
+      "trans_outputs": "trans_20"
+    },
+    {
+      "id": "state_16",
+      "name": "Correct",
+      "players": "team_1",
+      "type": "text",
+      "content": "Congratulations! You have found the sphere. Press any button to continue.",
+      "trans_inputs": "trans_18",
+      "trans_outputs": "trans_22"
+    },
+    {
+      "id": "state_17",
+      "name": "Incorrect",
+      "players": "team_1",
+      "type": "text",
+      "content": "That is incorrect, press any button to try again!",
+      "trans_inputs": "trans_19",
+      "trans_outputs": "trans_21"
+    },
+    {
+      "id": "state_18",
+      "name": "Game Over!",
+      "players": "game_wide",
+      "type": "text",
+      "content": "Congratulations you have completed EstimateIt! Please return all objects to the organizer. GAME OVER.",
+      "trans_inputs": "trans_22",
+      "trans_outputs": ""
+    }
+  ],
+  "transitions": [
+    {
+      "id": "trans_1",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_2",
+      "type": "color_sequence",
+      "content": "RD&GR"
+    },
+    {
+      "id": "trans_3",
+      "type": "color_sequence",
+      "content": ""
+    },
+    {
+      "id": "trans_4",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_5",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_6",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_7",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_8",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_9",
+      "type": "color_sequence",
+      "content": "BK"
+    },
+    {
+      "id": "trans_10",
+      "type": "color_sequence",
+      "content": "GR&RD&BK&BL"
+    },
+    {
+      "id": "trans_11",
+      "type": "color_sequence",
+      "content": ""
+    },
+    {
+      "id": "trans_12",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_13",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_14",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_15",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_16",
+      "type": "button_press",
+      "content": "BK"
+    },
+    {
+      "id": "trans_17",
+      "type": "color_sequence",
+      "content": "BK"
+    },
+    {
+      "id": "trans_18",
+      "type": "color_sequence",
+      "content": "GR&RD&BL&BK"
+    },
+    {
+      "id": "trans_19",
+      "type": "color_sequence",
+      "content": ""
+    },
+    {
+      "id": "trans_20",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_21",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_22",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    }
+  ]
+}
