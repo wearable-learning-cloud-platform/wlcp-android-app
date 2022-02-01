@@ -170,19 +170,20 @@
             android:paddingBottom="@dimen/transition_padding_bot">
 
             <Button
-                android:id="@+id/transition_submit_btn"
+                android:id="@+id/transition_clear_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/padding_side"
                 android:layout_weight="1"
-                android:text="@string/submit_btn_text" />
+                android:text="@string/clear_btn_text" />
 
             <Button
-                android:id="@+id/transition_clear_btn"
+                android:id="@+id/transition_submit_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/clear_btn_text" />
+                android:text="@string/submit_btn_text" />
+
         </LinearLayout>
 
     </LinearLayout>
