@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayoutTransition"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TransitionSequenceFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/padding_side_large_btns"
+            android:paddingTop="@dimen/padding_top"
+            android:paddingRight="@dimen/padding_side_large_btns"
+            android:paddingBottom="@dimen/padding_top">
+
+            <EditText
+                android:id="@+id/text_entry_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/answer_hint"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/error_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/answer_invalid_error"
+                android:textAlignment="center"
+                android:textColor="#FF0000"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_side"
+            android:paddingTop="@dimen/padding_top"
+            android:paddingRight="@dimen/padding_side"
+            android:paddingBottom="@dimen/transition_padding_bot">
+
+            <Button
+                android:id="@+id/transition_clear_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/padding_side"
+                android:layout_weight="1"
+                android:text="@string/clear_btn_text" />
+
+            <Button
+                android:id="@+id/transition_submit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/submit_btn_text" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>
