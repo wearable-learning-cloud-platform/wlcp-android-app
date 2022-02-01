@@ -48,8 +48,8 @@
     <string name="green_block_text">G</string>
     <string name="blue_block_text">B</string>
     <string name="block_text" />
-
     <string name="final_btn">Return to login</string>
     <string name="back_btn">Back</string>
     <string name="answer_hint">Answer</string>
+    <string name="answer_invalid_error">Incorrect answer. Please try again.</string>
 </resources>

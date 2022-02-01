@@ -30,7 +30,7 @@
       "name": "Question",
       "players": "game_wide",
       "type": "text",
-      "content": "This is the final question. Can you type the following?: Android",
+      "content": "This is the final question. Can you type one of the following?: HELLO or HI",
       "trans_inputs": "trans_2",
       "trans_outputs": "trans_3"
     },
@@ -58,7 +58,7 @@
     {
       "id": "trans_3",
       "type": "text_entry",
-      "content": "Android"
+      "content": "hello;hi"
     }
   ]
 }
