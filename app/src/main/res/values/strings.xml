@@ -20,7 +20,7 @@
     <string name="password_missing_error">Please enter a password.</string>
     <string name="username_password_error">Incorrect username and/or password.\nPlease try again or you can join a game without an account\nby entering your name.</string>
     <string name="login_tab_name">Name</string>
-    <string name="login_tab_account">WearableLearning account</string>
+    <string name="login_tab_account">Account</string>
     <string name="enter_game_button_text">Enter game</string>
 
     <!-- ChooseTeamActivity -->
