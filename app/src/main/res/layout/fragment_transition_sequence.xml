@@ -15,51 +15,59 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="@dimen/padding_side"
+            android:paddingLeft="@dimen/padding_side_large_btns"
             android:paddingTop="@dimen/padding_top"
-            android:paddingRight="@dimen/padding_side"
+            android:paddingRight="@dimen/padding_side_large_btns"
             android:paddingBottom="@dimen/padding_top">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:id="@+id/question_red_btn"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="82dp"
+                android:layout_marginLeft="@dimen/button_half_space"
                 android:layout_marginRight="@dimen/button_half_space"
-                android:layout_weight="1"
                 android:backgroundTint="@color/red"
-                android:text="@string/block_text" />
+                android:elevation="4dp"
+                android:layout_weight="1"
+                android:text="@string/block_text"/>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:id="@+id/question_green_btn"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="82dp"
                 android:layout_marginLeft="@dimen/button_half_space"
                 android:layout_marginRight="@dimen/button_half_space"
-                android:layout_weight="1"
                 android:backgroundTint="@color/green"
+                android:elevation="4dp"
+                android:layout_weight="1"
                 android:text="@string/block_text" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:id="@+id/question_blue_btn"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="82dp"
                 android:layout_marginLeft="@dimen/button_half_space"
                 android:layout_marginRight="@dimen/button_half_space"
-                android:layout_weight="1"
                 android:backgroundTint="@color/blue"
+                android:elevation="4dp"
+                android:layout_weight="1"
                 android:text="@string/block_text" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:id="@+id/question_black_btn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="82dp"
                 android:layout_marginLeft="@dimen/button_half_space"
-                android:layout_weight="1"
+                android:layout_marginRight="@dimen/button_half_space"
                 android:backgroundTint="@color/black"
+                android:elevation="4dp"
+                android:layout_weight="1"
                 android:text="@string/block_text" />
+
         </LinearLayout>
 
         <LinearLayout
