@@ -11,4 +11,5 @@
     <color name="green">#00AA00</color>
     <color name="blue">#0000FF</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="lightgrey_button_border">#E4AAA7A7</color>
 </resources>
