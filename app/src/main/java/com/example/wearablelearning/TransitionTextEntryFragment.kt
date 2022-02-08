@@ -24,6 +24,7 @@ class TransitionTextEntryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val id = this.requireArguments().getString("id")
+        val content = this.requireArguments().getString("content")
 
         val textEntryEditText = view.findViewById<EditText>(R.id.text_entry_edittext)
 
@@ -42,11 +43,23 @@ class TransitionTextEntryFragment : Fragment() {
         val submitButton = view.findViewById<Button>(R.id.transition_submit_btn)
 
         submitButton.setOnClickListener {
-            if(textEntryEditText.text.toString().lowercase() in getSolutions()) {
+            val input = textEntryEditText.text.toString()
+
+            //one possible transition and correct input
+            if(!id.toString().contains(";;") && checkInput(input.lowercase(), content.toString())) {
                 id?.let { it1 -> (activity as GameActivity).callTransition(it1) }
             }
-            else {
+            //one possible transition and incorrect input
+            else if(!id.toString().contains(";;")) {
                 errorTextView.visibility = TextView.VISIBLE
+            }
+            //multiple possible transitions
+            else {
+                val matchedId = checkInputOnMultipleTransitions(input, content.toString(), id.toString())
+
+                if(!StringUtils.isEmptyOrBlank(matchedId)) {
+                    matchedId?.let { it1 -> (activity as GameActivity).callTransition(it1) }
+                }
             }
         }
 
@@ -58,9 +71,29 @@ class TransitionTextEntryFragment : Fragment() {
         }
     }
 
-    private fun getSolutions(): List<String> {
-        val solution = this.requireArguments().getString("content")?.lowercase()
+    private fun checkInput(input: String, content:String): Boolean {
+        val solutionStr = content?.lowercase()
+        val solutionsList = solutionStr?.split(";") ?: listOf("")
 
-        return solution?.split(";") ?: listOf("")
+        if(content == "ALL_OTHER_INPUTS") {
+            return true
+        }
+
+        return input in solutionsList
+    }
+
+    private fun checkInputOnMultipleTransitions(input: String, content: String, id: String): String {
+        val ids = id.split(";;")
+        val contents = content.split(";;")
+
+        if(ids.size == contents.size) {
+            ids.zip(contents).forEach {(i, c) ->
+                if(checkInput(input, c)) {
+                    return i
+                }
+            }
+        }
+
+        return ""
     }
 }

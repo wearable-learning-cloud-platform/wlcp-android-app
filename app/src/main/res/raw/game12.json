@@ -1,6 +1,6 @@
 {
   "game": {
-    "game_pin": 11,
+    "game_pin": 12,
     "game_name": "Simple Game",
     "team_cnt": 2,
     "players_per_team": 1,

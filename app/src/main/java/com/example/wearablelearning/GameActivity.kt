@@ -36,12 +36,17 @@ class GameActivity : AppCompatActivity() {
         var fm: FragmentManager = supportFragmentManager
 
         changeState(fm, nextStateId)
-        getOutputTransition(nextStateId)
-        changeTransition(fm, getOutputTransition(nextStateId))
+        val outputTransition = getOutputTransition(nextStateId)
+
+        // if there is only one output transition
+        if(!outputTransition.contains(",") or isAllSameType(outputTransition)) {
+            changeTransition(fm, outputTransition)
+        }
+
     }
 
     private fun mapJson() {
-        val jsonContents: String = resources.openRawResource(R.raw.game11)
+        val jsonContents: String = resources.openRawResource(R.raw.game12) //TODO
             .bufferedReader().use { it.readText() }
 
         map = StringUtils.parseJsonWithGson(jsonContents)
@@ -90,9 +95,22 @@ class GameActivity : AppCompatActivity() {
 
         if(outputs.size == 1) {
             return outputs[0]
+        } else {
+           return outputs.joinToString()
+        }
+    }
+
+    private fun isAllSameType(transStr: String): Boolean {
+        val transList = transStr.replace(" ", "").split(',')
+        val transType = transitions[transList[0]]?.type.toString()
+
+        for(t in transList) {
+            if(transitions[t]?.type.toString() != transType) {
+                return false
+            }
         }
 
-        return outputs[0]
+        return true
     }
 
     private fun stateWithInputTransition(transId: String): Int {
@@ -120,9 +138,28 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun changeTransition(fm: FragmentManager, transition: String) {
-        val type = transitions[transition]?.type.toString()
-        val id = transitions[transition]?.id.toString()
-        val content = transitions[transition]?.content.toString()
+        var type = transitions[transition]?.type.toString()
+        var id = transitions[transition]?.id.toString()
+        var content = transitions[transition]?.content.toString()
+
+        //if multiple transitions
+        if(transition.contains(",")) {
+            val transList = transition.replace(" ", "").split(",")
+            type = transitions[transList[0]]?.type.toString()
+            id = ""
+            content = ""
+
+            for(t in transList) {
+                if(StringUtils.isEmptyOrBlank(content)) {
+                    content = transitions[t]?.content.toString()
+                    id = transitions[t]?.id.toString()
+                }
+                else {
+                    content = content + ";;" + transitions[t]?.content.toString()
+                    id = id + ";;" + transitions[t]?.id.toString()
+                }
+            }
+        }
 
         val ft: FragmentTransaction = fm.beginTransaction()
         val bundle = Bundle()
