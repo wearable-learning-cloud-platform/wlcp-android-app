@@ -55,7 +55,7 @@ class TransitionTextEntryFragment : Fragment() {
             }
             //multiple possible transitions
             else {
-                val matchedId = checkInputOnMultipleTransitions(input, content.toString(), id.toString())
+                val matchedId = checkInputOnMultipleTransitions(input.lowercase(), content.toString(), id.toString())
 
                 if(!StringUtils.isEmptyOrBlank(matchedId)) {
                     matchedId?.let { it1 -> (activity as GameActivity).callTransition(it1) }
