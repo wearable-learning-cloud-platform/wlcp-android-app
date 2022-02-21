@@ -23,8 +23,14 @@ class GameActivity : AppCompatActivity() {
         val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
 
         var fm: FragmentManager = supportFragmentManager
+        addGamePlayerInfo(fm)
 
         mapJson()
+
+        if (gameInfo != null) {
+            gameInfo.gameName = mapGameName()
+        }
+
         mapStates()
         mapTransitions()
 
@@ -44,7 +50,6 @@ class GameActivity : AppCompatActivity() {
         if(!outputTransition.contains(",") or isAllSameType(outputTransition)) {
             changeTransition(fm, outputTransition)
         }
-
     }
 
     private fun mapJson() {
@@ -52,6 +57,13 @@ class GameActivity : AppCompatActivity() {
             .bufferedReader().use { it.readText() }
 
         map = StringUtils.parseJsonWithGson(jsonContents)
+    }
+
+    private fun mapGameName(): String {
+        val gameInfo: String = map.getValue("game").toString()
+        val gameName: String = gameInfo.substringAfter("game_name=").substringBefore(", team_cnt=")
+
+        return gameName
     }
 
     private fun mapStates() {
@@ -125,6 +137,12 @@ class GameActivity : AppCompatActivity() {
         }
 
         return idx
+    }
+
+    private fun addGamePlayerInfo(fm: FragmentManager) {
+        val ft: FragmentTransaction = fm.beginTransaction()
+        ft.replace(R.id.frameLayout0, GamePlayerInfoFragment())
+        ft.commit()
     }
 
     private fun changeState(fm: FragmentManager, idx: Int) {
