@@ -20,6 +20,8 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
+        val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
+
         var fm: FragmentManager = supportFragmentManager
 
         mapJson()

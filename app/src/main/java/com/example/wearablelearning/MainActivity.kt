@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -26,6 +27,15 @@ class MainActivity : AppCompatActivity() {
         /** The _gamePinErrorText_ is used to display errors on incorrect game PIN input. */
         val gamePinErrorText: TextView = findViewById(R.id.error_tv)
 
+        var gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
+
+        if (gameInfo == null) {
+            gameInfo = GameInfo()
+        }
+        else {
+            gamePinEditText.setText(gameInfo.gamePin)
+        }
+
         /**
          * Set the _gamePinEditText_ listener to hide error messages when a game PIN is
          * being entered.
@@ -43,7 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         /**
          * The _joinGameButton_ is used to trigger switching from [MainActivity] to [LoginActivity].
-         * @TODO Set the [R.id.join_game_btn] text to the actual string resource
          */
         val joinGameButton: Button = findViewById(R.id.join_game_btn)
 
@@ -52,10 +61,11 @@ class MainActivity : AppCompatActivity() {
 
             /** Launch [LoginActivity] if the user-input game PIN is correct. */
             if (checkInput(gamePinEditText, gamePinErrorText)) {
+                gameInfo.gamePin = gamePinEditText.text.toString()
 
                 /** Build _intentMainToLogin_ to switch from [MainActivity] to [LoginActivity]. */
                 val intentMainToLogin = Intent(this@MainActivity, LoginActivity::class.java)
-
+                intentMainToLogin.putExtra("gameInfo", gameInfo)
                 startActivity(intentMainToLogin)
             }
         }

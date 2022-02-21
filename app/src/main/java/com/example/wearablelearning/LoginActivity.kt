@@ -1,11 +1,11 @@
 package com.example.wearablelearning
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.tabs.TabLayout
@@ -21,6 +21,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
 
         /**
          * The 'Join Game' button that triggers a switch from LoginActivity to GameActivity.
@@ -50,11 +52,21 @@ class LoginActivity : AppCompatActivity() {
         /**
          * ft is the fragment transaction.
          */
-        val ft: FragmentTransaction = fm.beginTransaction()
 
+        val ft: FragmentTransaction = fm.beginTransaction()
         ft.replace(R.id.frameLayout, LoginWithNameFragment())
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         ft.commit()
+
+        if(gameInfo?.userName != null) {
+            val tab = tabLayout.getTabAt(1)
+            tab?.select()
+
+            val ft: FragmentTransaction = fm.beginTransaction()
+            ft.replace(R.id.frameLayout, LoginWithAccountFragment())
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            ft.commit()
+        }
 
         //when tab is changed by user
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -92,11 +104,20 @@ class LoginActivity : AppCompatActivity() {
             val inputs: Array<String> = getLoginInputs(tabPos)
 
             if(checkInput(inputs, tabPos)) {
+                if (gameInfo != null && tabPos == 0) {
+                    gameInfo.name = inputs[0]
+                    gameInfo.userName = null
+                }
+                else if(gameInfo != null && tabPos == 1) {
+                    gameInfo.name = null
+                    gameInfo.userName = inputs[0]
+                }
+
                 /**
                  * The intent to switch activities from LoginActivity to GameActivity.
                  */
                 val intent = Intent(this@LoginActivity, ChooseTeamActivity::class.java)
-
+                intent.putExtra("gameInfo", gameInfo)
                 startActivity(intent)
             }
         }
@@ -106,7 +127,7 @@ class LoginActivity : AppCompatActivity() {
              * The intent to switch activities from LoginActivity to MainActivity.
              */
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
-
+            intent.putExtra("gameInfo", gameInfo)
             startActivity(intent)
         }
     }

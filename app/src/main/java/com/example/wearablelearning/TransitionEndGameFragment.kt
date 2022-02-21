@@ -19,12 +19,14 @@ class TransitionEndGameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val gameIntent = requireActivity().intent
+        val gameInfo = gameIntent.getSerializableExtra("gameInfo") as? GameInfo
 
         val button = view.findViewById<Button>(R.id.end_game_btn)
 
         button.setOnClickListener {
             val intent = Intent(activity, LoginActivity::class.java)
-
+            intent.putExtra("gameInfo", gameInfo)
             startActivity(intent)
         }
     }
