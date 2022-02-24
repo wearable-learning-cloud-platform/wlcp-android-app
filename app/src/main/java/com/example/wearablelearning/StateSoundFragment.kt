@@ -2,6 +2,7 @@ package com.example.wearablelearning
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,10 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 
 class StateSoundFragment : Fragment() {
+    companion object {
+        var mediaPlayer = MediaPlayer()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,7 +31,14 @@ class StateSoundFragment : Fragment() {
         val soundName = stateSound.toString().split(".")[0]
         val resID = resources.getIdentifier(soundName, "raw", context?.packageName)
 
-        val mediaPlayer = MediaPlayer.create(context, resID)
+        mediaPlayer = MediaPlayer.create(context, resID)
         mediaPlayer.start()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer.stop()
+        mediaPlayer.release()
+        mediaPlayer.release()
     }
 }

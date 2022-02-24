@@ -180,6 +180,16 @@ class GameActivity : AppCompatActivity() {
             ft.replace(R.id.frameLayout1, fragInfo)
             ft.commit()
         }
+        else if(type.contains("video")) {
+            val video = states["state_$idx"]?.other.toString()
+
+            val fragInfo = StateVideoFragment()
+            bundle.putString("content", content)
+            bundle.putString("video", video)
+            fragInfo.arguments = bundle
+            ft.replace(R.id.frameLayout1, fragInfo)
+            ft.commit()
+        }
     }
 
     private fun changeTransition(fm: FragmentManager, transition: String) {

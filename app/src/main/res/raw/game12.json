@@ -51,38 +51,38 @@
       "id": "state_5",
       "name": "Question4",
       "players": "game_wide",
-      "type": "text",
-      "content": "Type apple please (only 1 possible transition).",
-      "other": "",
+      "type": "video",
+      "content": "Input the sequence green, red, black.",
+      "other": "cats_playing.mp4",
       "trans_inputs": "trans_4",
       "trans_outputs": "trans_5"
     },
     {
       "id": "state_6",
-      "name": "Question5",
+      "name": "Question4",
       "players": "game_wide",
       "type": "text",
-      "content": "This is the final question. Can you type one of the following?: HELLO, HI, or BYE",
+      "content": "Type apple please (only 1 possible transition).",
       "other": "",
       "trans_inputs": "trans_5",
-      "trans_outputs": "trans_6, trans_7, trans_8"
+      "trans_outputs": "trans_6"
     },
     {
       "id": "state_7",
-      "name": "Game Over!",
+      "name": "Question5",
       "players": "game_wide",
       "type": "text",
-      "content": "HELLO! HI! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "content": "Can you type one of the following?: HELLO, HI, or BYE (3 possible transitions)",
       "other": "",
       "trans_inputs": "trans_6",
-      "trans_outputs": ""
+      "trans_outputs": "trans_7, trans_8, trans_9"
     },
     {
       "id": "state_8",
       "name": "Game Over!",
       "players": "game_wide",
       "type": "text",
-      "content": "BYE! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "content": "HELLO! HI! Congratulations you have completed SIMPLE GAME! GAME OVER.",
       "other": "",
       "trans_inputs": "trans_7",
       "trans_outputs": ""
@@ -92,9 +92,19 @@
       "name": "Game Over!",
       "players": "game_wide",
       "type": "text",
-      "content": "ALL OTHER INPUTS! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "content": "BYE! Congratulations you have completed SIMPLE GAME! GAME OVER.",
       "other": "",
       "trans_inputs": "trans_8",
+      "trans_outputs": ""
+    },
+    {
+      "id": "state_10",
+      "name": "Game Over!",
+      "players": "game_wide",
+      "type": "text",
+      "content": "ALL OTHER INPUTS! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "other": "",
+      "trans_inputs": "trans_9",
       "trans_outputs": ""
     }
   ],
@@ -121,21 +131,26 @@
     },
     {
       "id": "trans_5",
-      "type": "text_entry",
-      "content": "apple"
+      "type": "color_sequence",
+      "content": "GR&RD&BK"
     },
     {
       "id": "trans_6",
       "type": "text_entry",
-      "content": "hello;hi"
+      "content": "apple"
     },
     {
       "id": "trans_7",
       "type": "text_entry",
-      "content": "bye"
+      "content": "hello;hi"
     },
     {
       "id": "trans_8",
+      "type": "text_entry",
+      "content": "bye"
+    },
+    {
+      "id": "trans_9",
       "type": "text_entry",
       "content": "ALL_OTHER_INPUTS"
     }
