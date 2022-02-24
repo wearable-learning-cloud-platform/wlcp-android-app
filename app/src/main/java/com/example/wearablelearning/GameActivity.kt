@@ -22,7 +22,6 @@ class GameActivity : AppCompatActivity() {
         val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
 
         var fm: FragmentManager = supportFragmentManager
-        addGamePlayerInfo(fm)
 
         mapJson()
 
@@ -32,6 +31,7 @@ class GameActivity : AppCompatActivity() {
 
         mapStates()
         mapTransitions()
+        addGamePlayerInfo(fm)
 
         var idx = 1
         changeState(fm, idx)

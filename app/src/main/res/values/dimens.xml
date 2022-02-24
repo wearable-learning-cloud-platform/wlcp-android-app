@@ -10,7 +10,7 @@
     <dimen name="padding_top">14sp</dimen>
     <dimen name="padding_bot">18sp</dimen>
     <dimen name="layout_weight">0</dimen>
-    <dimen name="welcome_padding">100sp</dimen>
+    <dimen name="welcome_padding">50sp</dimen>
     <dimen name="button_padding">50sp</dimen>
     <dimen name="welcome_margin">100sp</dimen>
     <dimen name="button_half_space">6sp</dimen>

@@ -42,7 +42,7 @@
       "name": "Question3",
       "players": "game_wide",
       "type": "sound",
-      "content": "Is it your birthday? Select blue.",
+      "content": "Is it your birthday? Turn up your volume. Select blue.",
       "other": "birthday.mp3",
       "trans_inputs": "trans_3",
       "trans_outputs": "trans_4"
@@ -53,7 +53,7 @@
       "players": "game_wide",
       "type": "video",
       "content": "Input the sequence green, red, black.",
-      "other": "cats_playing.mp4",
+      "other": "video.gif",
       "trans_inputs": "trans_4",
       "trans_outputs": "trans_5"
     },

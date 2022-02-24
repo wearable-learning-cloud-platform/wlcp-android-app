@@ -37,8 +37,11 @@ class StateSoundFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        mediaPlayer.stop()
-        mediaPlayer.release()
-        mediaPlayer.release()
+
+        if(mediaPlayer.isPlaying()) {
+            mediaPlayer.stop()
+            mediaPlayer.release()
+            mediaPlayer.release()
+        }
     }
 }
