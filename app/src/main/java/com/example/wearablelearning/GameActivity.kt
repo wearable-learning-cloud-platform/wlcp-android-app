@@ -2,7 +2,6 @@ package com.example.wearablelearning
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 
@@ -78,7 +77,8 @@ class GameActivity : AppCompatActivity() {
                 stateStr.substringAfter(", name=").substringBefore(", players="),
                 stateStr.substringAfter(", players=").substringBefore(", type="),
                 stateStr.substringAfter(", type=").substringBefore(", content="),
-                stateStr.substringAfter(", content=").substringBefore(", trans_inputs="),
+                stateStr.substringAfter(", content=").substringBefore(", other="),
+                stateStr.substringAfter(", other=").substringBefore(", trans_inputs="),
                 stateStr.substringAfter(", trans_inputs=").substringBefore(", trans_outputs="),
                 stateStr.substringAfter(", trans_outputs=").substringBefore("}")
             )
@@ -148,13 +148,38 @@ class GameActivity : AppCompatActivity() {
     private fun changeState(fm: FragmentManager, idx: Int) {
         val ft: FragmentTransaction = fm.beginTransaction()
         val bundle = Bundle()
-        val fragInfo = StateFragment()
+
 
         val content = states["state_$idx"]?.content.toString()
-        bundle.putString("content", content)
-        fragInfo.arguments = bundle
-        ft.replace(R.id.frameLayout1, fragInfo)
-        ft.commit()
+        val type = states["state_$idx"]?.type.toString()
+
+        if(type.contains("text")) {
+            val fragInfo = StateTextFragment()
+            bundle.putString("content", content)
+            fragInfo.arguments = bundle
+            ft.replace(R.id.frameLayout1, fragInfo)
+            ft.commit()
+        }
+        else if(type.contains("photo")) {
+            val image = states["state_$idx"]?.other.toString()
+
+            val fragInfo = StatePhotoFragment()
+            bundle.putString("content", content)
+            bundle.putString("image", image)
+            fragInfo.arguments = bundle
+            ft.replace(R.id.frameLayout1, fragInfo)
+            ft.commit()
+        }
+        else if(type.contains("sound")) {
+            val sound = states["state_$idx"]?.other.toString()
+
+            val fragInfo = StateSoundFragment()
+            bundle.putString("content", content)
+            bundle.putString("sound", sound)
+            fragInfo.arguments = bundle
+            ft.replace(R.id.frameLayout1, fragInfo)
+            ft.commit()
+        }
     }
 
     private fun changeTransition(fm: FragmentManager, transition: String) {

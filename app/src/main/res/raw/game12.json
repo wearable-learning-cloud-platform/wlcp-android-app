@@ -13,61 +13,88 @@
       "players": "game_wide",
       "type": "text",
       "content": "WELCOME TO SIMPLE GAME! Push a button to start.",
+      "other": "",
       "trans_inputs": "",
       "trans_outputs": "trans_1"
     },
     {
       "id": "state_2",
-      "name": "Question",
+      "name": "Question1",
       "players": "game_wide",
       "type": "text",
       "content": "This is the first question. Can you input sequence black, blue?",
+      "other": "",
       "trans_inputs": "trans_1",
       "trans_outputs": "trans_2"
     },
     {
       "id": "state_3",
-      "name": "Question",
+      "name": "Question2",
       "players": "game_wide",
-      "type": "text",
-      "content": "Type apple please (only 1 possible transition).",
+      "type": "photo",
+      "content": "What animal is in the image below?",
+      "other": "cat.png",
       "trans_inputs": "trans_2",
       "trans_outputs": "trans_3"
     },
     {
       "id": "state_4",
-      "name": "Question",
+      "name": "Question3",
       "players": "game_wide",
-      "type": "text",
-      "content": "This is the final question. Can you type one of the following?: HELLO, HI, or BYE",
+      "type": "sound",
+      "content": "Is it your birthday? Select blue.",
+      "other": "birthday.mp3",
       "trans_inputs": "trans_3",
-      "trans_outputs": "trans_4, trans_5, trans_6"
+      "trans_outputs": "trans_4"
     },
     {
       "id": "state_5",
-      "name": "Game Over!",
+      "name": "Question4",
       "players": "game_wide",
       "type": "text",
-      "content": "HELLO! HI! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "content": "Type apple please (only 1 possible transition).",
+      "other": "",
       "trans_inputs": "trans_4",
-      "trans_outputs": ""
+      "trans_outputs": "trans_5"
     },
     {
       "id": "state_6",
-      "name": "Game Over!",
+      "name": "Question5",
       "players": "game_wide",
       "type": "text",
-      "content": "BYE! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "content": "This is the final question. Can you type one of the following?: HELLO, HI, or BYE",
+      "other": "",
       "trans_inputs": "trans_5",
-      "trans_outputs": ""
+      "trans_outputs": "trans_6, trans_7, trans_8"
     },
     {
       "id": "state_7",
       "name": "Game Over!",
       "players": "game_wide",
       "type": "text",
-      "content": "ALL OTHER INPUTS! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "content": "HELLO! HI! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "other": "",
       "trans_inputs": "trans_6",
+      "trans_outputs": ""
+    },
+    {
+      "id": "state_8",
+      "name": "Game Over!",
+      "players": "game_wide",
+      "type": "text",
+      "content": "BYE! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "other": "",
+      "trans_inputs": "trans_7",
+      "trans_outputs": ""
+    },
+    {
+      "id": "state_9",
+      "name": "Game Over!",
+      "players": "game_wide",
+      "type": "text",
+      "content": "ALL OTHER INPUTS! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "other": "",
+      "trans_inputs": "trans_8",
       "trans_outputs": ""
     }
   ],
@@ -85,20 +112,30 @@
     {
       "id": "trans_3",
       "type": "text_entry",
-      "content": "apple"
+      "content": "cat"
     },
     {
       "id": "trans_4",
-      "type": "text_entry",
-      "content": "hello;hi"
+      "type": "button_press",
+      "content": "BL"
     },
     {
       "id": "trans_5",
       "type": "text_entry",
-      "content": "bye"
+      "content": "apple"
     },
     {
       "id": "trans_6",
+      "type": "text_entry",
+      "content": "hello;hi"
+    },
+    {
+      "id": "trans_7",
+      "type": "text_entry",
+      "content": "bye"
+    },
+    {
+      "id": "trans_8",
       "type": "text_entry",
       "content": "ALL_OTHER_INPUTS"
     }

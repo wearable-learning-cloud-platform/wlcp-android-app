@@ -4,7 +4,7 @@
     android:id="@+id/frameLayoutState"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StateFragment">
+    tools:context=".StateTextFragment">
 
     <TextView
         android:id="@+id/state_tv"
