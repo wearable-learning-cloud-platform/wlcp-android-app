@@ -53,7 +53,7 @@
       "players": "game_wide",
       "type": "video",
       "content": "Input the sequence green, red, black.",
-      "other": "video.gif",
+      "other": "cats_playing_5s.gif",
       "trans_inputs": "trans_4",
       "trans_outputs": "trans_5"
     },
