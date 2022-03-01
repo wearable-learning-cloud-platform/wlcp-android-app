@@ -2,16 +2,20 @@ package com.example.wearablelearning
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.HorizontalScrollView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.google.android.material.button.MaterialButton
+
 
 class TransitionSequenceFragment : Fragment() {
     companion object {
-        const val maxBlocks = 8
+        const val maxBlocks = 10
         private var colorBtnClicks = 0
         private var colorSequence: String = ""
     }
@@ -36,6 +40,31 @@ class TransitionSequenceFragment : Fragment() {
         val blueButton = view.findViewById<Button>(R.id.question_blue_btn)
         val blackButton = view.findViewById<Button>(R.id.question_black_btn)
 
+        var scrollView = view.findViewById<HorizontalScrollView>(R.id.scrollView)
+
+        scrollView.viewTreeObserver.addOnScrollChangedListener {
+            var maxScrollX = scrollView.getChildAt(0).measuredWidth - scrollView.measuredWidth
+            var leftIcon = view.findViewById<MaterialButton>(R.id.question_temp_btn_left)
+            var rightIcon = view.findViewById<MaterialButton>(R.id.question_temp_btn_right)
+
+            if (scrollView.scrollX == 0) {
+                rightIcon.setIconTintResource(R.color.darkgrey)
+            } else {
+                rightIcon.setIconTintResource(R.color.lightgrey)
+            }
+
+            if (scrollView.scrollX == maxScrollX) {
+                leftIcon.setIconTintResource(R.color.darkgrey)
+            } else {
+                leftIcon.setIconTintResource(R.color.lightgrey)
+            }
+
+            if (scrollView.scrollX != 0 && scrollView.scrollX != maxScrollX)  {
+                rightIcon.setIconTintResource(R.color.darkgrey)
+                leftIcon.setIconTintResource(R.color.darkgrey)
+            }
+        }
+
         submitButton.setOnClickListener { v ->
             if(colorSequence == solution) {
                 colorBtnClicks = 0
@@ -45,7 +74,7 @@ class TransitionSequenceFragment : Fragment() {
         }
 
         clearButton.setOnClickListener {
-            for(i in 1..maxBlocks) {
+            for(i in 2..maxBlocks+1) {
                 val blockId = resources.getIdentifier(
                     "question_temp_btn_$i",
                     "id",
@@ -85,14 +114,21 @@ class TransitionSequenceFragment : Fragment() {
     }
 
     private fun addBlockToSolution(clickedButton: Button, color: Int, view: View) {
+        var blockNum = colorBtnClicks+1
+
         if (colorBtnClicks <= maxBlocks) {
             val buttonId = resources.getIdentifier(
-                "question_temp_btn_$colorBtnClicks",
+                "question_temp_btn_$blockNum",
                 "id",
                 requireContext().packageName
             )
             view.findViewById<Button>(buttonId)
                 .setBackgroundColor(ContextCompat.getColor(requireContext(), color))
+        }
+
+        if(colorBtnClicks > 6) {
+            var rightIcon = view.findViewById<MaterialButton>(R.id.question_temp_btn_right)
+            rightIcon.setIconTintResource(R.color.darkgrey)
         }
     }
 

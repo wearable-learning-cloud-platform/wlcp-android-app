@@ -89,84 +89,151 @@
             android:paddingBottom="@dimen/padding_top">
 
             <Button
-                android:id="@+id/question_temp_btn_1"
+                android:id="@+id/question_temp_btn_left"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
                 android:layout_marginRight="@dimen/button_half_space"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/transparent"
-                android:text="@string/block_text" />
+                app:icon="@drawable/ic_leftarrow_foreground"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/icon_padding"
+                app:iconTint="@color/lightgrey"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:rippleColor="@color/grey" />
+
+            <HorizontalScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/question_temp_btn_2"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="47dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="@dimen/button_half_space"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="@string/block_text" />
+
+                    <Button
+                        android:id="@+id/question_temp_btn_3"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="47dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="@dimen/button_half_space"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="@string/block_text" />
+
+                    <Button
+                        android:id="@+id/question_temp_btn_4"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="47dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="@dimen/button_half_space"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="@string/block_text" />
+
+                    <Button
+                        android:id="@+id/question_temp_btn_5"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="47dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="@dimen/button_half_space"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="@string/block_text" />
+
+                    <Button
+                        android:id="@+id/question_temp_btn_6"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="47dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="@dimen/button_half_space"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="@string/block_text" />
+
+                    <Button
+                        android:id="@+id/question_temp_btn_7"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="47dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="@dimen/button_half_space"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="@string/block_text" />
+
+                    <Button
+                        android:id="@+id/question_temp_btn_8"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="47dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="@dimen/button_half_space"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="@string/block_text" />
+
+                    <Button
+                        android:id="@+id/question_temp_btn_9"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="47dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="@dimen/button_half_space"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="@string/block_text" />
+
+                    <Button
+                        android:id="@+id/question_temp_btn_10"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="47dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="@dimen/button_half_space"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="@string/block_text" />
+
+                    <Button
+                        android:id="@+id/question_temp_btn_11"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="47dp"
+                        android:layout_height="50dp"
+                        android:layout_marginRight="@dimen/button_half_space"
+                        android:layout_weight="1"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="@string/block_text" />
+
+                </LinearLayout>
+            </HorizontalScrollView>
 
             <Button
-                android:id="@+id/question_temp_btn_2"
+                android:id="@+id/question_temp_btn_right"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
                 android:layout_marginRight="@dimen/button_half_space"
                 android:layout_weight="1"
                 android:backgroundTint="@android:color/transparent"
-                android:text="@string/block_text" />
-
-            <Button
-                android:id="@+id/question_temp_btn_3"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/button_half_space"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                android:text="@string/block_text" />
-
-            <Button
-                android:id="@+id/question_temp_btn_4"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/button_half_space"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                android:text="@string/block_text" />
-
-            <Button
-                android:id="@+id/question_temp_btn_5"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/button_half_space"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                android:text="@string/block_text" />
-
-            <Button
-                android:id="@+id/question_temp_btn_6"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/button_half_space"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                android:text="@string/block_text" />
-
-            <Button
-                android:id="@+id/question_temp_btn_7"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/button_half_space"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                android:text="@string/block_text" />
-
-            <Button
-                android:id="@+id/question_temp_btn_8"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/button_half_space"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/transparent"
-                android:text="@string/block_text" />
+                app:icon="@drawable/ic_rightarrow_foreground"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/icon_padding"
+                app:iconTint="@color/lightgrey"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:rippleColor="@color/grey" />
         </LinearLayout>
 
         <LinearLayout
