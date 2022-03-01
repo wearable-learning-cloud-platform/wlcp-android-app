@@ -12,4 +12,6 @@
     <color name="blue">#0000FF</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="lightgrey_button_border">#E4AAA7A7</color>
+    <color name="lightgrey">#E4DFDEDE</color>
+    <color name="grey">#E4989797</color>
 </resources>

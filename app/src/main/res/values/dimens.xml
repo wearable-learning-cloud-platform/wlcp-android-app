@@ -17,4 +17,7 @@
     <dimen name="transition_padding_bot">100sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="max_photo_height">400px</dimen>
+
+    <dimen name="icon_padding">0dp</dimen>
+    <dimen name="icon_margin">8dp</dimen>
 </resources>

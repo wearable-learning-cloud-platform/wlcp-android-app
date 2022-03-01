@@ -23,6 +23,53 @@
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_large" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/padding_top">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/rewind_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginRight="@dimen/icon_margin"
+                android:layout_weight="1"
+                android:elevation="4dp"
+                app:backgroundTint="@color/lightgrey"
+                app:icon="@drawable/ic_rewind_foreground"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/icon_padding"
+                app:iconTint="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:rippleColor="@color/grey"
+                app:strokeColor="@color/lightgrey_button_border"
+                app:strokeWidth="2dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/play_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginLeft="@dimen/icon_margin"
+                android:layout_weight="1"
+                android:elevation="4dp"
+                app:backgroundTint="@color/lightgrey"
+                app:icon="@drawable/ic_play_foreground"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/icon_padding"
+                app:iconTint="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:rippleColor="@color/grey"
+                app:strokeColor="@color/lightgrey_button_border"
+                app:strokeWidth="2dp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>
