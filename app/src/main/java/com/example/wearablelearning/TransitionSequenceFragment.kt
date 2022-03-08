@@ -8,7 +8,6 @@ import android.widget.Button
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.marginRight
 import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
 import kotlin.math.roundToInt
@@ -41,27 +40,29 @@ class TransitionSequenceFragment : Fragment() {
         val blackButton = view.findViewById<Button>(R.id.question_black_btn)
 
         var scrollView = view.findViewById<HorizontalScrollView>(R.id.scrollView)
+        var leftIcon = view.findViewById<MaterialButton>(R.id.question_temp_btn_left)
+        var rightIcon = view.findViewById<MaterialButton>(R.id.question_temp_btn_right)
 
         scrollView.viewTreeObserver.addOnScrollChangedListener {
             var maxScrollX = scrollView.getChildAt(0).measuredWidth - scrollView.measuredWidth
-            var leftIcon = view.findViewById<MaterialButton>(R.id.question_temp_btn_left)
-            var rightIcon = view.findViewById<MaterialButton>(R.id.question_temp_btn_right)
 
-            if (scrollView.scrollX == 0) {
-                rightIcon.setIconTintResource(R.color.darkgrey)
-            } else {
-                rightIcon.setIconTintResource(R.color.lightgrey)
-            }
+            if(colorBtnClicks > 6) {
+                if (scrollView.scrollX == 0) {
+                    rightIcon.setIconTintResource(R.color.darkgrey)
+                } else {
+                    rightIcon.setIconTintResource(R.color.lightgrey)
+                }
 
-            if (scrollView.scrollX == maxScrollX) {
-                leftIcon.setIconTintResource(R.color.darkgrey)
-            } else {
-                leftIcon.setIconTintResource(R.color.lightgrey)
-            }
+                if (scrollView.scrollX == maxScrollX) {
+                    leftIcon.setIconTintResource(R.color.darkgrey)
+                } else {
+                    leftIcon.setIconTintResource(R.color.lightgrey)
+                }
 
-            if (scrollView.scrollX != 0 && scrollView.scrollX != maxScrollX)  {
-                rightIcon.setIconTintResource(R.color.darkgrey)
-                leftIcon.setIconTintResource(R.color.darkgrey)
+                if (scrollView.scrollX != 0 && scrollView.scrollX != maxScrollX) {
+                    rightIcon.setIconTintResource(R.color.darkgrey)
+                    leftIcon.setIconTintResource(R.color.darkgrey)
+                }
             }
         }
 
@@ -75,7 +76,11 @@ class TransitionSequenceFragment : Fragment() {
 
         clearButton.setOnClickListener {
             val containingView = view?.findViewById<LinearLayout>(R.id.linearLayout)
-            containingView.removeAllViews();
+            containingView.removeAllViews()
+
+            view?.findViewById<HorizontalScrollView>(R.id.scrollView).isScrollbarFadingEnabled = false
+            rightIcon.setIconTintResource(R.color.lightgrey)
+            leftIcon.setIconTintResource(R.color.lightgrey)
 
             colorBtnClicks = 0
             colorSequence = ""
@@ -115,16 +120,13 @@ class TransitionSequenceFragment : Fragment() {
         if(colorBtnClicks > 6) {
             var rightIcon = view.findViewById<MaterialButton>(R.id.question_temp_btn_right)
             rightIcon.setIconTintResource(R.color.darkgrey)
+
+            view?.findViewById<HorizontalScrollView>(R.id.scrollView).isScrollbarFadingEnabled = false
         }
     }
 
     private fun createBlock(blockNum: Int): Button {
         var containingView = view?.findViewById<LinearLayout>(R.id.linearLayout)
-
-        /*
-        <!--                        style="?android:attr/buttonBarButtonStyle"-->
-        <!--                        android:layout_weight="1"-->
-        */
 
         var scale = resources.displayMetrics.density
         var widthPixels = (47 * scale + 0.5f)
