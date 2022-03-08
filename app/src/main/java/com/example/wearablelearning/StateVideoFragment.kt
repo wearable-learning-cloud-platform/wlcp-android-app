@@ -1,25 +1,25 @@
 package com.example.wearablelearning
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.MediaController
 import android.widget.TextView
 import android.widget.VideoView
 import androidx.fragment.app.Fragment
+import com.google.android.material.button.MaterialButton
 
 
 class StateVideoFragment : Fragment() {
-    companion object {
-        var isPaused = true
-    }
+    lateinit var videoView: VideoView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,42 +37,49 @@ class StateVideoFragment : Fragment() {
         val videoName = stateVideo.toString().split(".")[0]
         val resID = resources.getIdentifier(videoName, "raw", context?.packageName)
 
-        val videoView = getView()?.findViewById<VideoView>(R.id.state_videoView)
+        videoView = requireView().findViewById(R.id.state_videoView)!!
         val mediaController = MediaController(context)
         mediaController.setAnchorView(videoView)
         mediaController.visibility = View.GONE
+        videoView?.seekTo(1)
+
+        var videoPath = ""
 
         if (videoView != null) {
-            val path = "android.resource://" + context?.packageName + "/" + resID
+            videoPath = "android.resource://" + context?.packageName + "/" + resID
             videoView.setMediaController(mediaController)
-            videoView.setVideoURI(Uri.parse(path))
-            videoView.seekTo(1)
+            videoView.setVideoURI(Uri.parse(videoPath))
         }
 
         videoView?.setOnTouchListener(OnTouchListener { v, event ->
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    if(isPaused) {
-                        isPaused = false
-
-                        //TODO expand video to fullscreen
-//                        val metrics = requireContext().resources.displayMetrics
-//                        val width = metrics.widthPixels
-//                        val height = metrics.heightPixels
-//
-//                        videoView.layoutParams = FrameLayout.LayoutParams(width, height)
-
-                        videoView.start()
-                    }
-                    else {
-                        isPaused = true
-                        videoView.pause()
-                    }
-
+                    val intent = Intent(activity, VideoFullscreenActivity::class.java)
+                    intent.putExtra("videoPath", videoPath)
+                    startActivity(intent)
                 }
             }
 
             v?.onTouchEvent(event) ?: true
         })
+
+        getView()?.findViewById<MaterialButton>(R.id.play_btn)?.setOnClickListener {
+            val motionEvent = MotionEvent.obtain(
+                SystemClock.uptimeMillis(),
+                SystemClock.uptimeMillis() + 100,
+                MotionEvent.ACTION_DOWN,
+                android.R.attr.x.toFloat(),
+                android.R.attr.y.toFloat(),
+                0
+            )
+
+            videoView?.dispatchTouchEvent(motionEvent)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        videoView.seekTo(1)
     }
 }

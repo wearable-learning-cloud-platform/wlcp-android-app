@@ -27,12 +27,31 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/max_photo_height">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/play_btn"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:elevation="4dp"
+                app:backgroundTint="@color/transparent"
+                app:icon="@drawable/ic_play_foreground"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/icon_padding"
+                app:iconTint="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/state_videoView"
+                app:layout_constraintEnd_toEndOf="@+id/state_videoView"
+                app:layout_constraintStart_toStartOf="@+id/state_videoView"
+                app:layout_constraintTop_toTopOf="@+id/state_videoView"
+                app:strokeColor="@color/transparent" />
+
             <VideoView
                 android:id="@+id/state_videoView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:maxHeight="@dimen/max_photo_height"
-                tools:layout_editor_absoluteY="582dp" />
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="-44dp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
