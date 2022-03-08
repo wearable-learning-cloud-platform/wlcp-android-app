@@ -1,21 +1,21 @@
 package com.example.wearablelearning
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.HorizontalScrollView
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.marginRight
 import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
+import kotlin.math.roundToInt
 
 
 class TransitionSequenceFragment : Fragment() {
     companion object {
-        const val maxBlocks = 10
         private var colorBtnClicks = 0
         private var colorSequence: String = ""
     }
@@ -74,15 +74,8 @@ class TransitionSequenceFragment : Fragment() {
         }
 
         clearButton.setOnClickListener {
-            for(i in 2..maxBlocks+1) {
-                val blockId = resources.getIdentifier(
-                    "question_temp_btn_$i",
-                    "id",
-                    requireContext().packageName
-                )
-
-                view.findViewById<Button>(blockId).setBackgroundColor(Color.TRANSPARENT)
-            }
+            val containingView = view?.findViewById<LinearLayout>(R.id.linearLayout)
+            containingView.removeAllViews();
 
             colorBtnClicks = 0
             colorSequence = ""
@@ -114,22 +107,43 @@ class TransitionSequenceFragment : Fragment() {
     }
 
     private fun addBlockToSolution(clickedButton: Button, color: Int, view: View) {
-        var blockNum = colorBtnClicks+1
+        var blockNum = colorBtnClicks
 
-        if (colorBtnClicks <= maxBlocks) {
-            val buttonId = resources.getIdentifier(
-                "question_temp_btn_$blockNum",
-                "id",
-                requireContext().packageName
-            )
-            view.findViewById<Button>(buttonId)
-                .setBackgroundColor(ContextCompat.getColor(requireContext(), color))
-        }
+        var block = createBlock(blockNum)
+        block.setBackgroundColor(ContextCompat.getColor(requireContext(), color))
 
         if(colorBtnClicks > 6) {
             var rightIcon = view.findViewById<MaterialButton>(R.id.question_temp_btn_right)
             rightIcon.setIconTintResource(R.color.darkgrey)
         }
+    }
+
+    private fun createBlock(blockNum: Int): Button {
+        var containingView = view?.findViewById<LinearLayout>(R.id.linearLayout)
+
+        /*
+        <!--                        style="?android:attr/buttonBarButtonStyle"-->
+        <!--                        android:layout_weight="1"-->
+        */
+
+        var scale = resources.displayMetrics.density
+        var widthPixels = (47 * scale + 0.5f)
+        var heightPixels = (50 * scale + 0.5f)
+        var marginRightPixels = (4 * scale + 0.5f)
+
+        var newBlock = Button(context)
+        containingView?.addView(newBlock)
+
+        newBlock.layoutParams.width = widthPixels.roundToInt()
+        newBlock.layoutParams.height = heightPixels.roundToInt()
+        newBlock.tag = "question_temp_btn_$blockNum"
+        newBlock.text = ""
+
+        val param = newBlock.layoutParams as ViewGroup.MarginLayoutParams
+        param.setMargins(0, 0, marginRightPixels.roundToInt(), 0)
+        newBlock.layoutParams = param
+
+        return newBlock
     }
 
     private fun addKeywordToSequence(keyword: String) {

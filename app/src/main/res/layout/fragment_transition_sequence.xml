@@ -109,113 +109,14 @@
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1" >
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <Button
-                        android:id="@+id/question_temp_btn_2"
-                        style="?android:attr/buttonBarButtonStyle"
-                        android:layout_width="47dp"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="@dimen/button_half_space"
-                        android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="@string/block_text" />
-
-                    <Button
-                        android:id="@+id/question_temp_btn_3"
-                        style="?android:attr/buttonBarButtonStyle"
-                        android:layout_width="47dp"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="@dimen/button_half_space"
-                        android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="@string/block_text" />
-
-                    <Button
-                        android:id="@+id/question_temp_btn_4"
-                        style="?android:attr/buttonBarButtonStyle"
-                        android:layout_width="47dp"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="@dimen/button_half_space"
-                        android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="@string/block_text" />
-
-                    <Button
-                        android:id="@+id/question_temp_btn_5"
-                        style="?android:attr/buttonBarButtonStyle"
-                        android:layout_width="47dp"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="@dimen/button_half_space"
-                        android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="@string/block_text" />
-
-                    <Button
-                        android:id="@+id/question_temp_btn_6"
-                        style="?android:attr/buttonBarButtonStyle"
-                        android:layout_width="47dp"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="@dimen/button_half_space"
-                        android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="@string/block_text" />
-
-                    <Button
-                        android:id="@+id/question_temp_btn_7"
-                        style="?android:attr/buttonBarButtonStyle"
-                        android:layout_width="47dp"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="@dimen/button_half_space"
-                        android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="@string/block_text" />
-
-                    <Button
-                        android:id="@+id/question_temp_btn_8"
-                        style="?android:attr/buttonBarButtonStyle"
-                        android:layout_width="47dp"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="@dimen/button_half_space"
-                        android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="@string/block_text" />
-
-                    <Button
-                        android:id="@+id/question_temp_btn_9"
-                        style="?android:attr/buttonBarButtonStyle"
-                        android:layout_width="47dp"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="@dimen/button_half_space"
-                        android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="@string/block_text" />
-
-                    <Button
-                        android:id="@+id/question_temp_btn_10"
-                        style="?android:attr/buttonBarButtonStyle"
-                        android:layout_width="47dp"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="@dimen/button_half_space"
-                        android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="@string/block_text" />
-
-                    <Button
-                        android:id="@+id/question_temp_btn_11"
-                        style="?android:attr/buttonBarButtonStyle"
-                        android:layout_width="47dp"
-                        android:layout_height="50dp"
-                        android:layout_marginRight="@dimen/button_half_space"
-                        android:layout_weight="1"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="@string/block_text" />
-
-                </LinearLayout>
+                    android:id="@+id/linearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/button_half_space"></LinearLayout>
             </HorizontalScrollView>
 
             <Button
