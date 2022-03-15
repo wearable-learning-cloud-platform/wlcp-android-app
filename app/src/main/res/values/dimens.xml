@@ -20,4 +20,6 @@
 
     <dimen name="icon_padding">0dp</dimen>
     <dimen name="icon_margin">8dp</dimen>
+    <dimen name="margin_confirmation_btns">4dp</dimen>
+    <dimen name="confirm_body_text_size">20sp</dimen>
 </resources>

@@ -1,5 +1,8 @@
 package com.example.wearablelearning
 
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +13,7 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.roundToInt
 
 
@@ -75,15 +79,26 @@ class TransitionSequenceFragment : Fragment() {
         }
 
         clearButton.setOnClickListener {
-            val containingView = view?.findViewById<LinearLayout>(R.id.linearLayout)
-            containingView.removeAllViews()
+            context?.let { it1 ->
+                MaterialAlertDialogBuilder(it1, R.style.Theme_WearableLearning_AlertDialog)
+                    .setMessage(resources.getString(R.string.confirm_clear_text))
+                    .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
+                        val containingView = view?.findViewById<LinearLayout>(R.id.linearLayout)
+                        containingView.removeAllViews()
 
-            view?.findViewById<HorizontalScrollView>(R.id.scrollView).isScrollbarFadingEnabled = false
-            rightIcon.setIconTintResource(R.color.lightgrey)
-            leftIcon.setIconTintResource(R.color.lightgrey)
+                        view?.findViewById<HorizontalScrollView>(R.id.scrollView).isScrollbarFadingEnabled =
+                            false
+                        rightIcon.setIconTintResource(R.color.lightgrey)
+                        leftIcon.setIconTintResource(R.color.lightgrey)
 
-            colorBtnClicks = 0
-            colorSequence = ""
+                        colorBtnClicks = 0
+                        colorSequence = ""
+                    }
+                    .show()
+            }
         }
 
         redButton.setOnClickListener {

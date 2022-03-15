@@ -58,13 +58,13 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <!-- Strings used for confirmation activity -->
+    <string name="no_text">No</string>
+    <string name="yes_text">Yes</string>
+    <string name="confirm_clear_text">Are you sure you want to clear your answer?</string>
     <!-- Strings used for game name, player name, and team number -->
     <string name="game_name_txt">Game Null</string>
     <string name="player_name_txt">Player Null&#160;</string>
     <string name="team_name_txt">(Team Null)</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="close_btn_text">X</string>
 </resources>

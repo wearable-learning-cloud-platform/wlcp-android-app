@@ -27,4 +27,30 @@
         <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
         <item name="fullscreenTextColor">@color/light_blue_A200</item>
     </style>
+
+    <style name="Theme.WearableLearning.AlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/BodyTextStyle</item>
+    </style>
+
+    <style name="BodyTextStyle" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
+        <item name="android:textSize">@dimen/confirm_body_text_size</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:paddingBottom">@dimen/padding_bot</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/red</item>
+        <item name="android:layout_marginRight">@dimen/button_half_space</item>
+        <item name="android:paddingHorizontal">@dimen/button_half_space</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/green</item>
+        <item name="android:layout_marginLeft">@dimen/button_half_space</item>
+        <item name="android:paddingHorizontal">@dimen/button_half_space</item>
+    </style>
 </resources>
