@@ -3,22 +3,28 @@ package com.example.wearablelearning
 import android.R.attr.x
 import android.R.attr.y
 import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.MediaController
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
+import java.util.*
+import kotlin.concurrent.schedule
 
 
 class VideoFullscreenActivity : AppCompatActivity() {
     companion object {
-        var isPaused = true
+        var isPaused = 1.0 //1.0=true, 0.0=false, 0.5=almost
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -58,14 +64,36 @@ class VideoFullscreenActivity : AppCompatActivity() {
         videoView?.setOnTouchListener(View.OnTouchListener { v, event ->
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    if (isPaused) {
+                    //if video is paused, then play
+                    if (isPaused == 1.0) {
                         videoView.start()
-                        isPaused = false
+                        isPaused = 0.0
+                        clearDim(videoView)
                         playBtn.icon = this@VideoFullscreenActivity.let { ContextCompat.getDrawable(it, R.drawable.ic_pause_foreground)}
                         playBtn.iconTint = ContextCompat.getColorStateList(this@VideoFullscreenActivity, R.color.transparent)
-                    } else {
+                    }
+                    //if video is playing and screen tapped, then signal that player can pause by dimming screen and showing pause button for 1.5s
+                    else if(isPaused == 0.0) {
+                        isPaused = 0.5
+                        applyDim(videoView, 0.5f)
+                        playBtn.icon = this@VideoFullscreenActivity.let { ContextCompat.getDrawable(it, R.drawable.ic_pause_foreground)}
+                        playBtn.iconTint = ContextCompat.getColorStateList(this@VideoFullscreenActivity, R.color.white)
+
+                        Timer("SettingUp", false).schedule(1500) {
+                            if(isPaused == 0.5) {
+                                isPaused = 0.0
+                                clearDim(videoView)
+                                playBtn.iconTint = ContextCompat.getColorStateList(
+                                    this@VideoFullscreenActivity,
+                                    R.color.transparent
+                                )
+                            }
+                        }
+                    }
+                    //if video is playing and pause signal already triggered, then pause
+                    else if (isPaused == 0.5) {
                         videoView.pause()
-                        isPaused = true
+                        isPaused = 1.0
                         playBtn.icon = this@VideoFullscreenActivity.let { ContextCompat.getDrawable(it, R.drawable.ic_play_foreground)}
                         playBtn.iconTint = ContextCompat.getColorStateList(this@VideoFullscreenActivity, R.color.white)
                     }
@@ -77,7 +105,7 @@ class VideoFullscreenActivity : AppCompatActivity() {
 
         videoView.setOnCompletionListener {
             videoView.seekTo(1)
-            isPaused = false
+            isPaused = 0.5
 
             val motionEvent = MotionEvent.obtain(
                 SystemClock.uptimeMillis(),
@@ -101,5 +129,18 @@ class VideoFullscreenActivity : AppCompatActivity() {
             finish()
             overridePendingTransition(0, 0)
         }
+    }
+
+    private fun applyDim(parent: VideoView, dimAmount: Float) {
+        val dim: Drawable = ColorDrawable(Color.BLACK)
+        dim.setBounds(0, 0, parent.width, parent.height)
+        dim.alpha = (255 * dimAmount).toInt()
+        val overlay = parent.overlay
+        overlay.add(dim)
+    }
+
+    private fun clearDim(parent: VideoView) {
+        val overlay = parent.overlay
+        overlay.clear()
     }
 }
