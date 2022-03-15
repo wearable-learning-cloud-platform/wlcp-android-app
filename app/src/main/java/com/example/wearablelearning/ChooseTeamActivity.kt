@@ -12,10 +12,18 @@ class ChooseTeamActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_team)
 
-        val spinner: Spinner = findViewById(R.id.spinner)
-        val adapter = ArrayAdapter.createFromResource(this, R.array.team_player_list, android.R.layout.simple_spinner_item)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+        val teamArr = getDropdownList("team")
+        val playerArr = getDropdownList("player")
+
+        val spinnerTeam: Spinner = findViewById(R.id.team_spinner)
+        val adapterTeam = ArrayAdapter(this, android.R.layout.simple_spinner_item, teamArr)
+        adapterTeam.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerTeam.adapter = adapterTeam
+
+        val spinnerPlayer: Spinner = findViewById(R.id.player_spinner)
+        val adapterPlayer = ArrayAdapter(this, android.R.layout.simple_spinner_item, playerArr)
+        adapterPlayer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerPlayer.adapter = adapterPlayer
 
         val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
 
@@ -23,7 +31,7 @@ class ChooseTeamActivity : AppCompatActivity() {
 
         joinTeamBtn.setOnClickListener {
             if (gameInfo != null) {
-                setGameInfoTeamAndPlayer(spinner, gameInfo)
+                setGameInfoTeamAndPlayer(spinnerTeam, spinnerPlayer, gameInfo)
             }
 
             val intent = Intent(this@ChooseTeamActivity, GameActivity::class.java)
@@ -35,7 +43,7 @@ class ChooseTeamActivity : AppCompatActivity() {
 
         backBtn.setOnClickListener {
             if (gameInfo != null) {
-                setGameInfoTeamAndPlayer(spinner, gameInfo)
+                setGameInfoTeamAndPlayer(spinnerTeam, spinnerPlayer, gameInfo)
             }
 
             val intent = Intent(this@ChooseTeamActivity, LoginActivity::class.java)
@@ -44,19 +52,37 @@ class ChooseTeamActivity : AppCompatActivity() {
         }
     }
 
-    private fun setGameInfoTeamAndPlayer(spinner: Spinner, gameInfo: GameInfo) {
-        val spinnerSelected: String = spinner.selectedItem.toString()
-        val selected: Array<String> = parseSpinnerSelection(spinnerSelected)
+    private fun setGameInfoTeamAndPlayer(spinnerTeam: Spinner, spinnerPlauer: Spinner, gameInfo: GameInfo) {
+        val teamSelected: String = spinnerTeam.selectedItem.toString()
+        val playerSelected: String = spinnerPlauer.selectedItem.toString()
 
         if (gameInfo != null) {
-            gameInfo.team = selected[0]
-            gameInfo.player = selected[1]
+            gameInfo.team = teamSelected
+            gameInfo.player = playerSelected
         }
     }
 
-    private fun parseSpinnerSelection(str: String): Array<String> {
-        val strSplit: List<String> = str.split(" ")
+    private fun getDropdownList(item: String): ArrayList<String> {
+        val arr = ArrayList<String>()
 
-        return arrayOf(strSplit[1], strSplit[3])
+        for (i in 1..mapCount(item)) {
+            arr.add(i.toString())
+        }
+
+        return arr
+    }
+
+    private fun mapCount(item: String): Int {
+        val jsonContents: String = resources.openRawResource(R.raw.game12) //TODO
+            .bufferedReader().use { it.readText() }
+        val gameJSONInfo: String = StringUtils.parseJsonWithGson(jsonContents).getValue("game").toString()
+        var cnt = "1"
+
+        if(item == "team")
+            cnt = gameJSONInfo.substringAfter("team_cnt=").substringBefore(", players_per_team=")
+        else if(item == "player")
+            cnt = gameJSONInfo.substringAfter("players_per_team=").substringBefore(", visibility=")
+
+        return cnt.split(".")[0].toInt()
     }
 }
