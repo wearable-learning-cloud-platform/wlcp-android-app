@@ -2,6 +2,7 @@ package com.example.wearablelearning
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.media.MediaPlayer.OnPreparedListener
 import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
@@ -44,18 +45,35 @@ class StateVideoFragment : Fragment() {
         videoView?.seekTo(1)
 
         var videoPath = ""
+        var videoOrientation = ""
 
         if (videoView != null) {
             videoPath = "android.resource://" + context?.packageName + "/" + resID
             videoView.setMediaController(mediaController)
             videoView.setVideoURI(Uri.parse(videoPath))
+
+
         }
+
+        videoView.setOnPreparedListener(OnPreparedListener { mp ->
+            mp.setOnVideoSizeChangedListener { mp, width, height ->
+                val width: Int = videoView.width
+                val height: Int = videoView.height
+
+                videoOrientation = if(width >= height) {
+                    "landscape"
+                } else {
+                    "portrait"
+                }
+            }
+        })
 
         videoView?.setOnTouchListener(OnTouchListener { v, event ->
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
                     val intent = Intent(activity, VideoFullscreenActivity::class.java)
                     intent.putExtra("videoPath", videoPath)
+                    intent.putExtra("videoOrientation", videoOrientation)
                     startActivity(intent)
                 }
             }

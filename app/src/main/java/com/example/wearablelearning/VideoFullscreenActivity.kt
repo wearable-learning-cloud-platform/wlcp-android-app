@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +17,12 @@ import android.widget.Button
 import android.widget.MediaController
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 import java.util.*
 import kotlin.concurrent.schedule
+import kotlin.system.exitProcess
 
 
 class VideoFullscreenActivity : AppCompatActivity() {
@@ -34,6 +37,7 @@ class VideoFullscreenActivity : AppCompatActivity() {
         setContentView(R.layout.activity_video_fullscreen)
 
         var videoPath = intent.getSerializableExtra("videoPath") as String
+        var videoOrientation = intent.getSerializableExtra("videoOrientation") as String
 
         val videoView = findViewById<VideoView>(R.id.activity_videoView)
         val mediaController = MediaController(this@VideoFullscreenActivity)
@@ -44,6 +48,11 @@ class VideoFullscreenActivity : AppCompatActivity() {
             videoView.setMediaController(mediaController)
             videoView.setVideoURI(Uri.parse(videoPath))
             videoView.seekTo(1)
+
+            if(videoOrientation == "landscape") {
+                videoView.layoutParams.height = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                videoView.layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT
+            }
         }
 
         val playBtn = findViewById<MaterialButton>(R.id.play_btn)
@@ -126,8 +135,8 @@ class VideoFullscreenActivity : AppCompatActivity() {
                 videoView.stopPlayback()
             }
 
-            finish()
             overridePendingTransition(0, 0)
+            finish()
         }
     }
 
