@@ -37,7 +37,7 @@ class GamePlayerInfoFragment : Fragment() {
         }
 
         if (gameInfo?.team != null && gameInfo?.player != null) {
-            textViewTeamName.text = " (Team " + gameInfo.team + " Player " + gameInfo.player + ")"
+            textViewTeamName.text = " (" + gameInfo.team + " " + gameInfo.player + ")"
         }
     }
 }

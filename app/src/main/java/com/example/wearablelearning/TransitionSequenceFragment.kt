@@ -79,8 +79,8 @@ class TransitionSequenceFragment : Fragment() {
         }
 
         clearButton.setOnClickListener {
-            context?.let { it1 ->
-                MaterialAlertDialogBuilder(it1, R.style.Theme_WearableLearning_AlertDialog)
+            context?.let { context1 ->
+                MaterialAlertDialogBuilder(context1, R.style.Theme_WearableLearning_AlertDialog)
                     .setMessage(resources.getString(R.string.confirm_clear_text))
                     .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
                         dialog.cancel()

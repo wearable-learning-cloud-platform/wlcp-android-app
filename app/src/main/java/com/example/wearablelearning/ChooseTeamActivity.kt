@@ -6,6 +6,8 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ChooseTeamActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,9 +66,15 @@ class ChooseTeamActivity : AppCompatActivity() {
 
     private fun getDropdownList(item: String): ArrayList<String> {
         val arr = ArrayList<String>()
+        val itemCap = item.replaceFirstChar{
+            if (it.isLowerCase())
+                it.titlecase(Locale.getDefault())
+            else
+                it.toString()
+        }
 
         for (i in 1..mapCount(item)) {
-            arr.add(i.toString())
+            arr.add("$itemCap $i")
         }
 
         return arr
