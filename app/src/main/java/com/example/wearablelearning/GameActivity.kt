@@ -1,9 +1,12 @@
 package com.example.wearablelearning
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+
 
 /**
  * Game activity.
@@ -13,6 +16,7 @@ class GameActivity : AppCompatActivity() {
         var map: Map<String, Any> = emptyMap()
         var states: MutableMap<String, State> = mutableMapOf()
         var transitions: MutableMap<String, Transition> = mutableMapOf()
+        val gameInfo: GameInfo = GameInfo()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -244,5 +248,17 @@ class GameActivity : AppCompatActivity() {
             ft.replace(R.id.frameLayout2, fragInfo)
             ft.commit()
         }
+    }
+
+    override fun onBackPressed() {
+        MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
+            .setMessage(resources.getString(R.string.confirm_back_text))
+            .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
+                super.onBackPressed()
+            }
+            .show()
     }
 }

@@ -2,11 +2,12 @@ package com.example.wearablelearning
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class ChooseTeamActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +28,16 @@ class ChooseTeamActivity : AppCompatActivity() {
         spinnerPlayer.adapter = adapterPlayer
 
         val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
+
+        if(gameInfo?.team != null && gameInfo.player != null) {
+            spinnerTeam.setSelection(teamArr.indexOf(
+                teamArr.first { elem -> elem == gameInfo.team }
+            ))
+
+            spinnerPlayer.setSelection(playerArr.indexOf(
+                playerArr.first { elem -> elem == gameInfo.player }
+            ))
+        }
 
         val joinTeamBtn: Button = findViewById(R.id.join_game_btn)
 

@@ -45,6 +45,7 @@
     <string name="answer_hint">Answer</string>
     <string name="answer_invalid_error">Incorrect answer. Please try again.</string>
     <string name="title_activity_main2">MainActivity2</string>
+    <string name="confirm_back_text">Are you sure you want to go back?\n\nIf yes, you can come back to this screen by entering the same game pin, name, team, and player.</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
