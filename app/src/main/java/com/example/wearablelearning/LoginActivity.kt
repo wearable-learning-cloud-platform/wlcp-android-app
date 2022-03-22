@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import java.util.*
 
@@ -102,23 +103,33 @@ class LoginActivity : AppCompatActivity() {
              * tab. Has size of 1 if tabPos=0 or 2 if tabPos=1.
              */
             val inputs: Array<String> = getLoginInputs(tabPos)
+            val name = inputs[0]
 
             if(checkInput(inputs, tabPos)) {
                 if (gameInfo != null && tabPos == 0) {
-                    gameInfo.name = inputs[0]
+                    gameInfo.name = name
                     gameInfo.userName = null
                 }
                 else if(gameInfo != null && tabPos == 1) {
                     gameInfo.name = null
-                    gameInfo.userName = inputs[0]
+                    gameInfo.userName = name
                 }
 
-                /**
-                 * The intent to switch activities from LoginActivity to GameActivity.
-                 */
-                val intent = Intent(this@LoginActivity, ChooseTeamActivity::class.java)
-                intent.putExtra("gameInfo", gameInfo)
-                startActivity(intent)
+                val tempMsg = resources.getString(R.string.confirm_login_text)
+                var msg = tempMsg.substringBefore(" Username?")
+                msg = "$msg $name?"
+
+                MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
+                    .setMessage(msg)
+                    .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
+                        val intent = Intent(this@LoginActivity, ChooseTeamActivity::class.java)
+                        intent.putExtra("gameInfo", gameInfo)
+                        startActivity(intent)
+                    }
+                    .show()
             }
         }
 

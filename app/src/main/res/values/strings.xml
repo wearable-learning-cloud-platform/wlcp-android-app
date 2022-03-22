@@ -22,6 +22,7 @@
     <string name="login_tab_name">Name</string>
     <string name="login_tab_account">Account</string>
     <string name="enter_game_button_text">Enter game</string>
+    <string name="confirm_login_text">Are you sure you want to join as Username?</string>
 
     <!-- ChooseTeamActivity -->
     <string name="team_message">Team Selection</string>

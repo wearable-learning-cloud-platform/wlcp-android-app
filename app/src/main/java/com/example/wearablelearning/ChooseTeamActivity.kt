@@ -2,20 +2,13 @@ package com.example.wearablelearning
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
 class ChooseTeamActivity : AppCompatActivity() {
-    companion object {
-        var teamSelected: String = "Team 1"
-        var playerSelected: String = "Player 1"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_team)
