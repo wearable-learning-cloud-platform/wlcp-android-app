@@ -29,6 +29,7 @@
     <string name="team_prompt">Team</string>
     <string name="player_prompt">Player</string>
     <string name="join_team_button_text">Join team</string>
+    <string name="confirm_join_text">Are you sure you want to join as Team x Player y?</string>
 
     <!-- GameActivity -->
     <string name="question_txt">No state.</string>

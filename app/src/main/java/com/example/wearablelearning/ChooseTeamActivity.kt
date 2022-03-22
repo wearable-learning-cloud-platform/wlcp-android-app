@@ -2,14 +2,20 @@ package com.example.wearablelearning
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 
 class ChooseTeamActivity : AppCompatActivity() {
+    companion object {
+        var teamSelected: String = "Team 1"
+        var playerSelected: String = "Player 1"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_team)
@@ -32,20 +38,38 @@ class ChooseTeamActivity : AppCompatActivity() {
         val joinTeamBtn: Button = findViewById(R.id.join_game_btn)
 
         joinTeamBtn.setOnClickListener {
-            if (gameInfo != null) {
-                setGameInfoTeamAndPlayer(spinnerTeam, spinnerPlayer, gameInfo)
-            }
+            val teamSelected: String = spinnerTeam.selectedItem.toString()
+            val playerSelected: String = spinnerPlayer.selectedItem.toString()
 
-            val intent = Intent(this@ChooseTeamActivity, GameActivity::class.java)
-            intent.putExtra("gameInfo", gameInfo)
-            startActivity(intent)
+            val tempMsg = resources.getString(R.string.confirm_join_text)
+            var msg = tempMsg.substringBefore(" Team x Player y?")
+            msg = "$msg $teamSelected $playerSelected?"
+
+            MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
+                .setMessage(msg)
+                .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
+                    dialog.cancel()
+                }
+                .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
+                    if (gameInfo != null) {
+                        setGameInfoTeamAndPlayer(teamSelected, playerSelected, gameInfo)
+                    }
+
+                    val intent = Intent(this@ChooseTeamActivity, GameActivity::class.java)
+                    intent.putExtra("gameInfo", gameInfo)
+                    startActivity(intent)
+                }
+                .show()
         }
 
         val backBtn: Button = findViewById(R.id.back_btn)
 
         backBtn.setOnClickListener {
             if (gameInfo != null) {
-                setGameInfoTeamAndPlayer(spinnerTeam, spinnerPlayer, gameInfo)
+                val teamSelected: String = spinnerTeam.selectedItem.toString()
+                val playerSelected: String = spinnerPlayer.selectedItem.toString()
+
+                setGameInfoTeamAndPlayer(teamSelected, playerSelected, gameInfo)
             }
 
             val intent = Intent(this@ChooseTeamActivity, LoginActivity::class.java)
@@ -54,10 +78,7 @@ class ChooseTeamActivity : AppCompatActivity() {
         }
     }
 
-    private fun setGameInfoTeamAndPlayer(spinnerTeam: Spinner, spinnerPlauer: Spinner, gameInfo: GameInfo) {
-        val teamSelected: String = spinnerTeam.selectedItem.toString()
-        val playerSelected: String = spinnerPlauer.selectedItem.toString()
-
+    private fun setGameInfoTeamAndPlayer(teamSelected: String, playerSelected: String, gameInfo: GameInfo) {
         if (gameInfo != null) {
             gameInfo.team = teamSelected
             gameInfo.player = playerSelected
