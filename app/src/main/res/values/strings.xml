@@ -22,7 +22,7 @@
     <string name="login_tab_name">Name</string>
     <string name="login_tab_account">Account</string>
     <string name="enter_game_button_text">Enter game</string>
-    <string name="confirm_login_text">Are you sure you want to join as Username?</string>
+    <string name="confirm_login_text">Join game as Username?</string>
 
     <!-- ChooseTeamActivity -->
     <string name="team_message">Team Selection</string>
@@ -30,7 +30,7 @@
     <string name="team_prompt">Team</string>
     <string name="player_prompt">Player</string>
     <string name="join_team_button_text">Join team</string>
-    <string name="confirm_join_text">Are you sure you want to join as Team x Player y?</string>
+    <string name="confirm_join_text">Join team as Team x Player y?</string>
 
     <!-- GameActivity -->
     <string name="question_txt">No state.</string>
@@ -45,7 +45,7 @@
     <string name="answer_hint">Answer</string>
     <string name="answer_invalid_error">Incorrect answer. Please try again.</string>
     <string name="title_activity_main2">MainActivity2</string>
-    <string name="confirm_back_text">Are you sure you want to go back?\n\nIf yes, you can come back to this screen by entering the same game pin, name, team, and player.</string>
+    <string name="confirm_back_text">Exiting the game?\n\nIf yes, you can come back to this screen by entering the same game pin, name, team, and player.</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
