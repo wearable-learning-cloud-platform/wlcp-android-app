@@ -103,7 +103,7 @@ class LoginActivity : AppCompatActivity() {
              * tab. Has size of 1 if tabPos=0 or 2 if tabPos=1.
              */
             val inputs: Array<String> = getLoginInputs(tabPos)
-            val name = inputs[0]
+            val name = inputs[0].trim()
 
             if(checkInput(inputs, tabPos)) {
                 if (gameInfo != null && tabPos == 0) {
