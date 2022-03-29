@@ -20,7 +20,8 @@
         <activity
             android:name=".GameActivity"
             android:exported="false"
-            android:theme="@style/Theme.WearableLearning.NoActionBar" />
+            android:theme="@style/Theme.WearableLearning.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".LoginActivity"
             android:exported="false"
