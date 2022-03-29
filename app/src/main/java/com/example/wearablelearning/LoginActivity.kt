@@ -24,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
+        var gameInfoOfStartedGame = intent.getSerializableExtra("gameInfoOfStartedGame") as? GameInfo
 
         /**
          * The 'Join Game' button that triggers a switch from LoginActivity to GameActivity.
@@ -127,6 +128,7 @@ class LoginActivity : AppCompatActivity() {
                     .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
                         val intent = Intent(this@LoginActivity, ChooseTeamActivity::class.java)
                         intent.putExtra("gameInfo", gameInfo)
+                        intent.putExtra("gameInfoOfStartedGame", gameInfoOfStartedGame)
                         startActivity(intent)
                     }
                     .show()

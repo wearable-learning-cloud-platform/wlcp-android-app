@@ -2,6 +2,7 @@ package com.example.wearablelearning
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -16,33 +17,49 @@ class GameActivity : AppCompatActivity() {
         var map: Map<String, Any> = emptyMap()
         var states: MutableMap<String, State> = mutableMapOf()
         var transitions: MutableMap<String, Transition> = mutableMapOf()
-        val gameInfo: GameInfo = GameInfo()
+        var currTransId: String = String()
     }
+
+    lateinit var gameInfo: GameInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
+        gameInfo = (intent.getSerializableExtra("gameInfo") as? GameInfo)!!
+        var gameInfoOfStartedGame = intent.getSerializableExtra("gameInfoOfStartedGame") as? GameInfo
 
         var fm: FragmentManager = supportFragmentManager
 
         mapJson()
 
         if (gameInfo != null) {
-            gameInfo.gameName = mapGameName()
+            gameInfo?.gameName = mapGameName()
         }
 
         mapStates()
         mapTransitions()
         addGamePlayerInfo(fm)
 
-        var idx = 1
-        changeState(fm, idx)
-        changeTransition(fm, getOutputTransition(idx))
+        if(gameInfoOfStartedGame != null &&
+            gameInfoOfStartedGame.gamePin.equals(gameInfo.gamePin) &&
+            gameInfoOfStartedGame.name.equals(gameInfo.name) &&
+            gameInfoOfStartedGame.userName.equals(gameInfo.userName) &&
+            gameInfoOfStartedGame.team.equals(gameInfo.team) &&
+            gameInfoOfStartedGame.player.equals(gameInfo.player)) {
+
+            callTransition(gameInfoOfStartedGame.currTrans!!)
+        } else {
+            var idx = 1
+
+            changeState(fm, idx)
+            changeTransition(fm, getOutputTransition(idx))
+        }
     }
 
     fun callTransition(transId: String) {
+        currTransId = transId
+
         val nextStateId: Int = stateWithInputTransition(transId)
         var fm: FragmentManager = supportFragmentManager
 
@@ -153,7 +170,6 @@ class GameActivity : AppCompatActivity() {
         val ft: FragmentTransaction = fm.beginTransaction()
         val bundle = Bundle()
 
-
         val content = states["state_$idx"]?.content.toString()
         val type = states["state_$idx"]?.type.toString()
 
@@ -257,7 +273,21 @@ class GameActivity : AppCompatActivity() {
                 dialog.cancel()
             }
             .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
-                super.onBackPressed()
+                val intent = Intent(this@GameActivity, MainActivity::class.java)
+
+               /*
+                    FLAG_ACTIVITY_CLEAR_TOP:
+                    If set, and the activity being launched is already running in the current task,
+                    then instead of launching a new instance of that activity, all of the other
+                    activities on top of it will be closed and this Intent will be delivered to the
+                    (now on top) old activity as a new Intent.
+                */
+                gameInfo.currTrans = currTransId
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.putExtra("gameInfo", gameInfo)
+                intent.putExtra("gameInfoOfStartedGame", gameInfo)
+                startActivity(intent)
             }
             .show()
     }

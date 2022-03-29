@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         val gamePinErrorText: TextView = findViewById(R.id.error_tv)
 
         var gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
+        var gameInfoOfStartedGame = intent.getSerializableExtra("gameInfoOfStartedGame") as? GameInfo
 
         if (gameInfo == null) {
             gameInfo = GameInfo()
@@ -66,6 +67,7 @@ class MainActivity : AppCompatActivity() {
                 /** Build _intentMainToLogin_ to switch from [MainActivity] to [LoginActivity]. */
                 val intentMainToLogin = Intent(this@MainActivity, LoginActivity::class.java)
                 intentMainToLogin.putExtra("gameInfo", gameInfo)
+                intentMainToLogin.putExtra("gameInfoOfStartedGame", gameInfoOfStartedGame)
                 startActivity(intentMainToLogin)
             }
         }
