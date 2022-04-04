@@ -27,7 +27,19 @@ class MainActivity : AppCompatActivity() {
         /** The _gamePinErrorText_ is used to display errors on incorrect game PIN input. */
         val gamePinErrorText: TextView = findViewById(R.id.error_tv)
 
+        /**
+         * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
+         * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
+         * All [GameInfo] variables are null at startup and get populated as the user moves
+         * through the different app Activities; [GameInfo] objects are passed from one Activity
+         * to the next.
+         *
+         * Note that when [GameActivity] is started, all prior Activities are terminated. [GameInfo]
+         * is the object that enables storing of user inputs to be used later for pre-populating
+         * fields (e.g., pre-populate names, team numbers, player numbers, etc.).
+         */
         var gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
+
         var gameInfoOfStartedGame = intent.getSerializableExtra("gameInfoOfStartedGame") as? GameInfo
 
         if (gameInfo == null) {
@@ -66,6 +78,8 @@ class MainActivity : AppCompatActivity() {
 
                 /** Build _intentMainToLogin_ to switch from [MainActivity] to [LoginActivity]. */
                 val intentMainToLogin = Intent(this@MainActivity, LoginActivity::class.java)
+
+                /** Add the [GameInfo] objects into _intentMainToLogin_ */
                 intentMainToLogin.putExtra("gameInfo", gameInfo)
                 intentMainToLogin.putExtra("gameInfoOfStartedGame", gameInfoOfStartedGame)
                 startActivity(intentMainToLogin)
