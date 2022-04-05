@@ -14,25 +14,33 @@ import java.util.*
 
 
 /**
- * Login activity.
- * This class is the second screen of the app, asking the player for their name or username and password.
- * On valid inputs, activity switches to GameActivity.
+ * The [LoginActivity] class is launched from [MainActivity] and is used to request the player's
+ * name (for users with no WearableLearning account) or username and password (for users with a
+ * WearableLearning account). This activity launches [GameActivity] on valid user input.
  */
 class LoginActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        /**
+         * Retrieve the [GameInfo] object from the intent that started this Activity.
+         *
+         * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
+         * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
+         */
         val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
         var gameInfoOfStartedGame = intent.getSerializableExtra("gameInfoOfStartedGame") as? GameInfo
 
         /**
-         * The 'Join Game' button that triggers a switch from LoginActivity to GameActivity.
+         * The 'Join Game' button that triggers a switch from [LoginActivity] to [GameActivity].
          */
         val joinGameBtn: Button = findViewById(R.id.join_game_btn)
 
         /**
-         * The 'Back' button that triggers a switch from LoginActivity to MainActivity.
+         * The 'Back' button that triggers a switch from [LoginActivity] to [MainActivity].
          */
         val backBtn: Button = findViewById(R.id.back_btn)
 
@@ -42,24 +50,27 @@ class LoginActivity : AppCompatActivity() {
         var tabPos = 0
 
         /**
-         * tabLayout references tabLayout of activity.
+         * _tabLayout_ references tabLayout of activity.
          */
         val tabLayout: TabLayout = findViewById(R.id.tabLayout)
 
         /**
-         * fm is the fragment manager.
+         * _fm_ is the fragment manager.
          */
         val fm: FragmentManager = supportFragmentManager
 
         /**
-         * ft is the fragment transaction.
+         * _ft_ is the fragment transaction.
          */
-
         val ft: FragmentTransaction = fm.beginTransaction()
         ft.replace(R.id.frameLayout, LoginWithNameFragment())
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         ft.commit()
 
+        /**
+         * Inflate [R.layout.fragment_login_with_account] if the user previously logged in with
+         * a WearableLearning account username and password.
+         */
         if(gameInfo?.userName != null) {
             val tab = tabLayout.getTabAt(1)
             tab?.select()
@@ -171,7 +182,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /**
-     * Checks the values of name (inputs[0]; tab 0 selected) or username and password (inpus[0] and
+     * Checks the values of name (inputs[0]; tab 0 selected) or username and password (inputs[0] and
      * inputs[1]; tab 1 selected). All must have at least 1 character. Username and password must
      * match json. When invalid input, sets error messages.
      * @param inputs: Array<String> of inputs from EditText(s) of fragment

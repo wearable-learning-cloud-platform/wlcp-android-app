@@ -51,6 +51,7 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_login_with_account.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/fragment_login_with_name.xml" value="0.24322916666666666" />
       </map>
     </option>
   </component>

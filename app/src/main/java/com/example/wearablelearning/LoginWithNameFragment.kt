@@ -11,10 +11,13 @@ import java.util.*
 
 
 /**
- * Login With Name Fragment.
- * One of two fragments called by LoginActivity. This fragment is associated to tab 0 (name).
+ * The [LoginWithNameFragment] class is called by [LoginActivity].
+ * This is one of two fragments called by [LoginActivity] and is associated with
+ * [R.layout.fragment_login_with_name] (or tab 0) for logging into the
+ * WearableLearning app with a name.
  */
 class LoginWithNameFragment : Fragment() {
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
