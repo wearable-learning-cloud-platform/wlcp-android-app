@@ -111,8 +111,9 @@ class LoginActivity : AppCompatActivity() {
         //when user selects 'Begin game' button
         joinGameBtn.setOnClickListener {
             /**
-             * Inputs is an array of the user inputs retrieved from fragment associated to the opened
-             * tab. Has size of 1 if tabPos=0 or 2 if tabPos=1.
+             * _Inputs_ is an array of the user inputs retrieved from the fragment associated
+             * to with the active tab. Has size of 1 if _tabPos_=0 (name login) or 2 if
+             * _tabPos_=1 (WearableLearning account username and password).
              */
             val inputs: Array<String> = getLoginInputs(tabPos)
             val name = inputs[0].trim()
@@ -138,6 +139,8 @@ class LoginActivity : AppCompatActivity() {
                     }
                     .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
                         val intent = Intent(this@LoginActivity, ChooseTeamActivity::class.java)
+
+                        /** Add the [GameInfo] objects into _intent_ */
                         intent.putExtra("gameInfo", gameInfo)
                         intent.putExtra("gameInfoOfStartedGame", gameInfoOfStartedGame)
                         startActivity(intent)
@@ -148,7 +151,7 @@ class LoginActivity : AppCompatActivity() {
 
         backBtn.setOnClickListener{
             /**
-             * The intent to switch activities from LoginActivity to MainActivity.
+             * The intent to switch activities from [LoginActivity] to [MainActivity].
              */
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
             intent.putExtra("gameInfo", gameInfo)
@@ -158,7 +161,7 @@ class LoginActivity : AppCompatActivity() {
 
     /**
      * Retrieves inputs from the editTexts of a fragment. Fragment depends on the tabPos.
-     * @param tabPos: int, either 0 or 1
+     * @param tabPos An int which is either 0 (name login) or 1 (account login)
      */
     private fun getLoginInputs(tabPos: Int): Array<String> {
         val inputs: Array<String> = arrayOf("", "")
