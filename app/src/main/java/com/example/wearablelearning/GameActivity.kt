@@ -10,7 +10,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 /**
- * Game activity.
+ * The [GameActivity] class is launched from [ChooseTeamActivity] and is used to display the
+ * relevant _State_ and _Transition_ fragments of the game.
+ *
+ * As a player moves through the current active game, the _State_ and _Transition_ fragments
+ * switch to the next state and transition, as described by the current game information.
  */
 class GameActivity : AppCompatActivity() {
     companion object {

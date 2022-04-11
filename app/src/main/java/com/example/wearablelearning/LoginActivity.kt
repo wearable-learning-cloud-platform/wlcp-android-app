@@ -16,7 +16,7 @@ import java.util.*
 /**
  * The [LoginActivity] class is launched from [MainActivity] and is used to request the player's
  * name (for users with no WearableLearning account) or username and password (for users with a
- * WearableLearning account). This activity launches [GameActivity] on valid user input.
+ * WearableLearning account). This activity launches [ChooseTeamActivity] on valid user input.
  */
 class LoginActivity : AppCompatActivity() {
 
@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
         var gameInfoOfStartedGame = intent.getSerializableExtra("gameInfoOfStartedGame") as? GameInfo
 
         /**
-         * The 'Join Game' button that triggers a switch from [LoginActivity] to [GameActivity].
+         * The 'Join Game' button that triggers a switch from [LoginActivity] to [ChooseTeamActivity].
          */
         val joinGameBtn: Button = findViewById(R.id.join_game_btn)
 
@@ -108,8 +108,9 @@ class LoginActivity : AppCompatActivity() {
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
 
-        //when user selects 'Begin game' button
+        /** Set the _joinGameBtn_ listener to switch from [LoginActivity] to [ChooseTeamActivity]. */
         joinGameBtn.setOnClickListener {
+
             /**
              * _inputs_ is an array of the user entries retrieved from the fragment associated
              * with the active tab. _inputs_ has a size of 1 if _tabPos_=0 (name login), and 2 if
@@ -118,11 +119,15 @@ class LoginActivity : AppCompatActivity() {
             val inputs: Array<String> = getLoginInputs(tabPos)
             val name = inputs[0].trim()
 
+            /** Check whether the user joined with their name or WearableLearning credentials. */
             if(checkInput(inputs, tabPos)) {
+
+                /** User joined the game with their name */
                 if (gameInfo != null && tabPos == 0) {
                     gameInfo.name = name
                     gameInfo.userName = null
                 }
+                /** User joined the game with their WearableLearning credentials */
                 else if(gameInfo != null && tabPos == 1) {
                     gameInfo.name = null
                     gameInfo.userName = name
@@ -132,17 +137,23 @@ class LoginActivity : AppCompatActivity() {
                 var msg = tempMsg.substringBefore(" Username?")
                 msg = "$msg $name?"
 
+                /** Display a dialog box to confirm the user's name/credential entries. */
                 MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
                     .setMessage(msg)
                     .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
                         dialog.cancel()
                     }
                     .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
+                        /**
+                         * The intent to switch activities from [LoginActivity] to [ChooseTeamActivity].
+                         */
                         val intent = Intent(this@LoginActivity, ChooseTeamActivity::class.java)
 
                         /** Add the [GameInfo] objects into _intent_ */
                         intent.putExtra("gameInfo", gameInfo)
                         intent.putExtra("gameInfoOfStartedGame", gameInfoOfStartedGame)
+
+                        /** Launch [ChooseTeamActivity] */
                         startActivity(intent)
                     }
                     .show()

@@ -8,9 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 
-
+/**
+ * The [ChooseTeamActivity] class is launched from [LoginActivity] and is used to request the
+ * player's Team number and Player number.
+ * This activity launches [GameActivity] on valid user input.
+ */
 class ChooseTeamActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_team)
 
@@ -40,9 +46,14 @@ class ChooseTeamActivity : AppCompatActivity() {
             ))
         }
 
+        /**
+         * The 'Join Team' button that triggers a switch from [ChooseTeamActivity] to [GameActivity].
+         */
         val joinTeamBtn: Button = findViewById(R.id.join_game_btn)
 
+        /** Set the _joinTeamBtn_ listener to switch from [ChooseTeamActivity] to [GameActivity]. */
         joinTeamBtn.setOnClickListener {
+
             val teamSelected: String = spinnerTeam.selectedItem.toString()
             val playerSelected: String = spinnerPlayer.selectedItem.toString()
 
@@ -50,6 +61,7 @@ class ChooseTeamActivity : AppCompatActivity() {
             var msg = tempMsg.substringBefore(" Team x Player y?")
             msg = "$msg $teamSelected $playerSelected?"
 
+            /** Display a dialog box to confirm the user's Team and Player number selections. */
             MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
                 .setMessage(msg)
                 .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
@@ -60,9 +72,14 @@ class ChooseTeamActivity : AppCompatActivity() {
                         setGameInfoTeamAndPlayer(teamSelected, playerSelected, gameInfo)
                     }
 
+                    /** Build _intent_ to switch from [ChooseTeamActivity] to [GameActivity]. */
                     val intent = Intent(this@ChooseTeamActivity, GameActivity::class.java)
+
+                    /** Add the [GameInfo] objects into _intent_ */
                     intent.putExtra("gameInfo", gameInfo)
                     intent.putExtra("gameInfoOfStartedGame", gameInfoOfStartedGame)
+
+                    /** Launch [GameActivity] */
                     startActivity(intent)
                 }
                 .show()
@@ -91,6 +108,13 @@ class ChooseTeamActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The [getDropdownList] utility function produces a collection of values to populate a
+     * related dropdown list with - i.e., the _Team_ dropdown list or _Player_ dropdown list of
+     * the [ChooseTeamActivity] screen.
+     * @param [item] This is either "team" or "player"
+     * @return an ArrayList of values to be used to populate the Team or Player dropdowns
+     */
     private fun getDropdownList(item: String): ArrayList<String> {
         val arr = ArrayList<String>()
         val itemCap = item.replaceFirstChar{
