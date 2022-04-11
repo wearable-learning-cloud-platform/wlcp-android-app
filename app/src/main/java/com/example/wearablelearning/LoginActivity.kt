@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
         val backBtn: Button = findViewById(R.id.back_btn)
 
         /**
-         * tabPos is the integer value of the index position of a tab (leftmost tab is 0).
+         * _tabPos_ is the integer value of the index position of a tab (leftmost tab is 0).
          */
         var tabPos = 0
 
@@ -111,9 +111,9 @@ class LoginActivity : AppCompatActivity() {
         //when user selects 'Begin game' button
         joinGameBtn.setOnClickListener {
             /**
-             * _Inputs_ is an array of the user inputs retrieved from the fragment associated
-             * to with the active tab. Has size of 1 if _tabPos_=0 (name login) or 2 if
-             * _tabPos_=1 (WearableLearning account username and password).
+             * _inputs_ is an array of the user entries retrieved from the fragment associated
+             * with the active tab. _inputs_ has a size of 1 if _tabPos_=0 (name login), and 2 if
+             * _tabPos_=1 (WearableLearning account username and password login).
              */
             val inputs: Array<String> = getLoginInputs(tabPos)
             val name = inputs[0].trim()
@@ -149,12 +149,17 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        /** Set the _backBtn_ listener to switch from [LoginActivity] to [MainActivity]. */
         backBtn.setOnClickListener{
             /**
              * The intent to switch activities from [LoginActivity] to [MainActivity].
              */
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
+
+            /** Add the [GameInfo] objects into _intent_ */
             intent.putExtra("gameInfo", gameInfo)
+
+            /** Launch [MainActivity] */
             startActivity(intent)
         }
     }
@@ -246,8 +251,8 @@ class LoginActivity : AppCompatActivity() {
 
     /**
      * Checks if username and password pair are valid by comparing to map of credentials from json.
-     * @param username: string username from editTextName
-     * @param password: string password from editTextPassword
+     * @param [username] String username from editTextName
+     * @param [password] String password from editTextPassword
      * @return true if valid
      */
     private fun isValidCredentials(username: String, password: String): Boolean {
