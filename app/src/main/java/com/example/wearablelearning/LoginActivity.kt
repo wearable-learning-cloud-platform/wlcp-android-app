@@ -162,9 +162,8 @@ class LoginActivity : AppCompatActivity() {
 
         /** Set the _backBtn_ listener to switch from [LoginActivity] to [MainActivity]. */
         backBtn.setOnClickListener{
-            /**
-             * The intent to switch activities from [LoginActivity] to [MainActivity].
-             */
+
+            /** The intent to switch activities from [LoginActivity] to [MainActivity]. */
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
 
             /** Add the [GameInfo] objects into _intent_ */
