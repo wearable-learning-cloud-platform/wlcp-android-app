@@ -2,7 +2,6 @@ package com.example.wearablelearning
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -11,8 +10,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
-import org.json.JSONArray
-import org.json.JSONObject
 import java.util.*
 
 
@@ -27,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
+        var gameInfoOfStartedGame = intent.getSerializableExtra("gameInfoOfStartedGame") as? GameInfo
 
         /**
          * The 'Join Game' button that triggers a switch from LoginActivity to GameActivity.
@@ -108,40 +106,32 @@ class LoginActivity : AppCompatActivity() {
             val inputs: Array<String> = getLoginInputs(tabPos)
             val name = inputs[0].trim()
 
-            if (gameInfo != null) {
-                if(checkInput(inputs, tabPos, gameInfo)) {
-                    if (gameInfo != null && tabPos == 0) {
-                        gameInfo.name = name
-                        gameInfo.userName = null
-                        gameInfo.player = null
-                        gameInfo.team = null
-                        gameInfo.currState = null
-                        gameInfo.currTrans = null
-                    } else if(gameInfo != null && tabPos == 1) {
-                        gameInfo.name = null
-                        gameInfo.userName = name
-                        gameInfo.player = null
-                        gameInfo.team = null
-                        gameInfo.currState = null
-                        gameInfo.currTrans = null
-                    }
-
-                    val tempMsg = resources.getString(R.string.confirm_login_text)
-                    var msg = tempMsg.substringBefore(" Username?")
-                    msg = "$msg $name?"
-
-                    MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
-                        .setMessage(msg)
-                        .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
-                            dialog.cancel()
-                        }
-                        .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
-                            val intent = Intent(this@LoginActivity, ChooseTeamActivity::class.java)
-                            intent.putExtra("gameInfo", gameInfo)
-                            startActivity(intent)
-                        }
-                        .show()
+            if(checkInput(inputs, tabPos)) {
+                if (gameInfo != null && tabPos == 0) {
+                    gameInfo.name = name
+                    gameInfo.userName = null
                 }
+                else if(gameInfo != null && tabPos == 1) {
+                    gameInfo.name = null
+                    gameInfo.userName = name
+                }
+
+                val tempMsg = resources.getString(R.string.confirm_login_text)
+                var msg = tempMsg.substringBefore(" Username?")
+                msg = "$msg $name?"
+
+                MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
+                    .setMessage(msg)
+                    .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
+                        val intent = Intent(this@LoginActivity, ChooseTeamActivity::class.java)
+                        intent.putExtra("gameInfo", gameInfo)
+                        intent.putExtra("gameInfoOfStartedGame", gameInfoOfStartedGame)
+                        startActivity(intent)
+                    }
+                    .show()
             }
         }
 
@@ -187,7 +177,7 @@ class LoginActivity : AppCompatActivity() {
      * @param inputs: Array<String> of inputs from EditText(s) of fragment
      * @param tabPos: integer
      */
-    private fun checkInput(inputs: Array<String>, tabPos: Int, gameInfo: GameInfo): Boolean {
+    private fun checkInput(inputs: Array<String>, tabPos: Int): Boolean {
         //left tab (name)
         if(tabPos == 0) {
             if(StringUtils.isEmptyOrBlank(inputs[0])) {
@@ -196,41 +186,12 @@ class LoginActivity : AppCompatActivity() {
                 errorText.visibility = TextView.VISIBLE
                 return false
             }
-            else {
-                var takenInfo = gameInfo.gamePin?.let { nameIsTaken(inputs[0], it) }
-                var isTaken = takenInfo?.first
-                var takenGameInfo = takenInfo?.second
-
-                if(isTaken == true) {
-                    val tempMsg = resources.getString(R.string.username_taken_error)
-                    var msg = tempMsg.replace("Username", inputs[0])
-
-                    MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
-                        .setMessage(msg)
-                        .setNegativeButton(resources.getString(R.string.reconnect_text)) { _, _ ->
-                            val intent = Intent(this@LoginActivity, GameActivity::class.java)
-
-                            //update gameInfo with json info
-                            gameInfo.name = takenGameInfo?.get(0)
-                            gameInfo.team = "Team " + takenGameInfo?.get(1)?.split(".")!![0]
-                            gameInfo.player = "Player " + takenGameInfo?.get(2)?.split(".")!![0]
-                            gameInfo.currState = takenGameInfo?.get(3)
-                            gameInfo.currTrans = takenGameInfo?.get(4)
-
-                            intent.putExtra("gameInfo", gameInfo)
-                            startActivity(intent)
-                        }
-                        .setPositiveButton(resources.getString(R.string.try_again_text)) { dialog, _ ->
-                            dialog.cancel()
-                        }
-                        .show()
-
-                    return false
-                }
-            }
         }
         //right tab (WearableLearning.org account)
         else if(tabPos == 1) {
+            val editTextUsername: EditText = findViewById(R.id.loginUsernameEditText)
+            val editTextPassword: EditText = findViewById(R.id.loginPasswordEditText)
+
             //no username or password
             if(StringUtils.isEmptyOrBlank(inputs[0]) and StringUtils.isEmptyOrBlank(inputs[1])) {
                 val errorText: TextView = findViewById(R.id.error_tv3)
@@ -267,21 +228,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         return true
-    }
-
-    private fun nameIsTaken(newName: String, gamePin: String): Pair<Boolean, Array<String>> {
-        var takenNames = getTakenNames(gamePin).first
-        var takenNameInfo = getTakenNames(gamePin).second
-        var idx = 0
-
-        for(name in takenNames) {
-            if(newName == name) {
-                return Pair(true, takenNameInfo[idx])
-            }
-            idx++
-        }
-
-        return Pair(false, arrayOf())
     }
 
     /**
@@ -341,69 +287,5 @@ class LoginActivity : AppCompatActivity() {
         }
 
         return map
-    }
-
-    /**
-     * Pulls all players playing current game pin from json and outputs them as an array of names.
-     * @return array of names
-     */
-    private fun getTakenNames(gamePin: String): Pair<MutableList<String>, MutableList<Array<String>>> {
-        /**
-         * List to hold players of current game pin.
-         */
-        var names = mutableListOf<String>()
-
-        /**
-         * List to hold other info from json
-         */
-        var otherInfo = mutableListOf<Array<String>>()
-
-        /**
-         * Json file converted to string.
-         */
-        val jsonContents: String = resources.openRawResource(R.raw.data)
-            .bufferedReader().use { it.readText() }
-
-        var jsonMap = StringUtils.parseJsonWithGson(jsonContents).getValue("playing")
-        var gameMap = JSONObject(jsonMap.toString()).toMap()
-
-        for(key in gameMap.keys) {
-            if(key == "game$gamePin") {
-                var players = JSONObject(gameMap.getValue(key).toString()).toMap()
-
-                for(p in players.values) {
-                    var playerStr: String = p.toString()
-                    var name = playerStr.substringAfter("{username=").substringBefore(", team=")
-                    var team = playerStr.substringAfter("team=").substringBefore(", player=")
-                    var play = playerStr.substringAfter("player=").substringBefore(", state=")
-                    var state = playerStr.substringAfter("state=").substringBefore(", trans=")
-                    var trans = playerStr.substringAfter("trans=").substringBefore("}")
-
-                    if(name.endsWith('*')) {
-                        name = name.dropLast(1)
-                    }
-
-                    names.add(name)
-                    otherInfo.add(arrayOf(name, team, play, state, trans))
-                }
-
-                return Pair(names, otherInfo)
-            }
-        }
-
-        return Pair(names, otherInfo)
-    }
-
-    fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
-        //TODO: how does this work?
-        when (val value = this[it]) {
-            is JSONArray -> {
-                val map = (0 until value.length()).associate { Pair(it.toString(), value[it]) }
-                JSONObject(map).toMap().values.toList()
-            }
-            is JSONObject   -> value.toMap()
-            JSONObject.NULL -> null
-            else            -> value
-        }
     }
 }

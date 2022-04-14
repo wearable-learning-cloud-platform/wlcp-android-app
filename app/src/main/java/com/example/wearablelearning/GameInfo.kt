@@ -13,9 +13,5 @@ class GameInfo() : Serializable {
     var userName: String? = null
     var team: String? = null
     var player: String? = null
-    var currState: String? = null
     var currTrans: String? = null
-    //timeEnterState
-    //timeExitApp
-    //prevTransAnswer: if currState is 2 then this should be answer to state 1's question
 }
