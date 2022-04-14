@@ -40,8 +40,6 @@ class MainActivity : AppCompatActivity() {
          */
         var gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
 
-        var gameInfoOfStartedGame = intent.getSerializableExtra("gameInfoOfStartedGame") as? GameInfo
-
         if (gameInfo == null) {
             gameInfo = GameInfo()
         }
@@ -81,7 +79,6 @@ class MainActivity : AppCompatActivity() {
 
                 /** Add the [GameInfo] objects into _intentMainToLogin_ */
                 intentMainToLogin.putExtra("gameInfo", gameInfo)
-                intentMainToLogin.putExtra("gameInfoOfStartedGame", gameInfoOfStartedGame)
                 startActivity(intentMainToLogin)
             }
         }

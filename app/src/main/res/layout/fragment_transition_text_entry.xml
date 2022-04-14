@@ -48,8 +48,7 @@
             android:orientation="horizontal"
             android:paddingLeft="@dimen/padding_side"
             android:paddingTop="@dimen/padding_top"
-            android:paddingRight="@dimen/padding_side"
-            android:paddingBottom="@dimen/transition_padding_bot">
+            android:paddingRight="@dimen/padding_side">
 
             <Button
                 android:id="@+id/transition_clear_btn"

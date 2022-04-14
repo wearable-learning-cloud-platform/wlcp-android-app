@@ -26,7 +26,7 @@
         <ImageView
             android:id="@+id/state_imageView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/max_photo_height"
             android:adjustViewBounds="true"
             android:maxHeight="@dimen/max_photo_height"
             android:scaleType="centerInside"

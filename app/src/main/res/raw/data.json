@@ -8,6 +8,58 @@
     {
       "username": "user2",
       "password": "password2"
+    },
+    {
+      "username": "user3",
+      "password": "password3"
     }
-  ]
+  ],
+  "playing": {
+    "game12": {
+      "player001": {
+        "username": "user1",
+        "team": 1,
+        "player": 1,
+        "state": "state_1",
+        "trans": "trans_1"
+      },
+      "player002": {
+        "username": "user2",
+        "team": 1,
+        "player": 2,
+        "state": "state_4",
+        "trans": "trans_4"
+      },
+      "player003": {
+        "username": "user4*",
+        "team": 1,
+        "player": 3,
+        "state": "state_2",
+        "trans": "trans_2"
+      },
+      "player004": {
+        "username": "user5*",
+        "team": 2,
+        "player": 2,
+        "state": "state_1",
+        "trans": "trans_1"
+      }
+    },
+    "game22": {
+      "player001": {
+        "username": "user6*",
+        "team": 1,
+        "player": 1,
+        "state": "state_1",
+        "trans": "trans_1"
+      },
+      "player002": {
+        "username": "user7*",
+        "team": 1,
+        "player": 2,
+        "state": "state_1",
+        "trans": "trans_1"
+      }
+    }
+  }
 }

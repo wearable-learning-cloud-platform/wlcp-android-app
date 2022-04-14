@@ -28,25 +28,25 @@ class TransitionBtnPressFragment : Fragment() {
 
         redButton.setOnClickListener {
             if(solution != null && solution.contains("RD")) {
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1) }
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false) }
             }
         }
 
         greenButton.setOnClickListener {
             if(solution != null && solution.contains("GR")) {
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1) }
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false) }
             }
         }
 
         blueButton.setOnClickListener {
             if(solution != null && solution.contains("BL")) {
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1) }
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false) }
             }
         }
 
         blackButton.setOnClickListener {
             if(solution != null && solution.contains("BK")) {
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1) }
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false) }
             }
         }
     }

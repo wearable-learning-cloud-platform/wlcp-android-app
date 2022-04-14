@@ -27,7 +27,6 @@ class GameActivity : AppCompatActivity() {
         setContentView(R.layout.activity_game)
 
         gameInfo = (intent.getSerializableExtra("gameInfo") as? GameInfo)!!
-        var gameInfoOfStartedGame = intent.getSerializableExtra("gameInfoOfStartedGame") as? GameInfo
 
         var fm: FragmentManager = supportFragmentManager
 
@@ -41,14 +40,8 @@ class GameActivity : AppCompatActivity() {
         mapTransitions()
         addGamePlayerInfo(fm)
 
-        if(gameInfoOfStartedGame != null &&
-            gameInfoOfStartedGame.gamePin.equals(gameInfo.gamePin) &&
-            gameInfoOfStartedGame.name.equals(gameInfo.name) &&
-            gameInfoOfStartedGame.userName.equals(gameInfo.userName) &&
-            gameInfoOfStartedGame.team.equals(gameInfo.team) &&
-            gameInfoOfStartedGame.player.equals(gameInfo.player)) {
-
-            callTransition(gameInfoOfStartedGame.currTrans!!)
+        if(gameInfo != null && gameInfo.currState != null && gameInfo.currTrans != null) {
+            callTransition(gameInfo.currTrans!!, true)
         } else {
             var idx = 1
 
@@ -57,14 +50,19 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    fun callTransition(transId: String) {
+    fun callTransition(transId: String, isStart: Boolean) {
         currTransId = transId
 
-        val nextStateId: Int = stateWithInputTransition(transId)
+        var stateId: Int = stateWithInputTransition(transId)
+
+        if(isStart) {
+            stateId = stateWithOutputTransition(transId)
+        }
+
         var fm: FragmentManager = supportFragmentManager
 
-        changeState(fm, nextStateId)
-        val outputTransition = getOutputTransition(nextStateId)
+        changeState(fm, stateId)
+        val outputTransition = getOutputTransition(stateId)
 
         // if there is only one output transition
         if(!outputTransition.contains(",") or isAllSameType(outputTransition)) {
@@ -153,6 +151,18 @@ class GameActivity : AppCompatActivity() {
 
         for(i in 1..states.size) {
             if(states["state_$i"]?.trans_inputs?.contains(transId) == true) {
+                return i
+            }
+        }
+
+        return idx
+    }
+
+    private fun stateWithOutputTransition(transId: String): Int {
+        var idx = 0
+
+        for(i in 1..states.size) {
+            if(states["state_$i"]?.trans_outputs?.contains(transId) == true) {
                 return i
             }
         }
@@ -286,7 +296,6 @@ class GameActivity : AppCompatActivity() {
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.putExtra("gameInfo", gameInfo)
-                intent.putExtra("gameInfoOfStartedGame", gameInfo)
                 startActivity(intent)
             }
             .show()

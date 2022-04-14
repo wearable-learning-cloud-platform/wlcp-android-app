@@ -16,6 +16,9 @@
     <string name="existing_account_prompt">Enter your WearableLearning.org credentials</string>
     <string name="user_name_hint">Username</string>
     <string name="username_missing_error">Please enter a username and password.\nOr you can join a game without an account\nby entering your name.</string>
+    <string name="username_taken_error">The name Username has already been taken.\n\nIf you are trying to reconnect as Username, click Reconnect. Otherwise, click Enter New Name.</string>
+    <string name="try_again_text">Enter New Name</string>
+    <string name="reconnect_text">Reconnect</string>
     <string name="password_hint">Password</string>
     <string name="password_missing_error">Please enter a password.</string>
     <string name="username_password_error">Incorrect username and/or password.\nPlease try again or you can join a game without an account\nby entering your name.</string>
