@@ -23,6 +23,7 @@ class GameActivity : AppCompatActivity() {
         var states: MutableMap<String, State> = mutableMapOf()
         var transitions: MutableMap<String, Transition> = mutableMapOf()
         var currTransId: String = String()
+        var gamePin: String = String()
     }
 
     lateinit var gameInfo: GameInfo
@@ -32,6 +33,10 @@ class GameActivity : AppCompatActivity() {
         setContentView(R.layout.activity_game)
 
         gameInfo = (intent.getSerializableExtra("gameInfo") as? GameInfo)!!
+
+        if (gameInfo != null) {
+            gamePin = gameInfo.gamePin.toString()
+        }
 
         var fm: FragmentManager = supportFragmentManager
 
@@ -113,7 +118,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun mapJson() {
-        val jsonContents: String = resources.openRawResource(R.raw.game12) //TODO
+        val jsonContents: String = resources.openRawResource(getGameFileIdentifier(gamePin))
             .bufferedReader().use { it.readText() }
 
         map = StringUtils.parseJsonWithGson(jsonContents)
@@ -338,7 +343,6 @@ class GameActivity : AppCompatActivity() {
                     activities on top of it will be closed and this Intent will be delivered to the
                     (now on top) old activity as a new Intent.
                 */
-//                gameInfo.currTrans = currTransId
 
                 LogUtils.logGamePlay("player", gameInfo, true, applicationContext)
                 LogUtils.logGamePlay("gamePlay", gameInfo, true, applicationContext)
@@ -348,5 +352,17 @@ class GameActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             .show()
+    }
+
+    /**
+     * The [getGameFileIdentifier] utility function returns the integer identifier for the game
+     * json in the raw resources folder.
+     * @param [gamePin] stored in gameInfo
+     * @return The Int value of the json
+     */
+    private fun getGameFileIdentifier(gamePin: String): Int {
+        var fileName = "game$gamePin"
+
+        return resources.getIdentifier(fileName, "raw", applicationContext?.packageName)
     }
 }

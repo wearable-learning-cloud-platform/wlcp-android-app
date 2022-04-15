@@ -12,7 +12,7 @@
       "name": "Welcome!",
       "players": "game_wide",
       "type": "text",
-      "content": "WELCOME TO SIMPLE GAME! Push a button to start.",
+      "content": "WELCOME TO GAME 12! Push a button to start.",
       "other": "",
       "trans_inputs": "",
       "trans_outputs": "trans_1"

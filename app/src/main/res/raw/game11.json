@@ -1,9 +1,9 @@
 {
   "game": {
     "game_pin": 11,
-    "game_name": "Simple Game",
+    "game_name": "Very Simple Game",
     "team_cnt": 2,
-    "players_per_team": 1,
+    "players_per_team": 3,
     "visibility": "public"
   },
   "states": [
@@ -12,7 +12,8 @@
       "name": "Welcome!",
       "players": "game_wide",
       "type": "text",
-      "content": "WELCOME TO SIMPLE GAME! Push a button to start.",
+      "content": "WELCOME TO GAME 11! Push a button to start.",
+      "other": "",
       "trans_inputs": "",
       "trans_outputs": "trans_1"
     },
@@ -21,7 +22,8 @@
       "name": "Question",
       "players": "game_wide",
       "type": "text",
-      "content": "This is the first question. Can you input sequence black, blue?",
+      "content": "This is the first question. Can you input sequence green, red?",
+      "other": "",
       "trans_inputs": "trans_1",
       "trans_outputs": "trans_2"
     },
@@ -31,6 +33,7 @@
       "players": "game_wide",
       "type": "text",
       "content": "Type apple please (only 1 possible transition).",
+      "other": "",
       "trans_inputs": "trans_2",
       "trans_outputs": "trans_3"
     },
@@ -40,6 +43,7 @@
       "players": "game_wide",
       "type": "text",
       "content": "This is the final question. Can you type one of the following?: HELLO, HI, or BYE",
+      "other": "",
       "trans_inputs": "trans_3",
       "trans_outputs": "trans_4, trans_5, trans_6"
     },
@@ -49,6 +53,7 @@
       "players": "game_wide",
       "type": "text",
       "content": "HELLO! HI! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "other": "",
       "trans_inputs": "trans_4",
       "trans_outputs": ""
     },
@@ -58,6 +63,7 @@
       "players": "game_wide",
       "type": "text",
       "content": "BYE! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "other": "",
       "trans_inputs": "trans_5",
       "trans_outputs": ""
     },
@@ -67,6 +73,7 @@
       "players": "game_wide",
       "type": "text",
       "content": "ALL OTHER INPUTS! Congratulations you have completed SIMPLE GAME! GAME OVER.",
+      "other": "",
       "trans_inputs": "trans_6",
       "trans_outputs": ""
     }
@@ -80,7 +87,7 @@
     {
       "id": "trans_2",
       "type": "color_sequence",
-      "content": "BK&BL"
+      "content": "GR&RD"
     },
     {
       "id": "trans_3",

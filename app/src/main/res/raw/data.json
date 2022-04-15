@@ -1,5 +1,5 @@
 {
-  "game_pins": [11, 12, 22],
+  "game_pins": [11, 12],
   "accounts": [
     {
       "username": "user1",

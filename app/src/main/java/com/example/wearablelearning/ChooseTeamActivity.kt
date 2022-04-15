@@ -14,11 +14,24 @@ import java.util.*
  * This activity launches [GameActivity] on valid user input.
  */
 class ChooseTeamActivity : AppCompatActivity() {
+    var gamePin = String()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_team)
+
+        /**
+         * Retrieve the [GameInfo] object from the intent that started this Activity.
+         *
+         * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
+         * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
+         */
+        val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
+
+        if (gameInfo != null) {
+            gamePin = gameInfo.gamePin.toString()
+        }
 
         val teamArr = getDropdownList("team")
         val playerArr = getDropdownList("player")
@@ -32,14 +45,6 @@ class ChooseTeamActivity : AppCompatActivity() {
         val adapterPlayer = ArrayAdapter(this, android.R.layout.simple_spinner_item, playerArr)
         adapterPlayer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerPlayer.adapter = adapterPlayer
-
-        /**
-         * Retrieve the [GameInfo] object from the intent that started this Activity.
-         *
-         * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
-         * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
-         */
-        val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
 
         if(gameInfo?.team != null && gameInfo.player != null) {
             spinnerTeam.setSelection(teamArr.indexOf(
@@ -159,8 +164,7 @@ class ChooseTeamActivity : AppCompatActivity() {
      * @return The Int value of either team or player for the current game
      */
     private fun mapCount(item: String): Int {
-
-        val jsonContents: String = resources.openRawResource(R.raw.game12) //TODO unhardcode
+        val jsonContents: String = resources.openRawResource(getGameFileIdentifier(gamePin))
             .bufferedReader().use { it.readText() }
 
         val gameJSONInfo: String = StringUtils.parseJsonWithGson(jsonContents).getValue("game").toString()
@@ -174,5 +178,17 @@ class ChooseTeamActivity : AppCompatActivity() {
             cnt = gameJSONInfo.substringAfter("players_per_team=").substringBefore(", visibility=")
 
         return cnt.split(".")[0].toInt()
+    }
+
+    /**
+     * The [getGameFileIdentifier] utility function returns the integer identifier for the game
+     * json in the raw resources folder.
+     * @param [gamePin] stored in gameInfo
+     * @return The Int value of the json
+     */
+    private fun getGameFileIdentifier(gamePin: String): Int {
+        var fileName = "game$gamePin"
+
+        return resources.getIdentifier(fileName, "raw", applicationContext?.packageName)
     }
 }
