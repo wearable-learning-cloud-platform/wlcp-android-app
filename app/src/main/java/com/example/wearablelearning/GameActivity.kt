@@ -8,8 +8,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.json.JSONArray
-import org.json.JSONObject
-import java.io.FileOutputStream
 
 
 /**
