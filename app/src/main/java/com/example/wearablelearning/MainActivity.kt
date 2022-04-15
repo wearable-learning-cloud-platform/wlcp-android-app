@@ -9,13 +9,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import org.json.JSONObject
-import java.io.*
 
 
 /**
  * The [MainActivity] class is the app entry point and displays the first screen on launch
- * (i.e., the 'welcome/enter a game pin' screen).
+ * (i.e., the 'welcome/enter a game pin' screen). This activity launches [LoginActivity]
+ * on valid user game PIN input.
  */
 class MainActivity : AppCompatActivity() {
 
@@ -36,15 +35,17 @@ class MainActivity : AppCompatActivity() {
          * through the different app Activities; [GameInfo] objects are passed from one Activity
          * to the next.
          *
-         * Note that when [GameActivity] is started, all prior Activities are terminated. [GameInfo]
-         * is the object that enables storing of user inputs to be used later for pre-populating
-         * fields (e.g., pre-populate names, team numbers, player numbers, etc.).
+         * Note that when [GameActivity] is started, all prior app Activities are terminated.
+         * [GameInfo] is the object that enables storing of user inputs to be used later for
+         * pre-populating fields (e.g., pre-populate names, team numbers, player numbers, etc.).
          */
         var gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
 
+        /** Set _gameInfo_ as a new [GameInfo] object if there is no existing [GameInfo] object */
         if (gameInfo == null) {
             gameInfo = GameInfo()
         }
+        /** Pre-populate _gamePinEditText_ if there is an existing [GameInfo] object */
         else {
             gamePinEditText.setText(gameInfo.gamePin)
         }
@@ -71,8 +72,11 @@ class MainActivity : AppCompatActivity() {
 
         /** Set the _joinGameButton_ listener to switch activities when the game PIN is correct. */
         joinGameButton.setOnClickListener {
+
             /** Launch [LoginActivity] if the user-input game PIN is correct. */
             if (checkInput(gamePinEditText, gamePinErrorText)) {
+
+                /** Set _gameInfo.gamePin_ to the game PIN user input value */
                 gameInfo.gamePin = gamePinEditText.text.toString()
 
                 /** Build _intentMainToLogin_ to switch from [MainActivity] to [LoginActivity]. */
@@ -80,6 +84,8 @@ class MainActivity : AppCompatActivity() {
 
                 /** Add the [GameInfo] objects into _intentMainToLogin_ */
                 intentMainToLogin.putExtra("gameInfo", gameInfo)
+
+                /** Launch [LoginActivity] */
                 startActivity(intentMainToLogin)
             }
         }
