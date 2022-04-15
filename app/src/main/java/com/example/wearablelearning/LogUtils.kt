@@ -9,20 +9,32 @@ import java.io.*
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 
+/**
+ * Log utility object.
+ * Provides functions for logging interactions to internal storage jsons.
+ */
 object LogUtils {
-    //TODO
-    //log more events (rn only on correct submit and back)
-    //clear jsons when exit game, finish game, after so many hrs of inactivity
-    //any way to make jsons more readable?
-    //whenever writing to file also write to logcat (info, use name of file as keyword)
 
+    /**
+     * Writes log data to an internal json file, where log data is mostly made up GameInfo data.
+     * @param fileType: String
+     * @param data: GameInfo
+     * @param isAppExit: Boolean
+     * @param context: Context
+     */
     fun logGamePlay(fileType: String, data: GameInfo, isAppExit: Boolean, context: Context) {
+        /**
+         * The file name based on the fileType.
+         */
         var file: String = getFileName(fileType)
 
+        /**
+         * The json object where log data is put into.
+         */
         val jsonObj = JSONObject()
 
         jsonObj.put("name", getName(data.name, data.userName))
-        jsonObj.put("guest", getGuest(data.name, data.userName))
+        jsonObj.put("guest", getGuest(data.name))
         jsonObj.put("gamePin", data.gamePin)
         jsonObj.put("team", getNumber(data.team))
         jsonObj.put("player", getNumber(data.player))
@@ -32,10 +44,13 @@ object LogUtils {
         jsonObj.put("timeExitApp", getExitAppTimeStamp(isAppExit))
         jsonObj.put("prevTransAnswer", data.prevTransAnswer)
 
+        /**
+         * The file output stream for writing to the json file.
+         */
         val fileOutputStream: FileOutputStream
 
         try {
-            //if file does not exist, create file with new log
+            //if file does not currently exist, create file with new log
             if(!fileExists(file, context)) {
                 val jsonArray = JSONArray()
                 jsonArray.put(jsonObj)
@@ -90,6 +105,12 @@ object LogUtils {
         }
     }
 
+    /**
+     * Reads from a json line by line and returns the contents as a string.
+     * @param fileName: String
+     * @param context: Context
+     * @return string holding file contents
+     */
     fun readFromFile(fileName: String, context: Context): String {
         var inputStream: InputStream? = context.openFileInput(fileName)
         var fileAsString = ""
@@ -112,6 +133,11 @@ object LogUtils {
         return fileAsString
     }
 
+    /**
+     * Return the name of the json file based on a keyword.
+     * @param str: String
+     * @return string json file name
+     */
     private fun getFileName(str: String): String {
         if(str == "player") {
             return "playerTracker.json"
@@ -123,11 +149,23 @@ object LogUtils {
         return String()
     }
 
+    /**
+     * Checks if a file exists in internal storage.
+     * @param fileName: String
+     * @param context: Context
+     * @return true if file exists
+     */
     private fun fileExists(fileName: String, context: Context): Boolean {
         var file = context.getFileStreamPath(fileName)
         return file.exists()
     }
 
+    /**
+     * Gets the identifiable name of the player, whether that is name or username.
+     * @param name: String?
+     * @param userName: String?
+     * @return string username if it exists, otherwise returns string name
+     */
     private fun getName(name: String?, userName: String?): String? {
         if(name.isNullOrEmpty()) {
             return userName
@@ -136,7 +174,13 @@ object LogUtils {
         return name
     }
 
-    private fun getGuest(name: String?, userName: String?): Boolean {
+    /**
+     * Returns true if the name of the player exists.
+     * @param name: String?
+     * @param userName: String?
+     * @return true if name exists, otherwise false
+     */
+    private fun getGuest(name: String?): Boolean {
         if(name.isNullOrEmpty()) {
             return false
         }
@@ -144,6 +188,11 @@ object LogUtils {
         return true
     }
 
+    /**
+     * Returns only the trailing number of a string after a space.
+     * @param str: String
+     * @return string number
+     */
     private fun getNumber(str: String?): String {
         if (str != null) {
             return str.split(" ")[1]
@@ -152,10 +201,18 @@ object LogUtils {
         return str.toString()
     }
 
+    /**
+     * Returns the current timestamp.
+     * @return string timestamp
+     */
     private fun getStateTimeStamp(): String {
         return DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
     }
 
+    /**
+     * Returns the current timestamp only if isAppExit is true.
+     * @return string timestamp
+     */
     private fun getExitAppTimeStamp(isAppExit: Boolean): String {
         if(isAppExit) {
             return DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
