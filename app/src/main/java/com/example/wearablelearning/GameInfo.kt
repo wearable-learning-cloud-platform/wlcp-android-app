@@ -14,4 +14,6 @@ class GameInfo() : Serializable {
     var team: String? = null
     var player: String? = null
     var currTrans: String? = null
+    var currState: String? = null
+    var prevTransAnswer: String? = null
 }

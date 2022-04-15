@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 
 class TransitionEndGameFragment : Fragment() {
     override fun onCreateView(
@@ -25,6 +24,11 @@ class TransitionEndGameFragment : Fragment() {
         val button = view.findViewById<Button>(R.id.end_game_btn)
 
         button.setOnClickListener {
+            if (gameInfo != null) {
+                activity?.let { activity -> LogUtils.logGamePlay("player", gameInfo, true, activity.applicationContext) }
+                activity?.let { activity -> LogUtils.logGamePlay("gamePlay", gameInfo, true, activity.applicationContext) }
+            }
+
             val intent = Intent(activity, LoginActivity::class.java)
             intent.putExtra("gameInfo", gameInfo)
             startActivity(intent)

@@ -1,15 +1,17 @@
 package com.example.wearablelearning
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.content.Intent
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import org.json.JSONObject
 import java.io.*
+
 
 /**
  * The [MainActivity] class is the app entry point and displays the first screen on launch
@@ -40,8 +42,6 @@ class MainActivity : AppCompatActivity() {
          */
         var gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
 
-        var gameInfoOfStartedGame = intent.getSerializableExtra("gameInfoOfStartedGame") as? GameInfo
-
         if (gameInfo == null) {
             gameInfo = GameInfo()
         }
@@ -71,7 +71,6 @@ class MainActivity : AppCompatActivity() {
 
         /** Set the _joinGameButton_ listener to switch activities when the game PIN is correct. */
         joinGameButton.setOnClickListener {
-
             /** Launch [LoginActivity] if the user-input game PIN is correct. */
             if (checkInput(gamePinEditText, gamePinErrorText)) {
                 gameInfo.gamePin = gamePinEditText.text.toString()
@@ -81,7 +80,6 @@ class MainActivity : AppCompatActivity() {
 
                 /** Add the [GameInfo] objects into _intentMainToLogin_ */
                 intentMainToLogin.putExtra("gameInfo", gameInfo)
-                intentMainToLogin.putExtra("gameInfoOfStartedGame", gameInfoOfStartedGame)
                 startActivity(intentMainToLogin)
             }
         }

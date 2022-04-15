@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 
-
+//TODO get francisco's comments (april 4 to april 11 commits) (also gameactivity)
 class ChooseTeamActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +28,6 @@ class ChooseTeamActivity : AppCompatActivity() {
         spinnerPlayer.adapter = adapterPlayer
 
         val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
-        var gameInfoOfStartedGame = intent.getSerializableExtra("gameInfoOfStartedGame") as? GameInfo
 
         if(gameInfo?.team != null && gameInfo.player != null) {
             spinnerTeam.setSelection(teamArr.indexOf(
@@ -62,7 +61,6 @@ class ChooseTeamActivity : AppCompatActivity() {
 
                     val intent = Intent(this@ChooseTeamActivity, GameActivity::class.java)
                     intent.putExtra("gameInfo", gameInfo)
-                    intent.putExtra("gameInfoOfStartedGame", gameInfoOfStartedGame)
                     startActivity(intent)
                 }
                 .show()

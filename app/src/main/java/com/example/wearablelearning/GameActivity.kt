@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.FileOutputStream
 
 
 /**
@@ -44,19 +47,52 @@ class GameActivity : AppCompatActivity() {
         mapTransitions()
         addGamePlayerInfo(fm)
 
-        if(gameInfo != null && gameInfo.currState != null && gameInfo.currTrans != null) {
-            callTransition(gameInfo.currTrans!!, true)
+        if(playerStartedPlaying(gameInfo)) {
+            callTransition(gameInfo.currTrans!!, true, gameInfo.prevTransAnswer!!)
         } else {
             var idx = 1
 
             changeState(fm, idx)
             changeTransition(fm, getOutputTransition(idx))
+
+            LogUtils.logGamePlay("player", gameInfo, false, applicationContext)
+            LogUtils.logGamePlay("gamePlay", gameInfo, false, applicationContext)
         }
     }
 
-    fun callTransition(transId: String, isStart: Boolean) {
-        currTransId = transId
+    private fun playerStartedPlaying(gameInfo: GameInfo): Boolean {
+        val fileName = "playerTracker.json"
+        var file = applicationContext.getFileStreamPath(fileName)
 
+        if(!file.exists())
+            return false
+
+        val currPlayersOnDevice = JSONArray(LogUtils.readFromFile(fileName, applicationContext))
+
+        for(i in 0 until currPlayersOnDevice.length()) {
+            val obj = currPlayersOnDevice.getJSONObject(i)
+
+            if(obj.get("gamePin") == gameInfo.gamePin
+                && (obj.get("name") == gameInfo.name || obj.get("name") == gameInfo.userName)
+                && obj.get("team") == gameInfo.team!!.split(" ")[1]
+                && obj.get("player") == gameInfo.player!!.split(" ")[1]) {
+                    gameInfo.currState = obj.get("currState").toString()
+                    gameInfo.currTrans = obj.get("currTransition").toString()
+
+                    if(obj.has("prevTransAnswer")) {
+                        Log.d("test", obj.get("prevTransAnswer").toString())
+                        gameInfo.prevTransAnswer = obj.get("prevTransAnswer").toString()
+                    }
+
+                    return true
+            }
+        }
+
+        return false
+    }
+
+    fun callTransition(transId: String, isStart: Boolean, prevAnswer: String) {
+        currTransId = transId
         var stateId: Int = stateWithInputTransition(transId)
 
         if(isStart) {
@@ -72,6 +108,10 @@ class GameActivity : AppCompatActivity() {
         if(!outputTransition.contains(",") or isAllSameType(outputTransition)) {
             changeTransition(fm, outputTransition)
         }
+
+        gameInfo.prevTransAnswer = prevAnswer
+        LogUtils.logGamePlay("player", gameInfo, false, applicationContext)
+        LogUtils.logGamePlay("gamePlay", gameInfo, false, applicationContext)
     }
 
     private fun mapJson() {
@@ -187,6 +227,8 @@ class GameActivity : AppCompatActivity() {
         val content = states["state_$idx"]?.content.toString()
         val type = states["state_$idx"]?.type.toString()
 
+        gameInfo.currState = "state_$idx"
+
         if(type.contains("text")) {
             val fragInfo = StateTextFragment()
             bundle.putString("content", content)
@@ -250,6 +292,8 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
+        gameInfo.currTrans = "$id"
+
         val ft: FragmentTransaction = fm.beginTransaction()
         val bundle = Bundle()
         bundle.putString("id", id)
@@ -296,7 +340,10 @@ class GameActivity : AppCompatActivity() {
                     activities on top of it will be closed and this Intent will be delivered to the
                     (now on top) old activity as a new Intent.
                 */
-                gameInfo.currTrans = currTransId
+//                gameInfo.currTrans = currTransId
+
+                LogUtils.logGamePlay("player", gameInfo, true, applicationContext)
+                LogUtils.logGamePlay("gamePlay", gameInfo, true, applicationContext)
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 intent.putExtra("gameInfo", gameInfo)

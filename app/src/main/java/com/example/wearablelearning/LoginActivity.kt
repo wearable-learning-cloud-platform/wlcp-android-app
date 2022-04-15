@@ -2,6 +2,7 @@ package com.example.wearablelearning
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -10,6 +11,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
+import org.json.JSONArray
 import java.util.*
 
 
@@ -24,7 +26,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
-        var gameInfoOfStartedGame = intent.getSerializableExtra("gameInfoOfStartedGame") as? GameInfo
 
         /**
          * The 'Join Game' button that triggers a switch from LoginActivity to GameActivity.
@@ -97,20 +98,24 @@ class LoginActivity : AppCompatActivity() {
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
 
-        //when user selects 'Begin game' button
+        /** Set the _joinGameBtn_ listener to switch from [LoginActivity] to [ChooseTeamActivity]. */
         joinGameBtn.setOnClickListener {
             /**
-             * Inputs is an array of the user inputs retrieved from fragment associated to the opened
-             * tab. Has size of 1 if tabPos=0 or 2 if tabPos=1.
+             * _inputs_ is an array of the user entries retrieved from the fragment associated
+             * with the active tab. _inputs_ has a size of 1 if _tabPos_=0 (name login), and 2 if
+             * _tabPos_=1 (WearableLearning account username and password login).
              */
             val inputs: Array<String> = getLoginInputs(tabPos)
             val name = inputs[0].trim()
 
+            /** Check whether the user joined with their name or WearableLearning credentials. */
             if(checkInput(inputs, tabPos)) {
+                /** User joined the game with their name */
                 if (gameInfo != null && tabPos == 0) {
                     gameInfo.name = name
                     gameInfo.userName = null
                 }
+                /** User joined the game with their WearableLearning credentials */
                 else if(gameInfo != null && tabPos == 1) {
                     gameInfo.name = null
                     gameInfo.userName = name
@@ -120,6 +125,7 @@ class LoginActivity : AppCompatActivity() {
                 var msg = tempMsg.substringBefore(" Username?")
                 msg = "$msg $name?"
 
+                /** Display a dialog box to confirm the user's name/credential entries. */
                 MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
                     .setMessage(msg)
                     .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
@@ -128,7 +134,6 @@ class LoginActivity : AppCompatActivity() {
                     .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
                         val intent = Intent(this@LoginActivity, ChooseTeamActivity::class.java)
                         intent.putExtra("gameInfo", gameInfo)
-                        intent.putExtra("gameInfoOfStartedGame", gameInfoOfStartedGame)
                         startActivity(intent)
                     }
                     .show()
@@ -261,15 +266,17 @@ class LoginActivity : AppCompatActivity() {
             .bufferedReader().use { it.readText() }
             .filter { !it.isWhitespace() }
 
+        val accountInfo = jsonContents.substringAfter("accounts").substringBefore("playing")
+
         /**
          * List of usernames from json file.
          */
-        val usernames = Regex("username\"[:]\"(.*?)[\"]").findAll(jsonContents).map { it.groupValues[1] }.toList()
+        val usernames = Regex("username\"[:]\"(.*?)[\"]").findAll(accountInfo).map { it.groupValues[1] }.toList()
 
         /**
          * List of passwords from json file.
          */
-        val passwords = Regex("password\"[:]\"(.*?)[\"]").findAll(jsonContents).map { it.groupValues[1] }.toList()
+        val passwords = Regex("password\"[:]\"(.*?)[\"]").findAll(accountInfo).map { it.groupValues[1] }.toList()
 
         /**
          * Two iterators: one for usernames list and one for passwords list.

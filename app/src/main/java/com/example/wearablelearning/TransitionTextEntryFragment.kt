@@ -47,7 +47,7 @@ class TransitionTextEntryFragment : Fragment() {
 
             //one possible transition and correct input
             if(!id.toString().contains(";;") && checkInput(input.lowercase(), content.toString())) {
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false) }
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, input) }
             }
             //one possible transition and incorrect input
             else if(!id.toString().contains(";;")) {
@@ -58,7 +58,7 @@ class TransitionTextEntryFragment : Fragment() {
                 val matchedId = checkInputOnMultipleTransitions(input.lowercase(), content.toString(), id.toString())
 
                 if(!StringUtils.isEmptyOrBlank(matchedId)) {
-                    matchedId?.let { it1 -> (activity as GameActivity).callTransition(it1, false) }
+                    matchedId?.let { it1 -> (activity as GameActivity).callTransition(it1, false, input) }
                 }
             }
         }
