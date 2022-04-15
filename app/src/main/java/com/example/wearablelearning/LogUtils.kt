@@ -44,6 +44,8 @@ object LogUtils {
         jsonObj.put("timeExitApp", getExitAppTimeStamp(isAppExit))
         jsonObj.put("prevTransAnswer", data.prevTransAnswer)
 
+        Log.i(file, jsonObj.toString())
+
         /**
          * The file output stream for writing to the json file.
          */
