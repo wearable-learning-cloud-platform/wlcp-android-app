@@ -11,56 +11,63 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
-import org.json.JSONArray
-import java.util.*
-
 
 /**
- * Login activity.
- * This class is the second screen of the app, asking the player for their name or username and password.
- * On valid inputs, activity switches to GameActivity.
+ * The [LoginActivity] class is launched from [MainActivity] and is used to request the player's
+ * name (for users with no WearableLearning account) or username and password (for users with a
+ * WearableLearning account). This activity launches [ChooseTeamActivity] on valid user input.
  */
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        /**
+         * Retrieve the [GameInfo] object from the intent that started this Activity.
+         *
+         * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
+         * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
+         */
         val gameInfo = intent.getSerializableExtra("gameInfo") as? GameInfo
 
         /**
-         * The 'Join Game' button that triggers a switch from LoginActivity to GameActivity.
+         * The 'Join Game' button that triggers a switch from [LoginActivity] to [ChooseTeamActivity].
          */
         val joinGameBtn: Button = findViewById(R.id.join_game_btn)
 
         /**
-         * The 'Back' button that triggers a switch from LoginActivity to MainActivity.
+         * The 'Back' button that triggers a switch from [LoginActivity] to [MainActivity].
          */
         val backBtn: Button = findViewById(R.id.back_btn)
 
         /**
-         * tabPos is the integer value of the index position of a tab (leftmost tab is 0).
+         * _tabPos_ is the integer value of the index position of a tab (leftmost tab is 0).
          */
         var tabPos = 0
 
         /**
-         * tabLayout references tabLayout of activity.
+         * _tabLayout_ references tabLayout of activity.
          */
         val tabLayout: TabLayout = findViewById(R.id.tabLayout)
 
         /**
-         * fm is the fragment manager.
+         * _fm_ is the fragment manager.
          */
         val fm: FragmentManager = supportFragmentManager
 
         /**
-         * ft is the fragment transaction.
+         * _ft_ is the fragment transaction.
          */
-
         val ft: FragmentTransaction = fm.beginTransaction()
         ft.replace(R.id.frameLayout, LoginWithNameFragment())
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
         ft.commit()
 
+        /**
+         * Inflate [R.layout.fragment_login_with_account] if the user previously logged in with
+         * a WearableLearning account username and password.
+         */
         if(gameInfo?.userName != null) {
             val tab = tabLayout.getTabAt(1)
             tab?.select()
@@ -100,6 +107,7 @@ class LoginActivity : AppCompatActivity() {
 
         /** Set the _joinGameBtn_ listener to switch from [LoginActivity] to [ChooseTeamActivity]. */
         joinGameBtn.setOnClickListener {
+
             /**
              * _inputs_ is an array of the user entries retrieved from the fragment associated
              * with the active tab. _inputs_ has a size of 1 if _tabPos_=0 (name login), and 2 if
@@ -110,6 +118,7 @@ class LoginActivity : AppCompatActivity() {
 
             /** Check whether the user joined with their name or WearableLearning credentials. */
             if(checkInput(inputs, tabPos)) {
+
                 /** User joined the game with their name */
                 if (gameInfo != null && tabPos == 0) {
                     gameInfo.name = name
@@ -132,27 +141,38 @@ class LoginActivity : AppCompatActivity() {
                         dialog.cancel()
                     }
                     .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
+                        /**
+                         * The intent to switch activities from [LoginActivity] to [ChooseTeamActivity].
+                         */
                         val intent = Intent(this@LoginActivity, ChooseTeamActivity::class.java)
+
+                        /** Add the [GameInfo] objects into _intent_ */
                         intent.putExtra("gameInfo", gameInfo)
+
+                        /** Launch [ChooseTeamActivity] */
                         startActivity(intent)
                     }
                     .show()
             }
         }
 
+        /** Set the _backBtn_ listener to switch from [LoginActivity] to [MainActivity]. */
         backBtn.setOnClickListener{
-            /**
-             * The intent to switch activities from LoginActivity to MainActivity.
-             */
+
+            /** The intent to switch activities from [LoginActivity] to [MainActivity]. */
             val intent = Intent(this@LoginActivity, MainActivity::class.java)
+
+            /** Add the [GameInfo] objects into _intent_ */
             intent.putExtra("gameInfo", gameInfo)
+
+            /** Launch [MainActivity] */
             startActivity(intent)
         }
     }
 
     /**
      * Retrieves inputs from the editTexts of a fragment. Fragment depends on the tabPos.
-     * @param tabPos: int, either 0 or 1
+     * @param tabPos An int which is either 0 (name login) or 1 (account login)
      */
     private fun getLoginInputs(tabPos: Int): Array<String> {
         val inputs: Array<String> = arrayOf("", "")
@@ -176,7 +196,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     /**
-     * Checks the values of name (inputs[0]; tab 0 selected) or username and password (inpus[0] and
+     * Checks the values of name (inputs[0]; tab 0 selected) or username and password (inputs[0] and
      * inputs[1]; tab 1 selected). All must have at least 1 character. Username and password must
      * match json. When invalid input, sets error messages.
      * @param inputs: Array<String> of inputs from EditText(s) of fragment
@@ -194,38 +214,36 @@ class LoginActivity : AppCompatActivity() {
         }
         //right tab (WearableLearning.org account)
         else if(tabPos == 1) {
-            val editTextUsername: EditText = findViewById(R.id.loginUsernameEditText)
-            val editTextPassword: EditText = findViewById(R.id.loginPasswordEditText)
-
             //no username or password
-            if(StringUtils.isEmptyOrBlank(inputs[0]) and StringUtils.isEmptyOrBlank(inputs[1])) {
-                val errorText: TextView = findViewById(R.id.error_tv3)
-                errorText.text = getString(R.string.username_missing_error)
-                errorText.visibility = TextView.VISIBLE
-                return false
-            }
-            //username but no password
-            else if(StringUtils.isEmptyOrBlank(inputs[1])) {
-                val errorText: TextView = findViewById(R.id.error_tv3)
-                errorText.text = getString(R.string.password_missing_error)
-                errorText.visibility = TextView.VISIBLE
-                return false
-            }
-            //password but no username
-            else if(StringUtils.isEmptyOrBlank(inputs[0])) {
-                val errorText: TextView = findViewById(R.id.error_tv3)
-                errorText.text = getString(R.string.username_missing_error)
-                errorText.visibility = TextView.VISIBLE
-                return false
+            when {
+                StringUtils.isEmptyOrBlank(inputs[0]) and StringUtils.isEmptyOrBlank(inputs[1]) -> {
+                    val errorText: TextView = findViewById(R.id.error_tv3)
+                    errorText.text = getString(R.string.username_missing_error)
+                    errorText.visibility = TextView.VISIBLE
+                    return false
+                }
+                //username but no password
+                StringUtils.isEmptyOrBlank(inputs[1]) -> {
+                    val errorText: TextView = findViewById(R.id.error_tv3)
+                    errorText.text = getString(R.string.password_missing_error)
+                    errorText.visibility = TextView.VISIBLE
+                    return false
+                }
+                //password but no username
+                StringUtils.isEmptyOrBlank(inputs[0]) -> {
+                    val errorText: TextView = findViewById(R.id.error_tv3)
+                    errorText.text = getString(R.string.username_missing_error)
+                    errorText.visibility = TextView.VISIBLE
+                    return false
+                }
+                !StringUtils.isEmptyOrBlank(inputs[0]) and !StringUtils.isEmptyOrBlank(inputs[1]) and !isValidCredentials(inputs[0], inputs[1]) -> {
+                    val errorText: TextView = findViewById(R.id.error_tv3)
+                    errorText.text = getString(R.string.username_password_error)
+                    errorText.visibility = TextView.VISIBLE
+                    return false
+                }
             }
 
-            //username and password input but are invalid
-            if(!StringUtils.isEmptyOrBlank(inputs[0]) and !StringUtils.isEmptyOrBlank(inputs[1]) and !isValidCredentials(inputs[0], inputs[1])) {
-                val errorText: TextView = findViewById(R.id.error_tv3)
-                errorText.text = getString(R.string.username_password_error)
-                errorText.visibility = TextView.VISIBLE
-                return false
-            }
         }
         // invalid tabPos (should never enter else)
         else {
@@ -237,8 +255,8 @@ class LoginActivity : AppCompatActivity() {
 
     /**
      * Checks if username and password pair are valid by comparing to map of credentials from json.
-     * @param username: string username from editTextName
-     * @param password: string password from editTextPassword
+     * @param [username] String username from editTextName
+     * @param [password] String password from editTextPassword
      * @return true if valid
      */
     private fun isValidCredentials(username: String, password: String): Boolean {
