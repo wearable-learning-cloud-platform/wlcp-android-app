@@ -110,11 +110,17 @@ class ChooseTeamActivity : AppCompatActivity() {
                 setGameInfoTeamAndPlayer(teamSelected, playerSelected, gameInfo)
             }
 
+            /** Build _intent_ to switch from [ChooseTeamActivity] to [LoginActivity]. */
             val intent = Intent(this@ChooseTeamActivity, LoginActivity::class.java)
+
+            /** Add the [GameInfo] objects into _intent_ */
             intent.putExtra("gameInfo", gameInfo)
+
+            /** Launch [LoginActivity] */
             startActivity(intent)
         }
     }
+
 
     /**
      * The [setGameInfoTeamAndPlayer] utility function sets the _team_ and _player_ info of the
@@ -128,6 +134,7 @@ class ChooseTeamActivity : AppCompatActivity() {
             gameInfo.player = playerSelected
         }
     }
+
 
     /**
      * The [getDropdownList] utility function produces a collection of values to populate a
@@ -156,6 +163,7 @@ class ChooseTeamActivity : AppCompatActivity() {
 
         return arr
     }
+
 
     /**
      * The [mapCount] utility function returns the number of teams/players depending on which
