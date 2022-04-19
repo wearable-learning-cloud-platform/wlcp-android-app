@@ -76,6 +76,11 @@ class TransitionSequenceFragment : Fragment() {
                 colorSequence = ""
                 id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, solution) }
             }
+            else {
+                var gameInfo = (activity as GameActivity).gameInfo
+                gameInfo.prevTransAnswer = colorSequence
+                context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
+            }
         }
 
         clearButton.setOnClickListener {

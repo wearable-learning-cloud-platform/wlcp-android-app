@@ -44,6 +44,10 @@ class TransitionTextEntryFragment : Fragment() {
             //one possible transition and incorrect input
             else if(!id.toString().contains(";;")) {
                 errorTextView.visibility = TextView.VISIBLE
+
+                var gameInfo = (activity as GameActivity).gameInfo
+                gameInfo.prevTransAnswer = input.lowercase()
+                context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
             }
             //multiple possible transitions
             else {
@@ -51,6 +55,11 @@ class TransitionTextEntryFragment : Fragment() {
 
                 if(!StringUtils.isEmptyOrBlank(matchedId)) {
                     matchedId?.let { it1 -> (activity as GameActivity).callTransition(it1, false, input) }
+                }
+                else {
+                    var gameInfo = (activity as GameActivity).gameInfo
+                    gameInfo.prevTransAnswer = input.lowercase()
+                    context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
                 }
             }
         }

@@ -12,7 +12,7 @@
       "name": "Welcome!",
       "players": "game_wide",
       "type": "text",
-      "content": "WELCOME TO GAME 12! Push a button to start.",
+      "content": "WELCOME TO GAME 12! Push any button other than blue.",
       "other": "",
       "trans_inputs": "",
       "trans_outputs": "trans_1"
@@ -122,7 +122,7 @@
     {
       "id": "trans_1",
       "type": "button_press",
-      "content": "RD|GR|BL|BK"
+      "content": "RD|GR|BK"
     },
     {
       "id": "trans_2",
