@@ -32,8 +32,17 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
+        /**
+         * Retrieve the [GameInfo] object from the intent that started this Activity.
+         *
+         * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
+         * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
+         */
         gameInfo = (intent.getSerializableExtra("gameInfo") as? GameInfo)!!
 
+        /**
+         * Retrieve the [GameInfo] object's _gamePin_ if _gameInfo_ is not _null_.
+         */
         if (gameInfo != null) {
             gamePin = gameInfo.gamePin.toString()
         }
@@ -117,7 +126,16 @@ class GameActivity : AppCompatActivity() {
         LogUtils.logGamePlay("gamePlay", gameInfo, false, applicationContext)
     }
 
+
+    /**
+     * The [mapJson] utility function retrieves the JSON file associated with a given game pin
+     * from a [GameInfo] object.
+     */
     private fun mapJson() {
+
+        /**
+         * Retrieve the contents of a JSON file and store in _jsonContents_.
+         */
         val jsonContents: String = resources.openRawResource(getGameFileIdentifier(gamePin))
             .bufferedReader().use { it.readText() }
 
@@ -327,37 +345,48 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+
+    /**
+     * This [onBackPressed] override builds the dialog for the _back_ button on [GameActivity]
+     */
     override fun onBackPressed() {
+
         MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
             .setMessage(resources.getString(R.string.confirm_back_text))
             .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
                 dialog.cancel()
             }
             .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
-                val intent = Intent(this@GameActivity, MainActivity::class.java)
 
-               /*
-                    FLAG_ACTIVITY_CLEAR_TOP:
-                    If set, and the activity being launched is already running in the current task,
-                    then instead of launching a new instance of that activity, all of the other
-                    activities on top of it will be closed and this Intent will be delivered to the
-                    (now on top) old activity as a new Intent.
-                */
+                /** Build _intent_ to switch from [GameActivity] to [MainActivity]. */
+                val intent = Intent(this@GameActivity, MainActivity::class.java)
 
                 LogUtils.logGamePlay("player", gameInfo, true, applicationContext)
                 LogUtils.logGamePlay("gamePlay", gameInfo, true, applicationContext)
 
+                /**
+                 * Note -- FLAG_ACTIVITY_CLEAR_TOP:
+                 * If set, and the activity being launched is already running in the current task,
+                 * then instead of launching a new instance of that activity, all of the other
+                 * activities on top of it will be closed and this Intent will be delivered to the
+                 * (now on top) old activity as a new Intent.
+                 */
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+                /** Add the [GameInfo] objects into _intent_ */
                 intent.putExtra("gameInfo", gameInfo)
+
+                /** Launch [MainActivity] */
                 startActivity(intent)
             }
             .show()
     }
 
+
     /**
      * The [getGameFileIdentifier] utility function returns the integer identifier for the game
      * json in the raw resources folder.
-     * @param [gamePin] stored in gameInfo
+     * @param [gamePin] The _gamePin_ value stored in a [GameInfo] object
      * @return The Int value of the json
      */
     private fun getGameFileIdentifier(gamePin: String): Int {
