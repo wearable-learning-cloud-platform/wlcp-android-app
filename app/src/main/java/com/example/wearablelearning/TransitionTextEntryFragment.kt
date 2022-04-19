@@ -1,16 +1,18 @@
 package com.example.wearablelearning
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent.registerEventListener
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent.setEventListener
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
+
 
 class TransitionTextEntryFragment : Fragment() {
     override fun onCreateView(
@@ -29,16 +31,6 @@ class TransitionTextEntryFragment : Fragment() {
         val textEntryEditText = view.findViewById<EditText>(R.id.text_entry_edittext)
 
         val errorTextView = view.findViewById<TextView>(R.id.error_textview)
-
-        textEntryEditText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                errorTextView.visibility = TextView.INVISIBLE
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-        })
 
         val submitButton = view.findViewById<Button>(R.id.transition_submit_btn)
 
@@ -69,6 +61,23 @@ class TransitionTextEntryFragment : Fragment() {
             textEntryEditText.text.clear()
             errorTextView.visibility = TextView.INVISIBLE
         }
+
+        setEventListener(
+            requireActivity(),
+            object : KeyboardVisibilityEventListener {
+                override fun onVisibilityChanged(isOpen: Boolean) {
+                    val clearAndSubmitBtnGroup = view.findViewById<LinearLayout>(R.id.clear_and_submit_btns)
+                    val padding1 = view.resources.getDimensionPixelSize(R.dimen.padding_side)
+                    val padding2 = view.resources.getDimensionPixelSize(R.dimen.transition_padding_bot)
+
+                    if(isOpen) {
+                        clearAndSubmitBtnGroup.setPadding(padding1, padding1, padding1, padding1)
+                    }
+                    else {
+                        clearAndSubmitBtnGroup.setPadding(padding1, padding1, padding1, padding2)
+                    }
+                }
+            })
     }
 
     private fun checkInput(input: String, content:String): Boolean {
@@ -95,5 +104,9 @@ class TransitionTextEntryFragment : Fragment() {
         }
 
         return ""
+    }
+
+    fun spToPx(sp: Float): Float {
+        return sp * resources.displayMetrics.scaledDensity
     }
 }
