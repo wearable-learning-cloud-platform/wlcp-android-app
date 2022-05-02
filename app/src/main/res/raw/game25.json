@@ -1,9 +1,9 @@
 {
   "game": {
-    "game_pin": 22,
-    "game_name": "Simple EstimateItFinal",
-    "team_cnt": 3,
-    "players_per_team": 3,
+    "game_pin": 25,
+    "game_name": "Fantastic Forces",
+    "team_cnt": 4,
+    "players_per_team": 2,
     "visibility": "public"
   },
   "states": [
