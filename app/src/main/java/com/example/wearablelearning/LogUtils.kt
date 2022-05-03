@@ -105,9 +105,67 @@ object LogUtils {
                     fileOutputStream.close()
                 }
             }
-        }catch (e: Exception){
+        } catch (e: Exception){
             e.printStackTrace()
         }
+    }
+
+    /**
+     * Clear the contents of both files if 2 hours has elapsed since last play.
+     * @param context: Context
+     */
+    fun clearLogs(context: Context) {
+        var currTime = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
+        var lastLoggedTime = getLastLoggedTimeStamp("gamePlay", context)
+
+        currTime = currTime.substringAfter("T").substringBefore(":")
+        lastLoggedTime = lastLoggedTime.substringAfter("T").substringBefore(":")
+
+        if(lastLoggedTime.isNotEmpty() && currTime.isNotEmpty()) {
+            if (currTime.toInt() > (lastLoggedTime.toInt() + 2)) {
+                clearFile("player", context)
+                clearFile("gamePlay", context)
+            }
+        }
+    }
+
+    /**
+     * Clear the contents of a files.
+     * @param fileType: file to be cleared
+     * @param context: Context
+     */
+    private fun clearFile(fileType: String, context: Context) {
+        var file: String = getFileName(fileType)
+
+        try {
+            if(fileExists(file, context)) {
+                context.deleteFile(file)
+            }
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * Retrieve the last logged time from a json file.
+     * @param fileType: file to search
+     * @param context: Context
+     */
+    private fun getLastLoggedTimeStamp(fileType: String, context: Context): String {
+        var file: String = getFileName(fileType)
+
+        try {
+            if(fileExists(file, context)) {
+                val jsonArray = JSONArray(readFromFile(file, context))
+                var lastEntry = jsonArray.getJSONObject(jsonArray.length()-1)
+
+                return lastEntry.get("interactionTime").toString()
+            }
+        } catch (e: Exception){
+            e.printStackTrace()
+        }
+
+        return String()
     }
 
     /**

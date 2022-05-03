@@ -9,6 +9,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 
 /**
@@ -89,8 +91,10 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intentMainToLogin)
             }
         }
-    }
 
+        //clear log files from device (LogUtils will check if clearing of logs should happen)
+        LogUtils.clearLogs(applicationContext)
+    }
 
     /**
      * The [checkInput] utility function checks if the user input value of the edit text is valid.
