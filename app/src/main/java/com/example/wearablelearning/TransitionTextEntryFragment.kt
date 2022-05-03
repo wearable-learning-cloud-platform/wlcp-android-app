@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent.registerEventListener
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent.setEventListener
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
@@ -36,6 +34,8 @@ class TransitionTextEntryFragment : Fragment() {
 
         submitButton.setOnClickListener {
             val input = textEntryEditText.text.toString()
+            var gameInfo = (activity as GameActivity).gameInfo
+            gameInfo.interactionType = "submitButton"
 
             //one possible transition and correct input
             if(!id.toString().contains(";;") && checkInput(input.lowercase(), content.toString())) {
@@ -45,8 +45,8 @@ class TransitionTextEntryFragment : Fragment() {
             else if(!id.toString().contains(";;")) {
                 errorTextView.visibility = TextView.VISIBLE
 
-                var gameInfo = (activity as GameActivity).gameInfo
-                gameInfo.prevTransAnswer = input.lowercase()
+                gameInfo.currTransAnswer = input.lowercase()
+                context?.let { context -> LogUtils.logGamePlay("player", (activity as GameActivity).gameInfo, false, context) }
                 context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
             }
             //multiple possible transitions
@@ -58,7 +58,8 @@ class TransitionTextEntryFragment : Fragment() {
                 }
                 else {
                     var gameInfo = (activity as GameActivity).gameInfo
-                    gameInfo.prevTransAnswer = input.lowercase()
+                    gameInfo.currTransAnswer = input.lowercase()
+                    context?.let { context -> LogUtils.logGamePlay("player", (activity as GameActivity).gameInfo, false, context) }
                     context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
                 }
             }
@@ -67,8 +68,25 @@ class TransitionTextEntryFragment : Fragment() {
         val clearButton = view.findViewById<Button>(R.id.transition_clear_btn)
 
         clearButton.setOnClickListener {
-            textEntryEditText.text.clear()
-            errorTextView.visibility = TextView.INVISIBLE
+            context?.let { context1 ->
+                MaterialAlertDialogBuilder(context1, R.style.Theme_WearableLearning_AlertDialog)
+                    .setMessage(resources.getString(R.string.confirm_clear_text))
+                    .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
+                        var gameInfo = (activity as GameActivity).gameInfo
+                        gameInfo.interactionType = "clearButton"
+                        gameInfo.currTransAnswer = textEntryEditText.text.toString()
+
+                        textEntryEditText.text.clear()
+                        errorTextView.visibility = TextView.INVISIBLE
+
+                        context?.let { context -> LogUtils.logGamePlay("player", (activity as GameActivity).gameInfo, false, context) }
+                        context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
+                    }
+                    .show()
+            }
         }
 
         setEventListener(

@@ -71,14 +71,17 @@ class TransitionSequenceFragment : Fragment() {
         }
 
         submitButton.setOnClickListener { v ->
+            var gameInfo = (activity as GameActivity).gameInfo
+            gameInfo.interactionType = "submitButton"
+
             if(colorSequence == solution) {
                 colorBtnClicks = 0
                 colorSequence = ""
                 id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, solution) }
             }
             else {
-                var gameInfo = (activity as GameActivity).gameInfo
-                gameInfo.prevTransAnswer = colorSequence
+                gameInfo.currTransAnswer = colorSequence
+                context?.let { context -> LogUtils.logGamePlay("player", (activity as GameActivity).gameInfo, false, context) }
                 context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
             }
         }
@@ -98,6 +101,12 @@ class TransitionSequenceFragment : Fragment() {
                             false
                         rightIcon.setIconTintResource(R.color.lightgrey)
                         leftIcon.setIconTintResource(R.color.lightgrey)
+
+                        var gameInfo = (activity as GameActivity).gameInfo
+                        gameInfo.interactionType = "clearButton"
+                        gameInfo.currTransAnswer = colorSequence
+                        context?.let { context -> LogUtils.logGamePlay("player", (activity as GameActivity).gameInfo, false, context) }
+                        context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
 
                         colorBtnClicks = 0
                         colorSequence = ""

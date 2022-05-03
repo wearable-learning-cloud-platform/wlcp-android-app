@@ -8,6 +8,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.json.JSONArray
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 
 /**
@@ -92,7 +94,6 @@ class GameActivity : AppCompatActivity() {
                     gameInfo.currTrans = obj.get("currTransition").toString()
 
                     if(obj.has("prevTransAnswer")) {
-                        Log.d("test", obj.get("prevTransAnswer").toString())
                         gameInfo.prevTransAnswer = obj.get("prevTransAnswer").toString()
                     }
 
@@ -122,6 +123,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         gameInfo.prevTransAnswer = prevAnswer
+        gameInfo.currTransAnswer = String()
         LogUtils.logGamePlay("player", gameInfo, false, applicationContext)
         LogUtils.logGamePlay("gamePlay", gameInfo, false, applicationContext)
     }
@@ -249,6 +251,7 @@ class GameActivity : AppCompatActivity() {
         val type = states["state_$idx"]?.type.toString()
 
         gameInfo.currState = "state_$idx"
+        gameInfo.currStateStartTime = getTimeStamp()
 
         if(type.contains("text")) {
             val fragInfo = StateTextFragment()
@@ -357,6 +360,8 @@ class GameActivity : AppCompatActivity() {
                 dialog.cancel()
             }
             .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
+                gameInfo.interactionType = "backButton"
+                gameInfo.currTransAnswer = "backButton"
 
                 /** Build _intent_ to switch from [GameActivity] to [MainActivity]. */
                 val intent = Intent(this@GameActivity, MainActivity::class.java)
@@ -393,5 +398,13 @@ class GameActivity : AppCompatActivity() {
         var fileName = "game$gamePin"
 
         return resources.getIdentifier(fileName, "raw", applicationContext?.packageName)
+    }
+
+    /**
+     * Returns the current timestamp.
+     * @return string timestamp
+     */
+    private fun getTimeStamp(): String {
+        return DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
     }
 }

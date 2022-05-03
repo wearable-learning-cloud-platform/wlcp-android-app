@@ -25,6 +25,8 @@ class TransitionEndGameFragment : Fragment() {
 
         button.setOnClickListener {
             if (gameInfo != null) {
+                gameInfo.interactionType = "endOfGameButton"
+
                 activity?.let { activity -> LogUtils.logGamePlay("player", gameInfo, true, activity.applicationContext) }
                 activity?.let { activity -> LogUtils.logGamePlay("gamePlay", gameInfo, true, activity.applicationContext) }
             }

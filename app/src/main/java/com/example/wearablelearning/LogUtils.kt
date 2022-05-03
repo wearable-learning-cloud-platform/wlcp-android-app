@@ -40,9 +40,12 @@ object LogUtils {
         jsonObj.put("player", getNumber(data.player))
         jsonObj.put("currState", data.currState)
         jsonObj.put("currTransition", data.currTrans)
-        jsonObj.put("timeEnterState", getStateTimeStamp())
-        jsonObj.put("timeExitApp", getExitAppTimeStamp(isAppExit))
         jsonObj.put("prevTransAnswer", data.prevTransAnswer)
+        jsonObj.put("currTransAnswer", data.currTransAnswer)
+        jsonObj.put("interactionType", data.interactionType)
+        jsonObj.put("interactionTime", data.interactionType?.let { getStateTimeStamp(it) })
+        jsonObj.put("timeEnterState", data.currStateStartTime)
+        jsonObj.put("timeExitApp", getExitAppTimeStamp(isAppExit))
 
         Log.i(file, jsonObj.toString())
 
@@ -207,8 +210,11 @@ object LogUtils {
      * Returns the current timestamp.
      * @return string timestamp
      */
-    private fun getStateTimeStamp(): String {
-        return DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
+    private fun getStateTimeStamp(interactionType: String): String {
+        if(interactionType != null)
+            return DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
+
+        return String()
     }
 
     /**
