@@ -26,6 +26,16 @@
       "other": "pull_game.mp4",
       "trans_inputs": "trans_1",
       "trans_outputs": "trans_2"
+    },
+    {
+      "id": "state_3",
+      "name": "Question 1",
+      "players": "game_wide",
+      "type": "text",
+      "content": "What force are you applying on the ribbon? (push or pull)",
+      "other": "",
+      "trans_inputs": "trans_2",
+      "trans_outputs": "trans_3"
     }
   ],
   "transitions": [
@@ -38,6 +48,11 @@
       "id": "trans_2",
       "type": "button_press",
       "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_3",
+      "type": "text_entry",
+      "content": "pull"
     }
   ]
 }
