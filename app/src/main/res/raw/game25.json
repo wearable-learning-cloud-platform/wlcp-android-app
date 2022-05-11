@@ -55,7 +55,27 @@
       "content": "Sorry, that was incorrect. Hint: Your options are push or pull. Press return to try again or skip to see the answer.",
       "other": "",
       "trans_inputs": "trans_4",
-      "trans_outputs": "trans_5, trans_6"
+      "trans_outputs": "trans_5"
+    },
+    {
+      "id": "state_6",
+      "name": "Question 1",
+      "players": "game_wide",
+      "type": "text",
+      "content": "The answer was pull.",
+      "other": "",
+      "trans_inputs": "trans_5",
+      "trans_outputs": ""
+    },
+    {
+      "id": "state_7",
+      "name": "Question 1",
+      "players": "game_wide",
+      "type": "text",
+      "content": "What force are you applying on the ribbon?",
+      "other": "",
+      "trans_inputs": "trans_6",
+      "trans_outputs": "trans_3, trans_4"
     }
   ],
   "transitions": [
@@ -82,12 +102,12 @@
     {
       "id": "trans_5",
       "type": "return_or_skip",
-      "content": "Return"
+      "content": "Skip"
     },
     {
       "id": "trans_6",
       "type": "return_or_skip",
-      "content": "Skip"
+      "content": "Return"
     }
   ]
 }
