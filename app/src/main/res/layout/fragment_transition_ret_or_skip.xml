@@ -28,9 +28,10 @@
                 android:layout_marginLeft="@dimen/button_half_space"
                 android:layout_marginRight="@dimen/button_half_space"
                 android:layout_weight="1"
-                android:backgroundTint="@color/purple_200"
+                android:backgroundTint="@color/purple_500"
                 android:elevation="4dp"
                 android:text="Return"
+                android:textColor="@color/white"
                 app:strokeColor="@color/lightgrey_button_border"
                 app:strokeWidth="2dp" />
 
@@ -42,9 +43,10 @@
                 android:layout_marginLeft="@dimen/button_half_space"
                 android:layout_marginRight="@dimen/button_half_space"
                 android:layout_weight="1"
-                android:backgroundTint="@color/purple_200"
+                android:backgroundTint="@color/purple_500"
                 android:elevation="4dp"
                 android:text="Skip"
+                android:textColor="@color/white"
                 app:strokeColor="@color/lightgrey_button_border"
                 app:strokeWidth="2dp" />
 

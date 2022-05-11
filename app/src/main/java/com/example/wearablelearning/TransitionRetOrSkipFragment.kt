@@ -26,13 +26,13 @@ class TransitionRetOrSkipFragment : Fragment() {
 
         skip.setOnClickListener {
             if(solution != null && solution.contains("Skip")) {
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "RD") }
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "Skip") }
             }
         }
 
         ret.setOnClickListener {
             if(solution != null && solution.contains("Return")) {
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "GR") }
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "Return") }
             }
         }
     }
