@@ -55,7 +55,7 @@
       "content": "Sorry, that was incorrect. Hint: Your options are push or pull. Press return to try again or skip to see the answer.",
       "other": "",
       "trans_inputs": "trans_4",
-      "trans_outputs": "trans_5"
+      "trans_outputs": "trans_5, trans_6"
     },
     {
       "id": "state_6",

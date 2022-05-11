@@ -1,6 +1,7 @@
 package com.example.wearablelearning
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ class TransitionRetOrSkipFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val id = this.requireArguments().getString("id")
+        Log.d("ID", id.toString())
         val solution = this.requireArguments().getString("content")
 
         val skip = view.findViewById<Button>(R.id.skip_btn)
@@ -26,13 +28,17 @@ class TransitionRetOrSkipFragment : Fragment() {
 
         skip.setOnClickListener {
             if(solution != null && solution.contains("Skip")) {
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "Skip") }
+                val skipID = id.toString().split(";;")[0]
+                Log.d("SkipID", skipID)
+                skipID?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "Skip") }
             }
         }
 
         ret.setOnClickListener {
             if(solution != null && solution.contains("Return")) {
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "Return") }
+                val retID = id.toString().split(";;")[1]
+                Log.d("retID", retID)
+                retID?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "Return") }
             }
         }
     }

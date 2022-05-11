@@ -27,7 +27,7 @@ class TransitionTextEntryFragment : Fragment() {
         val content = this.requireArguments().getString("content")
 
         val textEntryEditText = view.findViewById<EditText>(R.id.text_entry_edittext)
-
+        Log.d("ID", id.toString())
         val errorTextView = view.findViewById<TextView>(R.id.error_textview)
 
         textEntryEditText.addTextChangedListener(object : TextWatcher {
