@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 
-class TransitionRetOrSkip : Fragment() {
+class TransitionRetOrSkipFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -21,13 +21,19 @@ class TransitionRetOrSkip : Fragment() {
         val id = this.requireArguments().getString("id")
         val solution = this.requireArguments().getString("content")
 
-        val skipButton = view.findViewById<Button>(R.id.question_red_btn)
-        val retButton = view.findViewById<Button>(R.id.question_green_btn)
+        val skip = view.findViewById<Button>(R.id.skip_btn)
+        val ret = view.findViewById<Button>(R.id.ret_btn)
 
-        skipButton.setOnClickListener {
+        skip.setOnClickListener {
+            if(solution != null && solution.contains("Skip")) {
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "RD") }
+            }
         }
 
-        retButton.setOnClickListener {
+        ret.setOnClickListener {
+            if(solution != null && solution.contains("Return")) {
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "GR") }
+            }
         }
     }
 }

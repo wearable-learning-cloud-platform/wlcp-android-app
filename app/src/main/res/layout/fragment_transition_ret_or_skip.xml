@@ -1,23 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ret_or_skip"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".TransitionRetOrSkipFragment">
 
-    <Button
-        android:id="@+id/retButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Return"
-        tools:layout_editor_absoluteX="83dp"
-        tools:layout_editor_absoluteY="27dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/skipButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Skip"
-        tools:layout_editor_absoluteX="220dp"
-        tools:layout_editor_absoluteY="27dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/padding_side_large_btns"
+            android:paddingTop="@dimen/padding_top"
+            android:paddingRight="@dimen/padding_side_large_btns"
+            android:paddingBottom="@dimen/padding_top">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ret_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="82dp"
+                android:layout_marginLeft="@dimen/button_half_space"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@color/purple_200"
+                android:elevation="4dp"
+                android:text="Return"
+                app:strokeColor="@color/lightgrey_button_border"
+                app:strokeWidth="2dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/skip_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="82dp"
+                android:layout_marginLeft="@dimen/button_half_space"
+                android:layout_marginRight="@dimen/button_half_space"
+                android:layout_weight="1"
+                android:backgroundTint="@color/purple_200"
+                android:elevation="4dp"
+                android:text="Skip"
+                app:strokeColor="@color/lightgrey_button_border"
+                app:strokeWidth="2dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>
