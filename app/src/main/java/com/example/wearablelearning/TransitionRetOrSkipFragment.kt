@@ -21,25 +21,21 @@ class TransitionRetOrSkipFragment : Fragment() {
 
         val id = this.requireArguments().getString("id")
         Log.d("ID", id.toString())
-        val solution = this.requireArguments().getString("content")
 
         val skip = view.findViewById<Button>(R.id.skip_btn)
         val ret = view.findViewById<Button>(R.id.ret_btn)
 
+        //for this to work, the skip transition must be listed first and the return transition afterward
         skip.setOnClickListener {
-            if(solution != null && solution.contains("Skip")) {
-                val skipID = id.toString().split(";;")[0]
-                Log.d("SkipID", skipID)
-                skipID?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "Skip") }
-            }
+            val skipID = id.toString().split(";;")[0]
+            Log.d("SkipID", skipID)
+            skipID?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "Skip") }
         }
 
         ret.setOnClickListener {
-            if(solution != null && solution.contains("Return")) {
-                val retID = id.toString().split(";;")[1]
-                Log.d("retID", retID)
-                retID?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "Return") }
-            }
+            val retID = id.toString().split(";;")[1]
+            Log.d("retID", retID)
+            retID?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "Return") }
         }
     }
 }
