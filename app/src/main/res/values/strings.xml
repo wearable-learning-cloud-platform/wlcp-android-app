@@ -64,4 +64,7 @@
     <string name="player_name_txt">Player Null&#160;</string>
     <string name="team_name_txt">(Team Null)</string>
     <string name="close_btn_text">X</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="zero_seconds_text">Time Duration: 0</string>
 </resources>

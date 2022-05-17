@@ -1,0 +1,83 @@
+{
+  "game": {
+    "game_pin": 14,
+    "game_name": "Timer Game",
+    "team_cnt": 3,
+    "players_per_team": 4,
+    "visibility": "public"
+  },
+  "states": [
+    {
+      "id": "state_1",
+      "name": "State1",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 1. Timer set to 5s.",
+      "other": "",
+      "trans_inputs": "",
+      "trans_outputs": "trans_1"
+    },
+    {
+      "id": "state_2",
+      "name": "State2",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 2. Timer ended. Press GREEN.",
+      "other": "",
+      "trans_inputs": "trans_1",
+      "trans_outputs": "trans_2"
+    },
+    {
+      "id": "state_3",
+      "name": "State3",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 3. Press RED before the timer runs out.",
+      "other": "",
+      "trans_inputs": "trans_2",
+      "trans_outputs": "trans_3, trans_4"
+    },
+    {
+      "id": "state_4",
+      "name": "State4",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 4. You pressed RED. Good for you!",
+      "other": "",
+      "trans_inputs": "trans_3",
+      "trans_outputs": ""
+    },
+    {
+      "id": "state_5",
+      "name": "State5",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 5. Too slow!",
+      "other": "",
+      "trans_inputs": "trans_4",
+      "trans_outputs": ""
+    }
+  ],
+  "transitions": [
+    {
+      "id": "trans_1",
+      "type": "timer",
+      "content": "5"
+    },
+    {
+      "id": "trans_2",
+      "type": "button_press",
+      "content": "GR"
+    },
+    {
+      "id": "trans_3",
+      "type": "button_press",
+      "content": "RD"
+    },
+    {
+      "id": "trans_4",
+      "type": "timer",
+      "content": "3"
+    }
+  ]
+}

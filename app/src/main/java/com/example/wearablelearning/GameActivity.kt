@@ -121,6 +121,10 @@ class GameActivity : AppCompatActivity() {
         if(!outputTransition.contains(",") or isAllSameType(outputTransition)) {
             changeTransition(fm, outputTransition)
         }
+        // multiple output transition types
+        else {
+            //TODO display timer and other transition
+        }
 
         gameInfo.prevTransAnswer = prevAnswer
         gameInfo.prevTransType = prevTransType
@@ -344,6 +348,12 @@ class GameActivity : AppCompatActivity() {
         }
         else if(type.contains("random")) {
             val fragInfo = TransitionRandomFragment()
+            fragInfo.arguments = bundle
+            ft.replace(R.id.frameLayout2, fragInfo)
+            ft.commit()
+        }
+        else if(type.contains("timer")) {
+            val fragInfo = TransitionTimerFragment()
             fragInfo.arguments = bundle
             ft.replace(R.id.frameLayout2, fragInfo)
             ft.commit()
