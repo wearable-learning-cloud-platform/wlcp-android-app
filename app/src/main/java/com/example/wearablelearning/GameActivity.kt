@@ -342,6 +342,12 @@ class GameActivity : AppCompatActivity() {
             ft.replace(R.id.frameLayout2, fragInfo)
             ft.commit()
         }
+        else if(type.contains("random")) {
+            val fragInfo = TransitionRandomFragment()
+            fragInfo.arguments = bundle
+            ft.replace(R.id.frameLayout2, fragInfo)
+            ft.commit()
+        }
         else {
             val fragInfo = TransitionEndGameFragment()
             ft.replace(R.id.frameLayout2, fragInfo)

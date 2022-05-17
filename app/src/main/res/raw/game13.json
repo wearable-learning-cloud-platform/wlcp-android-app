@@ -1,0 +1,173 @@
+{
+  "game": {
+    "game_pin": 13,
+    "game_name": "Random Game",
+    "team_cnt": 8,
+    "players_per_team": 4,
+    "visibility": "public"
+  },
+  "states": [
+    {
+      "id": "state_1",
+      "name": "State1",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 1. Press continue for random transition.",
+      "other": "",
+      "trans_inputs": "",
+      "trans_outputs": "trans_1, trans_2, trans_3, trans_4"
+    },
+    {
+      "id": "state_2",
+      "name": "State2",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 2. Press RED.",
+      "other": "",
+      "trans_inputs": "trans_1",
+      "trans_outputs": "trans_5"
+    },
+    {
+      "id": "state_3",
+      "name": "State3",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 3. Press GREEN.",
+      "other": "",
+      "trans_inputs": "trans_2",
+      "trans_outputs": "trans_6"
+    },
+    {
+      "id": "state_4",
+      "name": "State4",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 4. Press BLUE.",
+      "other": "",
+      "trans_inputs": "trans_3",
+      "trans_outputs": "trans_7"
+    },
+    {
+      "id": "state_5",
+      "name": "State5",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 5. Press BLACK.",
+      "other": "",
+      "trans_inputs": "trans_4",
+      "trans_outputs": "trans_8"
+    },
+    {
+      "id": "state_6",
+      "name": "State6",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 6. Enter sequence RED, GREEN.",
+      "other": "",
+      "trans_inputs": "trans_5",
+      "trans_outputs": "trans_9"
+    },
+    {
+      "id": "state_7",
+      "name": "State7",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 7. Press BLACK.",
+      "other": "",
+      "trans_inputs": "trans_6",
+      "trans_outputs": "trans_10"
+    },
+    {
+      "id": "state_8",
+      "name": "State8",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 8. Type WHALE.",
+      "other": "",
+      "trans_inputs": "trans_7",
+      "trans_outputs": "trans_11"
+    },
+    {
+      "id": "state_9",
+      "name": "State9",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 9. Enter sequence (RED, GREEN) x 6.",
+      "other": "",
+      "trans_inputs": "trans_8",
+      "trans_outputs": "trans_12"
+    },
+    {
+      "id": "state_10",
+      "name": "State10",
+      "players": "game_wide",
+      "type": "text",
+      "content": "State 9. END OF GAME.",
+      "other": "",
+      "trans_inputs": "trans_9, trans_10, trans_11, trans_12",
+      "trans_outputs": ""
+    }
+  ],
+  "transitions": [
+    {
+      "id": "trans_1",
+      "type": "random",
+      "content": "random"
+    },
+    {
+      "id": "trans_2",
+      "type": "random",
+      "content": "random"
+    },
+    {
+      "id": "trans_3",
+      "type": "random",
+      "content": "random"
+    },
+    {
+      "id": "trans_4",
+      "type": "random",
+      "content": "random"
+    },
+    {
+      "id": "trans_5",
+      "type": "button_press",
+      "content": "RD"
+    },
+    {
+      "id": "trans_6",
+      "type": "button_press",
+      "content": "GR"
+    },
+    {
+      "id": "trans_7",
+      "type": "button_press",
+      "content": "BL"
+    },
+    {
+      "id": "trans_8",
+      "type": "button_press",
+      "content": "BK"
+    },
+    {
+      "id": "trans_9",
+      "type": "color_sequence",
+      "content": "RD&GR"
+    },
+    {
+      "id": "trans_10",
+      "type": "button_press",
+      "content": "BK"
+    },
+    {
+      "id": "trans_11",
+      "type": "text_entry",
+      "content": "whale"
+    },
+    {
+      "id": "trans_12",
+      "type": "color_sequence",
+      "content": "RD&GR&RD&GR&RD&GR&RD&GR&RD&GR&RD&GR"
+    }
+  ]
+}

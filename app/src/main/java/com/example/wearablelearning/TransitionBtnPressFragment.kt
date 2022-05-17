@@ -21,7 +21,6 @@ class TransitionBtnPressFragment : Fragment() {
 
         val id = this.requireArguments().getString("id")
         val solution = this.requireArguments().getString("content")
-        Log.d("test", solution.toString())
 
         val redButton = view.findViewById<Button>(R.id.question_red_btn)
         val greenButton = view.findViewById<Button>(R.id.question_green_btn)

@@ -39,6 +39,7 @@
     <string name="question_txt">No state.</string>
     <string name="submit_btn_text">Submit</string>
     <string name="clear_btn_text">Clear</string>
+    <string name="continue_btn_text">Continue</string>
     <string name="red_block_text">R</string>
     <string name="green_block_text">G</string>
     <string name="blue_block_text">B</string>
@@ -63,6 +64,4 @@
     <string name="player_name_txt">Player Null&#160;</string>
     <string name="team_name_txt">(Team Null)</string>
     <string name="close_btn_text">X</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
