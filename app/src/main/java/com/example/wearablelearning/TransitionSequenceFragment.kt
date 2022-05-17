@@ -77,7 +77,7 @@ class TransitionSequenceFragment : Fragment() {
             if(colorSequence == solution) {
                 colorBtnClicks = 0
                 colorSequence = ""
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, solution) }
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, solution, "color_sequence") }
             }
             else {
                 gameInfo.currTransAnswer = colorSequence

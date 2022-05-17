@@ -34,8 +34,7 @@ class TransitionBtnPressFragment : Fragment() {
             gameInfo.interactionType = "coloredButtonPress"
 
             if(solution != null && solution.contains("RD")) {
-                gameInfo.prevTransAnswer = "RD"
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "RD") }
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "RD", "button_press") }
             }
             else {
                 gameInfo.currTransAnswer = "RD"
@@ -48,8 +47,7 @@ class TransitionBtnPressFragment : Fragment() {
             gameInfo.interactionType = "coloredButtonPress"
 
             if(solution != null && solution.contains("GR")) {
-                gameInfo.prevTransAnswer = "GR"
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "GR") }
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "GR", "button_press") }
             }
             else {
                 gameInfo.currTransAnswer = "GR"
@@ -62,8 +60,7 @@ class TransitionBtnPressFragment : Fragment() {
             gameInfo.interactionType = "coloredButtonPress"
 
             if(solution != null && solution.contains("BL")) {
-                gameInfo.prevTransAnswer = "BL"
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "BL") }
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "BL", "button_press") }
             }
             else {
                 gameInfo.currTransAnswer = "BL"
@@ -76,8 +73,7 @@ class TransitionBtnPressFragment : Fragment() {
             gameInfo.interactionType = "coloredButtonPress"
 
             if(solution != null && solution.contains("BK")) {
-                gameInfo.prevTransAnswer = "BK"
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "BK") }
+                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, "BK", "button_press") }
             }
             else {
                 gameInfo.currTransAnswer = "BK"

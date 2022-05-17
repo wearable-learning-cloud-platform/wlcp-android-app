@@ -62,7 +62,7 @@ class GameActivity : AppCompatActivity() {
         addGamePlayerInfo(fm)
 
         if(playerStartedPlaying(gameInfo)) {
-            callTransition(gameInfo.currTrans!!, true, gameInfo.prevTransAnswer!!)
+            callTransition(gameInfo.currTrans!!, true, gameInfo.prevTransAnswer!!, gameInfo.prevTransType!!)
         } else {
             var idx = 1
 
@@ -104,7 +104,7 @@ class GameActivity : AppCompatActivity() {
         return false
     }
 
-    fun callTransition(transId: String, isStart: Boolean, prevAnswer: String) {
+    fun callTransition(transId: String, isStart: Boolean, prevAnswer: String, prevTransType: String) {
         currTransId = transId
         var stateId: Int = stateWithInputTransition(transId)
 
@@ -123,6 +123,7 @@ class GameActivity : AppCompatActivity() {
         }
 
         gameInfo.prevTransAnswer = prevAnswer
+        gameInfo.prevTransType = prevTransType
         gameInfo.currTransAnswer = String()
         LogUtils.logGamePlay("player", gameInfo, false, applicationContext)
         LogUtils.logGamePlay("gamePlay", gameInfo, false, applicationContext)

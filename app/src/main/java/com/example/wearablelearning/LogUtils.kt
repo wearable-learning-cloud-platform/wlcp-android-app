@@ -40,6 +40,7 @@ object LogUtils {
         jsonObj.put("player", getNumber(data.player))
         jsonObj.put("currState", data.currState)
         jsonObj.put("currTransition", data.currTrans)
+        jsonObj.put("prevTransType", data.prevTransType)
         jsonObj.put("prevTransAnswer", data.prevTransAnswer)
         jsonObj.put("currTransAnswer", data.currTransAnswer)
         jsonObj.put("interactionType", data.interactionType)
@@ -48,12 +49,11 @@ object LogUtils {
         jsonObj.put("timeExitApp", getExitAppTimeStamp(isAppExit))
 
         Log.i(file, jsonObj.toString())
-
         /**
          * The file output stream for writing to the json file.
          */
         val fileOutputStream: FileOutputStream
-
+/*
         try {
             //if file does not currently exist, create file with new log
             if(!fileExists(file, context)) {
@@ -105,9 +105,11 @@ object LogUtils {
                     fileOutputStream.close()
                 }
             }
+
+            Log.i(file, jsonObj.toString())
         } catch (e: Exception){
             e.printStackTrace()
-        }
+        }*/
     }
 
     /**

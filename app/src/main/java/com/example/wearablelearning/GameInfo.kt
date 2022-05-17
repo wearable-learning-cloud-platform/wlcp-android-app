@@ -56,6 +56,12 @@ class GameInfo() : Serializable {
     var currStateStartTime: String? = null
 
     /**
+     * The type of the previous transition. For example, if the current state is state 2 then
+     * prevTransType is the type of state 1 (assuming linear game: start -> state 1 -> state 2).
+     */
+    var prevTransType: String? = null
+
+    /**
      * The answer to the previous transition. For example, if the current state is state 2 then
      * prevTransAnswer is the answer to state 1 (assuming linear game: start -> state 1 -> state 2).
      */
