@@ -48,12 +48,12 @@ object LogUtils {
         jsonObj.put("timeEnterState", data.currStateStartTime)
         jsonObj.put("timeExitApp", getExitAppTimeStamp(isAppExit))
 
-        Log.i(file, jsonObj.toString())
+//        Log.i(file, jsonObj.toString())
         /**
          * The file output stream for writing to the json file.
          */
         val fileOutputStream: FileOutputStream
-/*
+
         try {
             //if file does not currently exist, create file with new log
             if(!fileExists(file, context)) {
@@ -109,7 +109,7 @@ object LogUtils {
             Log.i(file, jsonObj.toString())
         } catch (e: Exception){
             e.printStackTrace()
-        }*/
+        }
     }
 
     /**
