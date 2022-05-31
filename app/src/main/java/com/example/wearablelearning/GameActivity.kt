@@ -119,11 +119,17 @@ class GameActivity : AppCompatActivity() {
 
         // if there is only one output transition
         if(!outputTransition.contains(",") or isAllSameType(outputTransition)) {
+            changeHelperTransition(fm, "none")
             changeTransition(fm, outputTransition)
         }
-        // multiple output transition types
+        // if there are multiple output transitions with different types (e.g. timer and button press)
         else {
-            //TODO display timer and other transition
+            var transList = outputTransition.replace(" ", "").split(',')
+
+            if(transList.size == 2) {
+                changeHelperTransition(fm, transList[1])
+                changeTransition(fm, transList[0])
+            }
         }
 
         gameInfo.prevTransAnswer = prevAnswer
@@ -297,6 +303,32 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    private fun changeHelperTransition(fm: FragmentManager, helperTransition: String) {
+        var type = transitions[helperTransition]?.type.toString()
+        var id = transitions[helperTransition]?.id.toString()
+        var content = transitions[helperTransition]?.content.toString()
+
+        val ft: FragmentTransaction = fm.beginTransaction()
+        val bundle = Bundle()
+        bundle.putString("id", id)
+        bundle.putString("content", content)
+        bundle.putString("frameLayout", "frameLayout2a")
+
+        if(helperTransition == "none") {
+            val fragInfo = TransitionBlankFragment()
+            fragInfo.arguments = bundle
+            ft.replace(R.id.frameLayout2a, fragInfo)
+            ft.commit()
+            return
+        }
+        else if(type.contains("timer")) {
+            val fragInfo = TransitionTimerFragment()
+            fragInfo.arguments = bundle
+            ft.replace(R.id.frameLayout2a, fragInfo)
+            ft.commit()
+        }
+    }
+
     private fun changeTransition(fm: FragmentManager, transition: String) {
         var type = transitions[transition]?.type.toString()
         var id = transitions[transition]?.id.toString()
@@ -327,6 +359,7 @@ class GameActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putString("id", id)
         bundle.putString("content", content)
+        bundle.putString("frameLayout", "frameLayout2")
 
         if(type.contains("button_press")) {
             val fragInfo = TransitionBtnPressFragment()

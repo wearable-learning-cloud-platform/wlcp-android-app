@@ -74,7 +74,6 @@ class GameInfo() : Serializable {
      */
     var currTransAnswer: String? = null
 
-
     /**
      * The interaction that triggered logging: clearButton, submitButton, backButton, or colorButtonPress.
      */

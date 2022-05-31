@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import com.google.android.material.textview.MaterialTextView
 
 class TransitionTimerFragment : Fragment() {
@@ -22,6 +23,19 @@ class TransitionTimerFragment : Fragment() {
 
         var id = this.requireArguments().getString("id")
         var seconds = this.requireArguments().getString("content")
+        var frameLayout = this.requireArguments().getString("frameLayout")
+
+        val timerLayout = view.findViewById<LinearLayout>(R.id.timer_layout)
+        val padding1 = view.resources.getDimensionPixelSize(R.dimen.padding_side)
+        val padding2 = view.resources.getDimensionPixelSize(R.dimen.transition_padding_bot)
+
+        if(frameLayout!!.contains("2a")) {
+            timerLayout.setPadding(padding1, padding1, padding1, padding1)
+        }
+        else {
+            timerLayout.setPadding(padding1, padding1, padding1, padding2)
+        }
+
         var milliseconds = seconds?.toLong()?.times(1000)?.plus(1000)
 
         val timerTextview = view.findViewById<MaterialTextView>(R.id.timer_textview)
@@ -36,7 +50,7 @@ class TransitionTimerFragment : Fragment() {
             }
 
             override fun onFinish() {
-                id?.let { transId -> (activity as GameActivity).callTransition(transId, false, "", "timer") }
+                id?.let { transId -> (activity as? GameActivity)?.callTransition(transId, false, "", "timer") }
             }
         }
         timer.start()
