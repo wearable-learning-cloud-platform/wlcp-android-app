@@ -12,6 +12,10 @@ import java.time.format.DateTimeFormatter
 /**
  * Log utility object.
  * Provides functions for logging interactions to internal storage jsons.
+ * Currently logs are being populated to gamePlay..json based on the following events: (TODO finish comment)
+ *
+ * TODO gamePlayLogDelay: only populated by log entries that don't make it to the server (checked by handshake)
+ * TODO 24 hrs instead of 2 (find ticket & update)
  */
 object LogUtils {
 
@@ -48,7 +52,8 @@ object LogUtils {
         jsonObj.put("timeEnterState", data.currStateStartTime)
         jsonObj.put("timeExitApp", getExitAppTimeStamp(isAppExit))
 
-//        Log.i(file, jsonObj.toString())
+        Log.i(file, jsonObj.toString())
+
         /**
          * The file output stream for writing to the json file.
          */
@@ -113,7 +118,7 @@ object LogUtils {
     }
 
     /**
-     * Clear the contents of both files if 2 hours has elapsed since last play.
+     * Clear the contents of both files if 24 hours has elapsed since last play.
      * @param context: Context
      */
     fun clearLogs(context: Context) {
@@ -124,7 +129,7 @@ object LogUtils {
         lastLoggedTime = lastLoggedTime.substringAfter("T").substringBefore(":")
 
         if(lastLoggedTime.isNotEmpty() && currTime.isNotEmpty()) {
-            if (currTime.toInt() > (lastLoggedTime.toInt() + 2)) {
+            if (currTime.toInt() > (lastLoggedTime.toInt() + 24)) {
                 clearFile("player", context)
                 clearFile("gamePlay", context)
             }
