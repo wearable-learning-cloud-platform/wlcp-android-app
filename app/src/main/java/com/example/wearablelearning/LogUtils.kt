@@ -12,10 +12,13 @@ import java.time.format.DateTimeFormatter
 /**
  * Log utility object.
  * Provides functions for logging interactions to internal storage jsons.
- * Currently logs are being populated to gamePlay..json based on the following events: (TODO finish comment)
+ * Currently logs are being populated to gamePlayLog.json based on the following events:
+ * 1) correct submit button (or similar submit action like a button press)
+ * 2) incorrect submit button
+ * 3) clear button
+ * 4) back arrow to exit game
  *
  * TODO gamePlayLogDelay: only populated by log entries that don't make it to the server (checked by handshake)
- * TODO 24 hrs instead of 2 (find ticket & update)
  */
 object LogUtils {
 
