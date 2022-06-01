@@ -58,12 +58,21 @@ class GameInfo() : Serializable {
     /**
      * The type of the previous transition. For example, if the current state is state 2 then
      * prevTransType is the type of state 1 (assuming linear game: start -> state 1 -> state 2).
+     * For cases where there are multiple transitions (e.g. timer and button press), both transitions
+     * are concatenated here (e.g. "3s timer and button_press").
      */
     var prevTransType: String? = null
 
     /**
      * The answer to the previous transition. For example, if the current state is state 2 then
      * prevTransAnswer is the answer to state 1 (assuming linear game: start -> state 1 -> state 2).
+     * For cases where timer is the only previous transitions, the prevTransAnswer is the duration of
+     * the timer since the player does not actually input an answer (e.g. "3s timer"). For cases
+     * where there are more than one transition, the answer that caused the game to progress is the
+     * prevTransAnswer (e.g. there is a 3s timer and RED button press and the player did not press the
+     * correct button in time then prevTransAnswer = "3s timer") (e.g. there is a 3s timer and RED
+     * button press and the player pressed the correct button before the timer expired then
+     * prevTransAnswer = "RD").
      */
     var prevTransAnswer: String? = null
 
@@ -75,7 +84,12 @@ class GameInfo() : Serializable {
     var currTransAnswer: String? = null
 
     /**
-     * The interaction that triggered logging: clearButton, submitButton, backButton, or colorButtonPress.
+     * The interaction that triggered logging: clearButton, submitButton, backButton, colorButtonPress,
+     * or timer expired. For cases where there are more than one transition, the interaction that
+     * caused the game to progress is the interactionType (e.g. there is a 3s timer and RED button
+     * press and the player did not press the correct button in time then interactionType = "3s timer
+     * expired") (e.g. there is a 3s timer and RED button press and the player pressed the correct
+     * button before the timer expired then interactionType = "coloredButtonPress").
      */
     var interactionType: String? = null
 }

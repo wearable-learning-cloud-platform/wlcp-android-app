@@ -26,6 +26,8 @@ class GameActivity : AppCompatActivity() {
         var transitions: MutableMap<String, Transition> = mutableMapOf()
         var currTransId: String = String()
         var gamePin: String = String()
+        var prevTransIsDouble: Boolean = false
+        var prevTransTypeDouble = String()
     }
 
     lateinit var gameInfo: GameInfo
@@ -117,23 +119,49 @@ class GameActivity : AppCompatActivity() {
         changeState(fm, stateId)
         val outputTransition = getOutputTransition(stateId)
 
+        if(prevTransIsDouble) {
+            gameInfo.prevTransType = prevTransTypeDouble
+        }
+        else {
+            gameInfo.prevTransType = prevTransType
+        }
+
         // if there is only one output transition
         if(!outputTransition.contains(",") or isAllSameType(outputTransition)) {
             changeHelperTransition(fm, "none")
             changeTransition(fm, outputTransition)
+
+            prevTransIsDouble = false
         }
         // if there are multiple output transitions with different types (e.g. timer and button press)
         else {
             var transList = outputTransition.replace(" ", "").split(',')
 
             if(transList.size == 2) {
-                changeHelperTransition(fm, transList[1])
-                changeTransition(fm, transList[0])
+                var transType0 = transitions[transList[0]]?.type.toString()
+                var transType1 = transitions[transList[1]]?.type.toString()
+                var timerStr:String = ""
+
+                if(transType0.contains("timer")) {
+                    changeHelperTransition(fm, transList[0])
+                    changeTransition(fm, transList[1])
+
+                    timerStr = transitions[transList[0]]?.content.toString().plus("s timer")
+                    prevTransTypeDouble = "$timerStr and $transType1"
+                }
+                else if(transType1.contains("timer")){
+                    changeHelperTransition(fm, transList[1])
+                    changeTransition(fm, transList[0])
+
+                    timerStr = transitions[transList[1]]?.content.toString().plus("s timer")
+                    prevTransTypeDouble = "$timerStr and $transType0"
+                }
+
+                prevTransIsDouble = true
             }
         }
 
         gameInfo.prevTransAnswer = prevAnswer
-        gameInfo.prevTransType = prevTransType
         gameInfo.currTransAnswer = String()
         LogUtils.logGamePlay("player", gameInfo, false, applicationContext)
         LogUtils.logGamePlay("gamePlay", gameInfo, false, applicationContext)

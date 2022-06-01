@@ -50,7 +50,9 @@ class TransitionTimerFragment : Fragment() {
             }
 
             override fun onFinish() {
-                id?.let { transId -> (activity as? GameActivity)?.callTransition(transId, false, "", "timer") }
+                var gameInfo = (activity as? GameActivity)?.gameInfo
+                gameInfo?.interactionType = seconds.plus("s timer expired")
+                id?.let { transId -> (activity as? GameActivity)?.callTransition(transId, false, seconds.plus("s timer"), seconds.plus("s timer")) }
             }
         }
         timer.start()
