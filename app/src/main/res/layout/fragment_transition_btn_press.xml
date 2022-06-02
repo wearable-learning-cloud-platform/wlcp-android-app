@@ -22,7 +22,7 @@
 
             <com.google.android.material.button.MaterialButton
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:id="@+id/skip_btn"
+                android:id="@+id/question_red_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="82dp"
                 android:layout_marginLeft="@dimen/button_half_space"
@@ -36,7 +36,7 @@
 
             <com.google.android.material.button.MaterialButton
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:id="@+id/ret_btn"
+                android:id="@+id/question_green_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="82dp"
                 android:layout_marginLeft="@dimen/button_half_space"

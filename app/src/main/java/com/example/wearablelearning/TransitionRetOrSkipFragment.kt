@@ -23,7 +23,7 @@ class TransitionRetOrSkipFragment : Fragment() {
         Log.d("ID", id.toString())
 
         val skip = view.findViewById<Button>(R.id.skip_btn)
-        val ret = view.findViewById<Button>(R.id.ret_btn)
+        val ret = view.findViewById<Button>(R.id.return_btn)
 
         //for this to work, the skip transition must be listed first and the return transition afterward
         skip.setOnClickListener {

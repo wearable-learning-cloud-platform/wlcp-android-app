@@ -35,8 +35,8 @@ class TransitionSequenceFragment : Fragment() {
 
         val submitButton = view.findViewById<Button>(R.id.transition_submit_btn)
         val clearButton = view.findViewById<Button>(R.id.transition_clear_btn)
-        val redButton = view.findViewById<Button>(R.id.skip_btn)
-        val greenButton = view.findViewById<Button>(R.id.ret_btn)
+        val redButton = view.findViewById<Button>(R.id.question_red_btn)
+        val greenButton = view.findViewById<Button>(R.id.question_green_btn)
         val blueButton = view.findViewById<Button>(R.id.question_blue_btn)
         val blackButton = view.findViewById<Button>(R.id.question_black_btn)
 
