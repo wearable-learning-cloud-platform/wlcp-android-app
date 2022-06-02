@@ -1,0 +1,113 @@
+{
+  "game": {
+    "game_pin": 25,
+    "game_name": "Fantastic Forces",
+    "team_cnt": 4,
+    "players_per_team": 2,
+    "visibility": "public"
+  },
+  "states": [
+    {
+      "id": "state_1",
+      "name": "Welcome!",
+      "players": "game_wide",
+      "type": "text",
+      "content": "Welcome to Fantastic Forces! Push a button to start.",
+      "other": "",
+      "trans_inputs": "",
+      "trans_outputs": "trans_1"
+    },
+    {
+      "id": "state_2",
+      "name": "First experiment",
+      "players": "game_wide",
+      "type": "video",
+      "content": "Watch the video below for directions. Click any button to continue.",
+      "other": "pull_game.mp4",
+      "trans_inputs": "trans_1",
+      "trans_outputs": "trans_2"
+    },
+    {
+      "id": "state_3",
+      "name": "Question 1",
+      "players": "game_wide",
+      "type": "text",
+      "content": "What force are you applying on the ribbon?",
+      "other": "",
+      "trans_inputs": "trans_2",
+      "trans_outputs": "trans_3, trans_4"
+    },
+    {
+      "id": "state_4",
+      "name": "Question 1",
+      "players": "game_wide",
+      "type": "text",
+      "content": "Correct!",
+      "other": "",
+      "trans_inputs": "trans_3",
+      "trans_outputs": ""
+    },
+    {
+      "id": "state_5",
+      "name": "Question 1",
+      "players": "game_wide",
+      "type": "text",
+      "content": "Sorry, that was incorrect. Hint: Your options are push or pull. Press return to try again or skip to see the answer.",
+      "other": "",
+      "trans_inputs": "trans_4",
+      "trans_outputs": "trans_5, trans_6"
+    },
+    {
+      "id": "state_6",
+      "name": "Question 1",
+      "players": "game_wide",
+      "type": "text",
+      "content": "The answer was pull.",
+      "other": "",
+      "trans_inputs": "trans_5",
+      "trans_outputs": ""
+    },
+    {
+      "id": "state_7",
+      "name": "Question 1",
+      "players": "game_wide",
+      "type": "text",
+      "content": "What force are you applying on the ribbon?",
+      "other": "",
+      "trans_inputs": "trans_6",
+      "trans_outputs": "trans_3, trans_4"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "trans_1",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_2",
+      "type": "button_press",
+      "content": "'RD|GR|BL|BK'"
+    },
+    {
+      "id": "trans_3",
+      "type": "text_entry",
+      "content": "pull"
+    },
+    {
+      "id": "trans_4",
+      "type": "text_entry",
+      "content": "ALL_OTHER_INPUTS"
+    },
+    {
+      "id": "trans_5",
+      "type": "return_or_skip",
+      "content": "Skip"
+    },
+    {
+      "id": "trans_6",
+      "type": "return_or_skip",
+      "content": "Return"
+    }
+  ]
+}
