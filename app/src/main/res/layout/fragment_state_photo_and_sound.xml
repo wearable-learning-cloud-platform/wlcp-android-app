@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayoutState"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StatePhotoAndSoundFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/welcome_padding">
+
+        <ImageView
+            android:id="@+id/state_imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/max_photo_height"
+            android:adjustViewBounds="true"
+            android:maxHeight="@dimen/max_photo_height"
+            android:scaleType="centerInside"
+            android:src="@raw/default_placeholder" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/padding_top">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/play_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginRight="@dimen/icon_margin"
+                android:layout_weight="1"
+                android:elevation="4dp"
+                app:backgroundTint="@color/lightgrey"
+                app:icon="@drawable/ic_play_foreground"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/icon_padding"
+                app:iconTint="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:rippleColor="@color/grey"
+                app:strokeColor="@color/lightgrey_button_border"
+                app:strokeWidth="2dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/rewind_btn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginLeft="@dimen/icon_margin"
+                android:layout_weight="1"
+                android:elevation="4dp"
+                app:backgroundTint="@color/lightgrey"
+                app:icon="@drawable/ic_rewind_foreground"
+                app:iconGravity="textStart"
+                app:iconPadding="@dimen/icon_padding"
+                app:iconTint="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:rippleColor="@color/grey"
+                app:strokeColor="@color/lightgrey_button_border"
+                app:strokeWidth="2dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

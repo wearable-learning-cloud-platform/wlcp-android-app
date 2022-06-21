@@ -1,0 +1,83 @@
+{
+  "game": {
+    "game_pin": 15,
+    "game_name": "Select the Color",
+    "team_cnt": 2,
+    "players_per_team": 3,
+    "visibility": "public"
+  },
+  "states": [
+    {
+      "id": "state_1",
+      "name": "State1",
+      "players": "game_wide",
+      "type": "text",
+      "content": "Welcome to Select the Color. To play, select the color that best matches the image and sound.\n\nTo begin, press BLACK below.",
+      "other": "",
+      "trans_inputs": "",
+      "trans_outputs": "trans_1"
+    },
+    {
+      "id": "state_2",
+      "name": "State2",
+      "players": "game_wide",
+      "type": "photo&sound",
+      "content": "truck.png",
+      "other": "siren.mp3",
+      "trans_inputs": "trans_1",
+      "trans_outputs": "trans_2"
+    },
+    {
+      "id": "state_3",
+      "name": "State3",
+      "players": "game_wide",
+      "type": "photo&sound",
+      "content": "bird.png",
+      "other": "bird_chirp.mp3",
+      "trans_inputs": "trans_2",
+      "trans_outputs": "trans_3"
+    },
+    {
+      "id": "state_4",
+      "name": "State4",
+      "players": "game_wide",
+      "type": "photo&sound",
+      "content": "frog.png",
+      "other": "frog_ribbit.mp3",
+      "trans_inputs": "trans_3",
+      "trans_outputs": "trans_4"
+    },
+    {
+      "id": "state_5",
+      "name": "State5",
+      "players": "game_wide",
+      "type": "text",
+      "content": "Great work!",
+      "other": "",
+      "trans_inputs": "trans_4",
+      "trans_outputs": ""
+    }
+  ],
+  "transitions": [
+    {
+      "id": "trans_1",
+      "type": "button_press",
+      "content": "BK"
+    },
+    {
+      "id": "trans_2",
+      "type": "button_press",
+      "content": "RD"
+    },
+    {
+      "id": "trans_3",
+      "type": "button_press",
+      "content": "BL"
+    },
+    {
+      "id": "trans_4",
+      "type": "button_press",
+      "content": "GR"
+    }
+  ]
+}

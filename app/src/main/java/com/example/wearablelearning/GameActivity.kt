@@ -3,6 +3,7 @@ package com.example.wearablelearning
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -301,6 +302,16 @@ class GameActivity : AppCompatActivity() {
         if(type.contains("text")) {
             val fragInfo = StateTextFragment()
             bundle.putString("content", content)
+            fragInfo.arguments = bundle
+            ft.replace(R.id.frameLayout1, fragInfo)
+            ft.commit()
+        }
+        else if(type == "photo&sound") {
+            val other = states["state_$idx"]?.other.toString()
+
+            val fragInfo = StatePhotoAndSoundFragment()
+            bundle.putString("image", content)
+            bundle.putString("sound", other)
             fragInfo.arguments = bundle
             ft.replace(R.id.frameLayout1, fragInfo)
             ft.commit()
