@@ -1,15 +1,19 @@
 package com.example.wearablelearning
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.json.JSONArray
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -32,6 +36,7 @@ class GameActivity : AppCompatActivity() {
 
     lateinit var gameInfo: GameInfo
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
@@ -51,7 +56,7 @@ class GameActivity : AppCompatActivity() {
             gamePin = gameInfo.gamePin.toString()
         }
 
-        var fm: FragmentManager = supportFragmentManager
+        val fm: FragmentManager = supportFragmentManager
 
         mapJson()
 
@@ -66,7 +71,7 @@ class GameActivity : AppCompatActivity() {
         if(playerStartedPlaying(gameInfo)) {
             callTransition(gameInfo.currTrans!!, true, gameInfo.prevTransAnswer!!, gameInfo.prevTransType!!)
         } else {
-            var idx = 1
+            val idx = 1
 
             changeState(fm, idx)
             changeTransition(fm, getOutputTransition(idx))
@@ -78,7 +83,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun playerStartedPlaying(gameInfo: GameInfo): Boolean {
         val fileName = "playerTracker.json"
-        var file = applicationContext.getFileStreamPath(fileName)
+        val file = applicationContext.getFileStreamPath(fileName)
 
         if(!file.exists())
             return false
@@ -106,6 +111,7 @@ class GameActivity : AppCompatActivity() {
         return false
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun callTransition(transId: String, isStart: Boolean, prevAnswer: String, prevTransType: String) {
         currTransId = transId
         var stateId: Int = stateWithInputTransition(transId)
@@ -114,7 +120,7 @@ class GameActivity : AppCompatActivity() {
             stateId = stateWithOutputTransition(transId)
         }
 
-        var fm: FragmentManager = supportFragmentManager
+        val fm: FragmentManager = supportFragmentManager
 
         changeState(fm, stateId)
         val outputTransition = getOutputTransition(stateId)
@@ -135,12 +141,12 @@ class GameActivity : AppCompatActivity() {
         }
         // if there are multiple output transitions with different types (e.g. timer and button press)
         else {
-            var transList = outputTransition.replace(" ", "").split(',')
+            val transList = outputTransition.replace(" ", "").split(',')
 
             if(transList.size == 2) {
-                var transType0 = transitions[transList[0]]?.type.toString()
-                var transType1 = transitions[transList[1]]?.type.toString()
-                var timerStr:String = ""
+                val transType0 = transitions[transList[0]]?.type.toString()
+                val transType1 = transitions[transList[1]]?.type.toString()
+                val timerStr: String
 
                 if(transType0.contains("timer")) {
                     changeHelperTransition(fm, transList[0])
@@ -185,17 +191,16 @@ class GameActivity : AppCompatActivity() {
 
     private fun mapGameName(): String {
         val gameInfo: String = map.getValue("game").toString()
-        val gameName: String = gameInfo.substringAfter("game_name=").substringBefore(", team_cnt=")
 
-        return gameName
+        return gameInfo.substringAfter("game_name=").substringBefore(", team_cnt=")
     }
 
     private fun mapStates() {
         val stateList: ArrayList<Any> = map.getValue("states") as ArrayList<Any>
 
         for(s in stateList) {
-            var stateStr: String = s.toString()
-            var stateId: String = stateStr.substringAfter("{id=").substringBefore(", name=")
+            val stateStr: String = s.toString()
+            val stateId: String = stateStr.substringAfter("{id=").substringBefore(", name=")
 
             val newState = State(
                 stateId,
@@ -216,8 +221,8 @@ class GameActivity : AppCompatActivity() {
         val transList: ArrayList<Any> = map.getValue("transitions") as ArrayList<Any>
 
         for(t in transList) {
-            var transStr: String = t.toString()
-            var transId: String = transStr.substringAfter("{id=").substringBefore(", type=")
+            val transStr: String = t.toString()
+            val transId: String = transStr.substringAfter("{id=").substringBefore(", type=")
 
             val newTransition = Transition(
                 transId,
@@ -230,7 +235,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun getOutputTransition(idx: Int): String {
-        var outputs: List<String> = states["state_$idx"]!!.trans_outputs
+        val outputs: List<String> = states["state_$idx"]!!.trans_outputs
 
         if(outputs.size == 1) {
             return outputs[0]
@@ -253,7 +258,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun stateWithInputTransition(transId: String): Int {
-        var idx = 0
+        val idx = 0
 
         for(i in 1..states.size) {
             if(states["state_$i"]?.trans_inputs?.contains(transId) == true) {
@@ -265,7 +270,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun stateWithOutputTransition(transId: String): Int {
-        var idx = 0
+        val idx = 0
 
         for(i in 1..states.size) {
             if(states["state_$i"]?.trans_outputs?.contains(transId) == true) {
@@ -282,6 +287,7 @@ class GameActivity : AppCompatActivity() {
         ft.commit()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun changeState(fm: FragmentManager, idx: Int) {
         val ft: FragmentTransaction = fm.beginTransaction()
         val bundle = Bundle()
@@ -332,9 +338,9 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun changeHelperTransition(fm: FragmentManager, helperTransition: String) {
-        var type = transitions[helperTransition]?.type.toString()
-        var id = transitions[helperTransition]?.id.toString()
-        var content = transitions[helperTransition]?.content.toString()
+        val type = transitions[helperTransition]?.type.toString()
+        val id = transitions[helperTransition]?.id.toString()
+        val content = transitions[helperTransition]?.content.toString()
 
         val ft: FragmentTransaction = fm.beginTransaction()
         val bundle = Bundle()
@@ -430,6 +436,7 @@ class GameActivity : AppCompatActivity() {
     /**
      * This [onBackPressed] override builds the dialog for the _back_ button on [GameActivity]
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBackPressed() {
 
         MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
@@ -473,7 +480,7 @@ class GameActivity : AppCompatActivity() {
      * @return The Int value of the json
      */
     private fun getGameFileIdentifier(gamePin: String): Int {
-        var fileName = "game$gamePin"
+        val fileName = "game$gamePin"
 
         return resources.getIdentifier(fileName, "raw", applicationContext?.packageName)
     }
@@ -482,7 +489,16 @@ class GameActivity : AppCompatActivity() {
      * Returns the current timestamp.
      * @return string timestamp
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getTimeStamp(): String {
-        return DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
+        val currTime =
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N){
+                DateTimeFormatter.ISO_INSTANT.format(Instant.now())
+            } else {
+                val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                simpleDateFormat.format(Date())
+            }
+
+        return currTime.toString()
     }
 }

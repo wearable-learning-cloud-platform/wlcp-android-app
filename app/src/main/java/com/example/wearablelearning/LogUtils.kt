@@ -1,13 +1,17 @@
 package com.example.wearablelearning
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 /**
  * Log utility object.
@@ -29,11 +33,12 @@ object LogUtils {
      * @param isAppExit: Boolean
      * @param context: Context
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     fun logGamePlay(fileType: String, data: GameInfo, isAppExit: Boolean, context: Context) {
         /**
          * The file name based on the fileType.
          */
-        var file: String = getFileName(fileType)
+        val file: String = getFileName(fileType)
 
         /**
          * The json object where log data is put into.
@@ -124,8 +129,16 @@ object LogUtils {
      * Clear the contents of both files if 24 hours has elapsed since last play.
      * @param context: Context
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     fun clearLogs(context: Context) {
-        var currTime = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
+        var currTime =
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N){
+                DateTimeFormatter.ISO_INSTANT.format(Instant.now())
+            } else {
+                val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                simpleDateFormat.format(Date())
+            }
+
         var lastLoggedTime = getLastLoggedTimeStamp("gamePlay", context)
 
         currTime = currTime.substringAfter("T").substringBefore(":")
@@ -145,7 +158,7 @@ object LogUtils {
      * @param context: Context
      */
     private fun clearFile(fileType: String, context: Context) {
-        var file: String = getFileName(fileType)
+        val file: String = getFileName(fileType)
 
         try {
             if(fileExists(file, context)) {
@@ -162,12 +175,12 @@ object LogUtils {
      * @param context: Context
      */
     private fun getLastLoggedTimeStamp(fileType: String, context: Context): String {
-        var file: String = getFileName(fileType)
+        val file: String = getFileName(fileType)
 
         try {
             if(fileExists(file, context)) {
                 val jsonArray = JSONArray(readFromFile(file, context))
-                var lastEntry = jsonArray.getJSONObject(jsonArray.length()-1)
+                val lastEntry = jsonArray.getJSONObject(jsonArray.length()-1)
 
                 return lastEntry.get("interactionTime").toString()
             }
@@ -185,13 +198,13 @@ object LogUtils {
      * @return string holding file contents
      */
     fun readFromFile(fileName: String, context: Context): String {
-        var inputStream: InputStream? = context.openFileInput(fileName)
+        val inputStream: InputStream? = context.openFileInput(fileName)
         var fileAsString = ""
 
         if(inputStream != null) {
             val inputStreamReader = InputStreamReader(inputStream)
             val bufferedReader = BufferedReader(inputStreamReader)
-            var receiveString: String? = ""
+            var receiveString: String?
             val stringBuilder = StringBuilder()
 
             while (bufferedReader.readLine().also { receiveString = it } != null) {
@@ -229,7 +242,7 @@ object LogUtils {
      * @return true if file exists
      */
     private fun fileExists(fileName: String, context: Context): Boolean {
-        var file = context.getFileStreamPath(fileName)
+        val file = context.getFileStreamPath(fileName)
         return file.exists()
     }
 
@@ -250,7 +263,6 @@ object LogUtils {
     /**
      * Returns true if the name of the player exists.
      * @param name: String?
-     * @param userName: String?
      * @return true if name exists, otherwise false
      */
     private fun getGuest(name: String?): Boolean {
@@ -278,9 +290,19 @@ object LogUtils {
      * Returns the current timestamp.
      * @return string timestamp
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getStateTimeStamp(interactionType: String): String {
-        if(interactionType != null)
-            return DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
+        if(interactionType != null) {
+            val currTime =
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N){
+                    DateTimeFormatter.ISO_INSTANT.format(Instant.now())
+                } else {
+                    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                    simpleDateFormat.format(Date())
+                }
+
+            return currTime.toString()
+        }
 
         return String()
     }
@@ -289,9 +311,18 @@ object LogUtils {
      * Returns the current timestamp only if isAppExit is true.
      * @return string timestamp
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getExitAppTimeStamp(isAppExit: Boolean): String {
         if(isAppExit) {
-            return DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()
+            val currTime =
+                if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N){
+                    DateTimeFormatter.ISO_INSTANT.format(Instant.now())
+                } else {
+                    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                    simpleDateFormat.format(Date())
+                }
+
+            return currTime.toString()
         }
 
         return String()
