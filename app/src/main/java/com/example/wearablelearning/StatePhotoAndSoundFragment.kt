@@ -29,7 +29,6 @@ class StatePhotoAndSoundFragment : Fragment() {
 
         //sound
         val stateSound = this.requireArguments().getString("sound")
-
         val soundName = stateSound.toString().split(".")[0]
         val resIDSound = resources.getIdentifier(soundName, "raw", context?.packageName)
 
