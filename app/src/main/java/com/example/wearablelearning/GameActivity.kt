@@ -206,10 +206,11 @@ class GameActivity : AppCompatActivity() {
             val newState = State(
                 stateId,
                 stateStr.substringAfter(", name=").substringBefore(", players="),
-                stateStr.substringAfter(", players=").substringBefore(", type="),
-                stateStr.substringAfter(", type=").substringBefore(", content="),
-                stateStr.substringAfter(", content=").substringBefore(", other="),
-                stateStr.substringAfter(", other=").substringBefore(", trans_inputs="),
+                stateStr.substringAfter(", players=").substringBefore(", text="),
+                stateStr.substringAfter(", text=").substringBefore(", photo="),
+                stateStr.substringAfter(", photo=").substringBefore(", sound="),
+                stateStr.substringAfter(", sound=").substringBefore(", video="),
+                stateStr.substringAfter(", video=").substringBefore(", trans_inputs="),
                 stateStr.substringAfter(", trans_inputs=").substringBefore(", trans_outputs="),
                 stateStr.substringAfter(", trans_outputs=").substringBefore("}")
             )
@@ -293,58 +294,136 @@ class GameActivity : AppCompatActivity() {
         val ft: FragmentTransaction = fm.beginTransaction()
         val bundle = Bundle()
 
-        val content = states["state_$idx"]?.content.toString()
-        val type = states["state_$idx"]?.type.toString()
+        val type = states["state_$idx"]?.let { determineType(it) }
 
         gameInfo.currState = "state_$idx"
         gameInfo.currStateStartTime = getTimeStamp()
 
-        if(type.contains("text")) {
-            val fragInfo = StateTextFragment()
-            bundle.putString("content", content)
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout1, fragInfo)
-            ft.commit()
-        }
-        else if(type == "photo&sound") {
-            val other = states["state_$idx"]?.other.toString()
+        if(type == "text") {
+            val text = states["state_$idx"]?.text.toString()
 
-            val fragInfo = StatePhotoAndSoundFragment()
-            bundle.putString("image", content)
-            bundle.putString("sound", other)
+            val fragInfo = StateTextFragment()
+            bundle.putString("text", text)
             fragInfo.arguments = bundle
             ft.replace(R.id.frameLayout1, fragInfo)
             ft.commit()
         }
-        else if(type.contains("photo")) {
-            val image = states["state_$idx"]?.other.toString()
+        else if(type == "photo") {
+            val text = String()
+            val image = states["state_$idx"]?.photo.toString()
 
             val fragInfo = StatePhotoFragment()
-            bundle.putString("content", content)
+            bundle.putString("text", text)
             bundle.putString("image", image)
             fragInfo.arguments = bundle
             ft.replace(R.id.frameLayout1, fragInfo)
             ft.commit()
         }
-        else if(type.contains("sound")) {
-            val sound = states["state_$idx"]?.other.toString()
+        else if(type == "sound") {
+            val text = String()
+            val sound = states["state_$idx"]?.sound.toString()
 
             val fragInfo = StateSoundFragment()
-            bundle.putString("content", content)
+            bundle.putString("text", text)
             bundle.putString("sound", sound)
             fragInfo.arguments = bundle
             ft.replace(R.id.frameLayout1, fragInfo)
             ft.commit()
         }
-        else if(type.contains("video")) {
-            val video = states["state_$idx"]?.other.toString()
+        else if(type == "text&photo") {
+            val text = states["state_$idx"]?.text.toString()
+            val image = states["state_$idx"]?.photo.toString()
+
+            val fragInfo = StatePhotoFragment()
+            bundle.putString("text", text)
+            bundle.putString("image", image)
+            fragInfo.arguments = bundle
+            ft.replace(R.id.frameLayout1, fragInfo)
+            ft.commit()
+        }
+        else if(type == "text&sound") {
+            val text = states["state_$idx"]?.text.toString()
+            val sound = states["state_$idx"]?.sound.toString()
+
+            val fragInfo = StateSoundFragment()
+            bundle.putString("text", text)
+            bundle.putString("sound", sound)
+            fragInfo.arguments = bundle
+            ft.replace(R.id.frameLayout1, fragInfo)
+            ft.commit()
+        }
+        else if(type == "text&video") {
+            val text = states["state_$idx"]?.text.toString()
+            val video = states["state_$idx"]?.video.toString()
 
             val fragInfo = StateVideoFragment()
-            bundle.putString("content", content)
+            bundle.putString("text", text)
             bundle.putString("video", video)
             fragInfo.arguments = bundle
             ft.replace(R.id.frameLayout1, fragInfo)
             ft.commit()
+        }
+        else if(type == "photo&sound") {
+            val photo = states["state_$idx"]?.photo.toString()
+            val sound = states["state_$idx"]?.sound.toString()
+
+            val fragInfo = StatePhotoAndSoundFragment()
+            bundle.putString("photo", photo)
+            bundle.putString("sound", sound)
+            fragInfo.arguments = bundle
+            ft.replace(R.id.frameLayout1, fragInfo)
+            ft.commit()
+        }
+    }
+
+    private fun determineType(state: State): String {
+        var isText = false
+        var isPhoto = false
+        var isSound = false
+        var isVideo = false
+
+        if(!StringUtils.isEmptyOrBlank(state.text)) {
+            isText = true
+        }
+
+        if(!StringUtils.isEmptyOrBlank(state.photo)) {
+            isPhoto = true
+        }
+
+        if(!StringUtils.isEmptyOrBlank(state.sound)) {
+            isSound = true
+        }
+
+        if(!StringUtils.isEmptyOrBlank(state.video)) {
+            isVideo = true
+        }
+
+        if(isSound && isPhoto) {
+            return "photo&sound"
+        }
+        else if(isText && isSound) {
+            return "text&sound"
+        }
+        else if(isText && isVideo) {
+            return "text&video"
+        }
+        else if(isText && isPhoto) {
+            return "text&photo"
+        }
+        else if(isSound) {
+            return "sound"
+        }
+        else if(isVideo) {
+            return "video"
+        }
+        else if(isPhoto) {
+            return "photo"
+        }
+        else if(isText) {
+            return "text"
+        }
+        else {
+            return String()
         }
     }
 

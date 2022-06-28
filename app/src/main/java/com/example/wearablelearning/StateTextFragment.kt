@@ -16,7 +16,7 @@ class StateTextFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val stateContent = this.requireArguments().getString("content")
+        val stateContent = this.requireArguments().getString("text")
         getView()?.findViewById<TextView>(R.id.state_tv)?.text = stateContent
     }
 }

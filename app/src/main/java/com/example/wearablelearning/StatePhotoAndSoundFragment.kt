@@ -22,7 +22,7 @@ class StatePhotoAndSoundFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //image
-        val stateImage = this.requireArguments().getString("image")
+        val stateImage = this.requireArguments().getString("photo")
         val imageName = stateImage.toString().split(".")[0]
         val resIDImage = resources.getIdentifier(imageName, "raw", context?.packageName);
         getView()?.findViewById<ImageView>(R.id.state_imageView)?.setImageResource(resIDImage)
