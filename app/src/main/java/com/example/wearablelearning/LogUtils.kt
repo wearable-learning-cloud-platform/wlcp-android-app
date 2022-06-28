@@ -294,9 +294,12 @@ object LogUtils {
     private fun getStateTimeStamp(interactionType: String): String {
         if(interactionType != null) {
             val currTime =
+                /** If greater than Nougat/Android 7. */
                 if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N){
                     DateTimeFormatter.ISO_INSTANT.format(Instant.now())
-                } else {
+                }
+                /** If Nougat/Android 7 or less than, can't use DateTimeFormatter. */
+                else {
                     val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                     simpleDateFormat.format(Date())
                 }
@@ -315,9 +318,12 @@ object LogUtils {
     private fun getExitAppTimeStamp(isAppExit: Boolean): String {
         if(isAppExit) {
             val currTime =
+                /** If greater than Nougat/Android 7. */
                 if(Build.VERSION.SDK_INT > Build.VERSION_CODES.N){
                     DateTimeFormatter.ISO_INSTANT.format(Instant.now())
-                } else {
+                }
+                /** If Nougat/Android 7 or less than, can't use DateTimeFormatter. */
+                else {
                     val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                     simpleDateFormat.format(Date())
                 }
