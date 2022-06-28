@@ -3,7 +3,6 @@ package com.example.wearablelearning
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -15,7 +14,6 @@ import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
-
 
 /**
  * The [GameActivity] class is launched from [ChooseTeamActivity] and is used to display the
@@ -53,25 +51,27 @@ class GameActivity : AppCompatActivity() {
         /**
          * Retrieve the [GameInfo] object's _gamePin_ if _gameInfo_ is not _null_.
          */
-        if (gameInfo != null) {
-            gamePin = gameInfo.gamePin.toString()
-        }
+        gamePin = gameInfo.gamePin.toString()
 
+        /**
+         * The fragment manager that swaps out state and transition fragments.
+         */
         val fm: FragmentManager = supportFragmentManager
 
         mapJson()
 
-        if (gameInfo != null) {
-            gameInfo?.gameName = mapGameName()
-        }
+        gameInfo?.gameName = mapGameName()
 
         mapStates()
         mapTransitions()
         addGamePlayerInfo(fm)
 
+        /** If resuming a game, proceed with calling previous transition and state. */
         if(playerStartedPlaying(gameInfo)) {
             callTransition(gameInfo.currTrans!!, true, gameInfo.prevTransAnswer!!, gameInfo.prevTransType!!)
-        } else {
+        }
+        /** If a new game is started, start at the first state and transition. */
+        else {
             val idx = 1
 
             changeState(fm, idx)
@@ -82,6 +82,13 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The [playerStartedPlaying] function checks playerTracker.json to see if the current player has
+     * already started playing the current game pin using the same team and player values. If so,
+     * return true.
+     * @param [gameInfo] The GameInfo object
+     * @return True if gamePin, name, team, and player match a log in playerTracker.json
+     */
     private fun playerStartedPlaying(gameInfo: GameInfo): Boolean {
         val fileName = "playerTracker.json"
         val file = applicationContext.getFileStreamPath(fileName)
@@ -112,6 +119,15 @@ class GameActivity : AppCompatActivity() {
         return false
     }
 
+    /**
+     * The [callTransition] function calls the output transition of the current state. Based on the
+     * called transition, the next state is loaded into the state fragment as well as the transition
+     * into the transition fragment.
+     * @param [transId] The id associated to the game's json
+     * @param [isStart] True if first transition/state for the current gameplay
+     * @param [prevAnswer] The previous user answer
+     * @param [prevTransType] The previous transition type
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun callTransition(transId: String, isStart: Boolean, prevAnswer: String, prevTransType: String) {
         currTransId = transId
@@ -133,14 +149,15 @@ class GameActivity : AppCompatActivity() {
             gameInfo.prevTransType = prevTransType
         }
 
-        // if there is only one output transition
+        /** If there is only one output transition. */
         if(!outputTransition.contains(",") or isAllSameType(outputTransition)) {
             changeHelperTransition(fm, "none")
             changeTransition(fm, outputTransition)
 
             prevTransIsDouble = false
         }
-        // if there are multiple output transitions with different types (e.g. timer and button press)
+        /** If there are multiple output transitions with different types
+         * (e.g. timer and button press). */
         else {
             val transList = outputTransition.replace(" ", "").split(',')
 
@@ -149,6 +166,7 @@ class GameActivity : AppCompatActivity() {
                 val transType1 = transitions[transList[1]]?.type.toString()
                 val timerStr: String
 
+                /** If Timer is the first transition. */
                 if(transType0.contains("timer")) {
                     changeHelperTransition(fm, transList[0])
                     changeTransition(fm, transList[1])
@@ -156,6 +174,7 @@ class GameActivity : AppCompatActivity() {
                     timerStr = transitions[transList[0]]?.content.toString().plus("s timer")
                     prevTransTypeDouble = "$timerStr and $transType1"
                 }
+                /** If Timer is the second transition. */
                 else if(transType1.contains("timer")){
                     changeHelperTransition(fm, transList[1])
                     changeTransition(fm, transList[0])
@@ -180,7 +199,6 @@ class GameActivity : AppCompatActivity() {
      * from a [GameInfo] object.
      */
     private fun mapJson() {
-
         /**
          * Retrieve the contents of a JSON file and store in _jsonContents_.
          */
@@ -190,12 +208,20 @@ class GameActivity : AppCompatActivity() {
         map = StringUtils.parseJsonWithGson(jsonContents)
     }
 
+    /**
+     * The [mapGameName] utility function retrieves the name of the current game from map.
+     * @return name of game
+     */
     private fun mapGameName(): String {
         val gameInfo: String = map.getValue("game").toString()
 
         return gameInfo.substringAfter("game_name=").substringBefore(", team_cnt=")
     }
 
+    /**
+     * The [mapStates] utility function retrieves the data for each state (i.e. name, players, text,
+     * photo, sound, video, trans_inputs, trans_outputs) from _map_ and stores them in _states_.
+     */
     private fun mapStates() {
         val stateList: ArrayList<Any> = map.getValue("states") as ArrayList<Any>
 
@@ -219,6 +245,10 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The [mapTransitions] utility function retrieves the data for each transition (i.e. id, type,
+     * content) from _map_ and stores the in _transitions_.
+     */
     private fun mapTransitions() {
         val transList: ArrayList<Any> = map.getValue("transitions") as ArrayList<Any>
 
@@ -236,6 +266,11 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The [getOutputTransition] utility function returns a string of output transition ids.
+     * @param [idx] The index of state.
+     * @return The string of output transitions.
+     */
     private fun getOutputTransition(idx: Int): String {
         val outputs: List<String> = states["state_$idx"]!!.trans_outputs
 
@@ -246,6 +281,12 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The [isAllSameType] utility function determines if all output transitions are of the same
+     * type (e.g. all button press).
+     * @param [transStr] The string of output transition ids.
+     * @return True if all output transitions are of the same type.
+     */
     private fun isAllSameType(transStr: String): Boolean {
         val transList = transStr.replace(" ", "").split(',')
         val transType = transitions[transList[0]]?.type.toString()
@@ -259,6 +300,12 @@ class GameActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * The [stateWithInputTransition] utility function returns the state id with the given input
+     * transition.
+     * @param [transId] The id of the input transition.
+     * @return The id of the state.
+     */
     private fun stateWithInputTransition(transId: String): Int {
         val idx = 0
 
@@ -271,6 +318,12 @@ class GameActivity : AppCompatActivity() {
         return idx
     }
 
+    /**
+     * The [stateWithOutputTransition] utility function returns the state id with the given output
+     * transition.
+     * @param [transId] The id of the output transition.
+     * @return The id of the state.
+     */
     private fun stateWithOutputTransition(transId: String): Int {
         val idx = 0
 
@@ -283,12 +336,24 @@ class GameActivity : AppCompatActivity() {
         return idx
     }
 
+    /**
+     * The [addGamePlayerInfo] function adds the [GamePlayerInfoFragment] with name, player, and team
+     * data to the top of the Activity.
+     * @param [fm] The fragment manager.
+     */
     private fun addGamePlayerInfo(fm: FragmentManager) {
         val ft: FragmentTransaction = fm.beginTransaction()
         ft.replace(R.id.frameLayout0, GamePlayerInfoFragment())
         ft.commit()
     }
 
+    /**
+     * The [changeState] utility function uses the fragment manager to swap the current state with
+     * the next state. Function checks the type of the state and appropriately replaces the
+     * current state fragment with a new state fragment.
+     * @param [fm] The fragment manager.
+     * @param [idx] The idx/id of the state.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun changeState(fm: FragmentManager, idx: Int) {
         val ft: FragmentTransaction = fm.beginTransaction()
@@ -299,6 +364,7 @@ class GameActivity : AppCompatActivity() {
         gameInfo.currState = "state_$idx"
         gameInfo.currStateStartTime = getTimeStamp()
 
+        /** Text state fragment. */
         if(type == "text") {
             val text = states["state_$idx"]?.text.toString()
 
@@ -308,6 +374,7 @@ class GameActivity : AppCompatActivity() {
             ft.replace(R.id.frameLayout1, fragInfo)
             ft.commit()
         }
+        /** Photo state fragment. */
         else if(type == "photo") {
             val text = String()
             val image = states["state_$idx"]?.photo.toString()
@@ -319,6 +386,7 @@ class GameActivity : AppCompatActivity() {
             ft.replace(R.id.frameLayout1, fragInfo)
             ft.commit()
         }
+        /** Sound state fragment. */
         else if(type == "sound") {
             val text = String()
             val sound = states["state_$idx"]?.sound.toString()
@@ -330,6 +398,7 @@ class GameActivity : AppCompatActivity() {
             ft.replace(R.id.frameLayout1, fragInfo)
             ft.commit()
         }
+        /** Text & Photo state fragment. */
         else if(type == "text&photo") {
             val text = states["state_$idx"]?.text.toString()
             val image = states["state_$idx"]?.photo.toString()
@@ -341,6 +410,7 @@ class GameActivity : AppCompatActivity() {
             ft.replace(R.id.frameLayout1, fragInfo)
             ft.commit()
         }
+        /** Text & Sound state fragment. */
         else if(type == "text&sound") {
             val text = states["state_$idx"]?.text.toString()
             val sound = states["state_$idx"]?.sound.toString()
@@ -352,6 +422,7 @@ class GameActivity : AppCompatActivity() {
             ft.replace(R.id.frameLayout1, fragInfo)
             ft.commit()
         }
+        /** Text & Video state fragment. */
         else if(type == "text&video") {
             val text = states["state_$idx"]?.text.toString()
             val video = states["state_$idx"]?.video.toString()
@@ -363,6 +434,7 @@ class GameActivity : AppCompatActivity() {
             ft.replace(R.id.frameLayout1, fragInfo)
             ft.commit()
         }
+        /** Photo & Sound state fragment. */
         else if(type == "photo&sound") {
             val photo = states["state_$idx"]?.photo.toString()
             val sound = states["state_$idx"]?.sound.toString()
@@ -376,6 +448,12 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The [determineType] utility function determines the type of state fragment to be called by
+     * checking the text, photo, sound, and video values for the state.
+     * @param [state] The State object.
+     * @return Keyword that represents the state fragment to be called.
+     */
     private fun determineType(state: State): String {
         var isText = false
         var isPhoto = false
@@ -398,6 +476,7 @@ class GameActivity : AppCompatActivity() {
             isVideo = true
         }
 
+        /** Return a keyword based on the concatenation of true booleans. */
         if(isSound && isPhoto) {
             return "photo&sound"
         }
@@ -427,6 +506,14 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The [changeHelperTransition] utility function determines if there needs to be two transition
+     * fragments (the second being the helper). For example, if there is a timer and button press
+     * transition, the helper transition would be the timer and thus this fragment would be replaced
+     * with [TransitionTimerFragment]. Otherwise, the helper is replaced with [TransitionBlankFragment].
+     * @param [fm] The fragment manager.
+     * @param [helperTransition] The helper transitions's id.
+     */
     private fun changeHelperTransition(fm: FragmentManager, helperTransition: String) {
         val type = transitions[helperTransition]?.type.toString()
         val id = transitions[helperTransition]?.id.toString()
@@ -453,12 +540,19 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * The [changeTransition] utility function changes the current transition by replacing the
+     * transition fragment with the appropriate transition fragment associated to the next
+     * transition.
+     * @param [fm] The fragment manager.
+     * @param [transition] The transitions's id.
+     */
     private fun changeTransition(fm: FragmentManager, transition: String) {
         var type = transitions[transition]?.type.toString()
         var id = transitions[transition]?.id.toString()
         var content = transitions[transition]?.content.toString()
 
-        //if multiple transitions
+        /** If there are multiple transitions retrieve list. */
         if(transition.contains(",")) {
             val transList = transition.replace(" ", "").split(",")
             type = transitions[transList[0]]?.type.toString()
@@ -477,7 +571,7 @@ class GameActivity : AppCompatActivity() {
             }
         }
 
-        gameInfo.currTrans = "$id"
+        gameInfo.currTrans = id
 
         val ft: FragmentTransaction = fm.beginTransaction()
         val bundle = Bundle()
@@ -485,36 +579,42 @@ class GameActivity : AppCompatActivity() {
         bundle.putString("content", content)
         bundle.putString("frameLayout", "frameLayout2")
 
+        /** Button Press transition fragment. */
         if(type.contains("button_press")) {
             val fragInfo = TransitionBtnPressFragment()
             fragInfo.arguments = bundle
             ft.replace(R.id.frameLayout2, fragInfo)
             ft.commit()
         }
+        /** Color Sequence transition fragment. */
         else if(type.contains("color_sequence")) {
             val fragInfo = TransitionSequenceFragment()
             fragInfo.arguments = bundle
             ft.replace(R.id.frameLayout2, fragInfo)
             ft.commit()
         }
+        /** Text Entry transition fragment. */
         else if(type.contains("text_entry")) {
             val fragInfo = TransitionTextEntryFragment()
             fragInfo.arguments = bundle
             ft.replace(R.id.frameLayout2, fragInfo)
             ft.commit()
         }
+        /** Random transition fragment. */
         else if(type.contains("random")) {
             val fragInfo = TransitionRandomFragment()
             fragInfo.arguments = bundle
             ft.replace(R.id.frameLayout2, fragInfo)
             ft.commit()
         }
+        /** Timer transition fragment. */
         else if(type.contains("timer")) {
             val fragInfo = TransitionTimerFragment()
             fragInfo.arguments = bundle
             ft.replace(R.id.frameLayout2, fragInfo)
             ft.commit()
         }
+        /** End Game transition fragment. */
         else {
             val fragInfo = TransitionEndGameFragment()
             ft.replace(R.id.frameLayout2, fragInfo)
@@ -528,7 +628,6 @@ class GameActivity : AppCompatActivity() {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBackPressed() {
-
         MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
             .setMessage(resources.getString(R.string.confirm_back_text))
             .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
