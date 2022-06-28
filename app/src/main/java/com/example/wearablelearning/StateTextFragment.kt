@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
+/**
+ * The [StateTextFragment] class is called by [GameActivity]. This fragment holds a text.
+ */
 class StateTextFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -16,6 +19,7 @@ class StateTextFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        /** Retrieve the text to be displayed in the textview. */
         val stateContent = this.requireArguments().getString("text")
         getView()?.findViewById<TextView>(R.id.state_tv)?.text = stateContent
     }
