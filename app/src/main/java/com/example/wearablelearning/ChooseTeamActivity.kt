@@ -2,7 +2,6 @@ package com.example.wearablelearning
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -14,10 +13,10 @@ import java.util.*
  * This activity launches [GameActivity] on valid user input.
  */
 class ChooseTeamActivity : AppCompatActivity() {
-    var gamePin = String()
+    /** gamePin to be set on creation to value stored in intent's GameInfo.*/
+    private var gamePin = String()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_team)
 
@@ -36,16 +35,21 @@ class ChooseTeamActivity : AppCompatActivity() {
         val teamArr = getDropdownList("team")
         val playerArr = getDropdownList("player")
 
+        /** Create Team dropdown. */
         val spinnerTeam: Spinner = findViewById(R.id.team_spinner)
         val adapterTeam = ArrayAdapter(this, android.R.layout.simple_spinner_item, teamArr)
         adapterTeam.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerTeam.adapter = adapterTeam
 
+        /** Create Player dropdown. */
         val spinnerPlayer: Spinner = findViewById(R.id.player_spinner)
         val adapterPlayer = ArrayAdapter(this, android.R.layout.simple_spinner_item, playerArr)
         adapterPlayer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerPlayer.adapter = adapterPlayer
 
+        /**
+         * Initialize Team and Player dropdowns to first option in respective lists.
+         */
         if(gameInfo?.team != null && gameInfo.player != null) {
             spinnerTeam.setSelection(teamArr.indexOf(
                 teamArr.first { elem -> elem == gameInfo.team }
@@ -96,6 +100,9 @@ class ChooseTeamActivity : AppCompatActivity() {
                 .show()
         }
 
+        /**
+         * The 'Back' button that triggers a switch from [ChooseTeamActivity] back to [LoginActivity].
+         */
         val backBtn: Button = findViewById(R.id.back_btn)
 
         backBtn.setOnClickListener {
@@ -129,10 +136,8 @@ class ChooseTeamActivity : AppCompatActivity() {
      * @param [playerSelected] The player number of the current player for the current game
      */
     private fun setGameInfoTeamAndPlayer(teamSelected: String, playerSelected: String, gameInfo: GameInfo) {
-        if (gameInfo != null) {
-            gameInfo.team = teamSelected
-            gameInfo.player = playerSelected
-        }
+        gameInfo.team = teamSelected
+        gameInfo.player = playerSelected
     }
 
 
@@ -144,7 +149,6 @@ class ChooseTeamActivity : AppCompatActivity() {
      * @return An ArrayList of values to be used to populate the Team or Player dropdowns
      */
     private fun getDropdownList(item: String): ArrayList<String> {
-
         /** Switch the first character of [item] to uppercase */
         val itemCap = item.replaceFirstChar{
             if (it.isLowerCase())
@@ -195,7 +199,7 @@ class ChooseTeamActivity : AppCompatActivity() {
      * @return The Int value of the json
      */
     private fun getGameFileIdentifier(gamePin: String): Int {
-        var fileName = "game$gamePin"
+        val fileName = "game$gamePin"
 
         return resources.getIdentifier(fileName, "raw", applicationContext?.packageName)
     }
