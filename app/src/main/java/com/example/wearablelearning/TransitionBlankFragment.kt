@@ -8,9 +8,8 @@ import android.view.ViewGroup
 
 /**
  * The [TransitionBlankFragment] class is called by [GameActivity]. This fragment is blank and is
- * used when there is only one transition fragment. The only time this fragment is not used is if
- * there are more than one transition fragments (e.g. timer and button press). This fragment allows
- * for no user actions and is simple a place holder.
+ * used when there is only one transition fragment. This fragment allows for no user actions and
+ * is simply a place holder in [GameActivity].
  */
 class TransitionBlankFragment : Fragment() {
     override fun onCreateView(
