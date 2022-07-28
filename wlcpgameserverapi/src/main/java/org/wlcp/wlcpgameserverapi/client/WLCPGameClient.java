@@ -46,7 +46,7 @@ public class WLCPGameClient {
     public WLCPGameClientCallback connectionOpenedCallback = () -> {};
     public WLCPGameClientCallback connectionClosedCallback = () -> {};
     public WLCPGameClientCallback connectionErrorCallback = () -> {};
-    public WLCPGameClientCallback connectionfailedServerHeartbeatCallback = () -> {};
+    public WLCPGameClientCallback connectionFailedServerHeartbeatCallback = () -> {};
 
     public WLCPGameClientCallback connectToGameInstanceCallback = () -> {};
     public WLCPGameClientCallback disconnectFromGameInstanceCallback = () -> {};
@@ -158,7 +158,7 @@ public class WLCPGameClient {
                     connectionErrorCallback.callback();
                 case FAILED_SERVER_HEARTBEAT:
                     Log.i("CLOSED", "CLOSED");
-                    connectionfailedServerHeartbeatCallback.callback();
+                    connectionFailedServerHeartbeatCallback.callback();
             }
         }).toString();
         stompClient.connect();
