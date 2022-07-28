@@ -75,11 +75,11 @@ public class WLCPGameClient {
         return instance;
     }
 
-    public List<String> getGameInstanceList() throws InterruptedException {
+    public List<String> fetchGameInstanceList() throws InterruptedException {
         AtomicReference<List<String>> returnList = new AtomicReference<>();
         Thread thread = new Thread(() -> {
             try {
-                returnList.set(getGameInstanceListInternal());
+                returnList.set(fetchGameInstanceListInternal());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -89,7 +89,7 @@ public class WLCPGameClient {
         return returnList.get();
     }
 
-    private List<String> getGameInstanceListInternal() throws IOException {
+    private List<String> fetchGameInstanceListInternal() throws IOException {
         URL url = new URL("http://" + baseURL + ":" + port + "/wlcp-gameserver/gameInstanceController/allGameInstances");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
@@ -110,11 +110,11 @@ public class WLCPGameClient {
         return null;
     }
 
-    public List<PlayerAvailableMessage> getPlayersAvailableFromGamePin() throws InterruptedException {
+    public List<PlayerAvailableMessage> fetchPlayersAvailableFromGamePin(String gameInstanceId, String usernameId) throws InterruptedException {
         AtomicReference<List<PlayerAvailableMessage>> returnList = new AtomicReference<>();
         Thread thread = new Thread(() -> {
             try {
-                returnList.set(getPlayersAvailableFromGamePinInternal());
+                returnList.set(fetchPlayersAvailableFromGamePinInternal(gameInstanceId, usernameId));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -124,7 +124,7 @@ public class WLCPGameClient {
         return returnList.get();
     }
 
-    public List<PlayerAvailableMessage> getPlayersAvailableFromGamePinInternal() throws IOException {
+    private List<PlayerAvailableMessage> fetchPlayersAvailableFromGamePinInternal(String gameInstanceId, String usernameId) throws IOException {
         URL url = new URL("http://" + baseURL + ":" + port + "/wlcp-gameserver/gameInstanceController/playersAvaliable/" + gameInstanceId + "/" + usernameId);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
@@ -141,7 +141,13 @@ public class WLCPGameClient {
         return null;
     }
 
-    public void connect() {
+    public void connect(String gameInstanceId, String usernameId, int team, int player) {
+        this.gameInstanceId = gameInstanceId;
+        this.usernameId = usernameId;
+        PlayerAvailableMessage m = new PlayerAvailableMessage();
+        m.team = team;
+        m.player = player;
+        this.player = m;
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "ws://" + baseURL + ":" + port + "/wlcp-gameserver/wlcpGameServer-ws/0");
         stompClient.lifecycle().subscribe(lifecycleEvent -> {
             switch (lifecycleEvent.getType()) {
