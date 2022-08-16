@@ -128,6 +128,7 @@ class LoginActivity : AppCompatActivity() {
                     gameInfo.userName = name
                 }
 
+                /** Build the prompt to display to the user to confirm user name */
                 val tempMsg = resources.getString(R.string.confirm_login_text)
                 var msg = tempMsg.substringBefore(" Username?")
                 msg = "$msg $name?"
