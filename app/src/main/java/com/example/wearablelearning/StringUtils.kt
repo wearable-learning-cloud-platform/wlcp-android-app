@@ -87,6 +87,11 @@ object StringUtils {
         return substr.split(delimiter)
     }
 
+    /**
+     * Given a json in string format, uses Gson to parse the json.
+     * @param jsonString: json as string
+     * @return Map of json.
+     */
     @JvmStatic
     fun parseJsonWithGson(jsonString: String): Map<String, Any> {
         var map: Map<String, Any> = HashMap()

@@ -22,8 +22,8 @@
       "id": "state_2",
       "name": "Question",
       "players": "game_wide",
-      "text": "This is the first question. Can you input sequence green, red?",
-      "photo": "",
+      "text": "",
+      "photo": "test_image.png",
       "sound": "",
       "video": "",
       "trans_inputs": "trans_1",
@@ -33,9 +33,9 @@
       "id": "state_3",
       "name": "Question",
       "players": "game_wide",
-      "text": "Type apple please (only 1 possible transition).",
+      "text": "",
       "photo": "",
-      "sound": "",
+      "sound": "test_sound.mp3",
       "video": "",
       "trans_inputs": "trans_2",
       "trans_outputs": "trans_3"
@@ -93,13 +93,13 @@
     },
     {
       "id": "trans_2",
-      "type": "color_sequence",
-      "content": "GR&RD"
+      "type": "button_press",
+      "content": "GR"
     },
     {
       "id": "trans_3",
-      "type": "text_entry",
-      "content": "apple"
+      "type": "button_press",
+      "content": "RD"
     },
     {
       "id": "trans_4",

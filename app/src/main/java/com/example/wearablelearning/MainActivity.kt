@@ -1,17 +1,15 @@
 package com.example.wearablelearning
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import java.time.Instant
-import java.time.format.DateTimeFormatter
-
 
 /**
  * The [MainActivity] class is the app entry point and displays the first screen on launch
@@ -20,6 +18,7 @@ import java.time.format.DateTimeFormatter
  */
 class MainActivity : AppCompatActivity() {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

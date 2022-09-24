@@ -2,7 +2,6 @@ package com.example.wearablelearning
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -19,7 +18,6 @@ import com.google.android.material.tabs.TabLayout
  */
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
@@ -78,20 +76,21 @@ class LoginActivity : AppCompatActivity() {
             ft.commit()
         }
 
-        //when tab is changed by user
+        /** When user changes tab, replace fragment with either [LoginWithNameFragment] or
+         * [LoginWithAccountFragment]. */
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab != null) {
                     tabPos = tab.position
 
-                    //leftmost tab: Name
+                    /** Leftmost tab: Name. */
                     if (tabPos == 0) {
                         val ft: FragmentTransaction = fm.beginTransaction()
                         ft.replace(R.id.frameLayout, LoginWithNameFragment())
                         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         ft.commit()
                     }
-                    //second tab: WearableLearning.org credentials
+                    /** Second tab: WearableLearning.org credentials. */
                     else if (tabPos == 1) {
                         val ft: FragmentTransaction = fm.beginTransaction()
                         ft.replace(R.id.frameLayout, LoginWithAccountFragment())
@@ -107,7 +106,6 @@ class LoginActivity : AppCompatActivity() {
 
         /** Set the _joinGameBtn_ listener to switch from [LoginActivity] to [ChooseTeamActivity]. */
         joinGameBtn.setOnClickListener {
-
             /**
              * _inputs_ is an array of the user entries retrieved from the fragment associated
              * with the active tab. _inputs_ has a size of 1 if _tabPos_=0 (name login), and 2 if
@@ -130,6 +128,7 @@ class LoginActivity : AppCompatActivity() {
                     gameInfo.userName = name
                 }
 
+                /** Build the prompt to display to the user to confirm user name */
                 val tempMsg = resources.getString(R.string.confirm_login_text)
                 var msg = tempMsg.substringBefore(" Username?")
                 msg = "$msg $name?"
@@ -177,13 +176,13 @@ class LoginActivity : AppCompatActivity() {
     private fun getLoginInputs(tabPos: Int): Array<String> {
         val inputs: Array<String> = arrayOf("", "")
 
-        //leftmost tab: Name
+        /** Leftmost tab: Name. */
         if(tabPos == 0) {
             val editTextName: EditText = findViewById(R.id.loginNameEditText)
 
             inputs[0] = editTextName.text.toString()
         }
-        //second tab: WearableLearning.org credentials
+        /** Second tab: WearableLearning.org credentials. */
         else if(tabPos == 1) {
             val editTextUsername: EditText = findViewById(R.id.loginUsernameEditText)
             val editTextPassword: EditText = findViewById(R.id.loginPasswordEditText)
@@ -203,7 +202,7 @@ class LoginActivity : AppCompatActivity() {
      * @param tabPos: integer
      */
     private fun checkInput(inputs: Array<String>, tabPos: Int): Boolean {
-        //left tab (name)
+        /** Leftmost tab: Name. */
         if(tabPos == 0) {
             if(StringUtils.isEmptyOrBlank(inputs[0])) {
                 val errorText: TextView = findViewById(R.id.error_tv2)
@@ -212,7 +211,7 @@ class LoginActivity : AppCompatActivity() {
                 return false
             }
         }
-        //right tab (WearableLearning.org account)
+        /** Second tab: WearableLearning.org credentials. */
         else if(tabPos == 1) {
             //no username or password
             when {

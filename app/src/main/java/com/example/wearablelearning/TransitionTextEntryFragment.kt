@@ -1,13 +1,14 @@
 package com.example.wearablelearning
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent.registerEventListener
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent.setEventListener
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
@@ -20,21 +21,34 @@ class TransitionTextEntryFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_transition_text_entry, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        /** The _id_ is the current transition's id. */
         val id = this.requireArguments().getString("id")
+
+        /** The _content_ is the current transition's correct answer (i.e. expected user input). */
         val content = this.requireArguments().getString("content")
 
         val textEntryEditText = view.findViewById<EditText>(R.id.text_entry_edittext)
-
         val errorTextView = view.findViewById<TextView>(R.id.error_textview)
 
+        /**
+         * The _submitButton_ checks the user's input to the correct solution _content_.
+         */
         val submitButton = view.findViewById<Button>(R.id.transition_submit_btn)
 
         submitButton.setOnClickListener {
             val input = textEntryEditText.text.toString()
-            var gameInfo = (activity as GameActivity).gameInfo
+
+            /**
+             * Retrieve the [GameInfo] object from the intent that started [GameActivity].
+             *
+             * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
+             * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
+             */
+            val gameInfo = (activity as GameActivity).gameInfo
             gameInfo.interactionType = "submitButton"
 
             //one possible transition and correct input
@@ -56,10 +70,10 @@ class TransitionTextEntryFragment : Fragment() {
 
                 if(!StringUtils.isEmptyOrBlank(matchedId)) {
                     gameInfo.prevTransAnswer = "text_entry"
-                    matchedId?.let { it1 -> (activity as GameActivity).callTransition(it1, false, input, "text_entry") }
+                    matchedId.let { it1 -> (activity as GameActivity).callTransition(it1, false, input, "text_entry") }
                 }
                 else {
-                    var gameInfo = (activity as GameActivity).gameInfo
+                    val gameInfo = (activity as GameActivity).gameInfo
                     gameInfo.currTransAnswer = input.lowercase()
                     context?.let { context -> LogUtils.logGamePlay("player", (activity as GameActivity).gameInfo, false, context) }
                     context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
@@ -67,6 +81,9 @@ class TransitionTextEntryFragment : Fragment() {
             }
         }
 
+        /**
+         * The _clearButton_ deletes the user's input (after a confirmation dialog is approved).
+         */
         val clearButton = view.findViewById<Button>(R.id.transition_clear_btn)
 
         clearButton.setOnClickListener {
@@ -77,7 +94,14 @@ class TransitionTextEntryFragment : Fragment() {
                         dialog.cancel()
                     }
                     .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
-                        var gameInfo = (activity as GameActivity).gameInfo
+                        /**
+                         * Retrieve the [GameInfo] object from the intent that started [GameActivity].
+                         *
+                         * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
+                         * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
+                         */
+                        val gameInfo = (activity as GameActivity).gameInfo
+
                         gameInfo.interactionType = "clearButton"
                         gameInfo.currTransAnswer = textEntryEditText.text.toString()
 
@@ -91,6 +115,10 @@ class TransitionTextEntryFragment : Fragment() {
             }
         }
 
+        /**
+         * When the user types, the keyboard takes up screen space. To combat this, the padding
+         * under the text box is decreased when the keyboard is visible.
+         */
         setEventListener(
             requireActivity(),
             object : KeyboardVisibilityEventListener {
@@ -109,9 +137,14 @@ class TransitionTextEntryFragment : Fragment() {
             })
     }
 
+    /**
+     * The [checkInput] function compares the user's answer to the correct answer on submit.
+     * @param [input] The user's input.
+     * @param [content] The solution.
+     */
     private fun checkInput(input: String, content:String): Boolean {
-        val solutionStr = content?.lowercase()
-        val solutionsList = solutionStr?.split(";") ?: listOf("")
+        val solutionStr = content.lowercase()
+        val solutionsList = solutionStr.split(";") ?: listOf("")
 
         if(content == "ALL_OTHER_INPUTS") {
             return true
@@ -120,6 +153,13 @@ class TransitionTextEntryFragment : Fragment() {
         return input in solutionsList
     }
 
+    /**
+     * The [checkInputOnMultipleTransitions] function calls [checkInput] for each possible output
+     * transition.
+     * @param [input] The user's input.
+     * @param [content] The solution.
+     * @param [id] The id of the transition.
+     */
     private fun checkInputOnMultipleTransitions(input: String, content: String, id: String): String {
         val ids = id.split(";;")
         val contents = content.split(";;")
@@ -135,7 +175,7 @@ class TransitionTextEntryFragment : Fragment() {
         return ""
     }
 
-    fun spToPx(sp: Float): Float {
-        return sp * resources.displayMetrics.scaledDensity
-    }
+//    fun spToPx(sp: Float): Float {
+//        return sp * resources.displayMetrics.scaledDensity
+//    }
 }

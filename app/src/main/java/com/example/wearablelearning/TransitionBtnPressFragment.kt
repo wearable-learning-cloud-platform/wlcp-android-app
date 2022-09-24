@@ -1,13 +1,18 @@
 package com.example.wearablelearning
 
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.annotation.RequiresApi
 
+/**
+ * The [TransitionBtnPressFragment] class is called by [GameActivity]. This fragment includes 4
+ * buttons (red, green, blue, and black). The user is expected to click one of these 4 buttons.
+ */
 class TransitionBtnPressFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -16,10 +21,14 @@ class TransitionBtnPressFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_transition_btn_press, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        /** The _id_ is the current transition's id. */
         val id = this.requireArguments().getString("id")
+
+        /** The _solution_ is the current transition's correct answer (i.e. expected user input). */
         val solution = this.requireArguments().getString("content")
 
         val redButton = view.findViewById<Button>(R.id.question_red_btn)
@@ -27,8 +36,18 @@ class TransitionBtnPressFragment : Fragment() {
         val blueButton = view.findViewById<Button>(R.id.question_blue_btn)
         val blackButton = view.findViewById<Button>(R.id.question_black_btn)
 
-        var gameInfo = (activity as GameActivity).gameInfo
+        /**
+         * Retrieve the [GameInfo] object from the intent that started [GameActivity].
+         *
+         * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
+         * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
+         */
+        val gameInfo = (activity as GameActivity).gameInfo
 
+        /**
+         * If RED BUTTON is clicked and the solution is RD then call callTransition in [GameActivity].
+         * Otherwise, user is unsuccessful in moving on.
+         */
         redButton.setOnClickListener {
             gameInfo.interactionType = "coloredButtonPress"
 
@@ -42,6 +61,10 @@ class TransitionBtnPressFragment : Fragment() {
             }
         }
 
+        /**
+         * If GREEN BUTTON is clicked and the solution is GR then call callTransition in [GameActivity].
+         * Otherwise, user is unsuccessful in moving on.
+         */
         greenButton.setOnClickListener {
             gameInfo.interactionType = "coloredButtonPress"
 
@@ -55,6 +78,10 @@ class TransitionBtnPressFragment : Fragment() {
             }
         }
 
+        /**
+         * If BLUE BUTTON is clicked and the solution is BL then call callTransition in [GameActivity].
+         * Otherwise, user is unsuccessful in moving on.
+         */
         blueButton.setOnClickListener {
             gameInfo.interactionType = "coloredButtonPress"
 
@@ -68,6 +95,10 @@ class TransitionBtnPressFragment : Fragment() {
             }
         }
 
+        /**
+         * If BLACK BUTTON is clicked and the solution is BK then call callTransition in [GameActivity].
+         * Otherwise, user is unsuccessful in moving on.
+         */
         blackButton.setOnClickListener {
             gameInfo.interactionType = "coloredButtonPress"
 
