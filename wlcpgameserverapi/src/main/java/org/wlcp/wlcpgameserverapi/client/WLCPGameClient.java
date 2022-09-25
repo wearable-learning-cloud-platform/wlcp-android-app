@@ -56,13 +56,17 @@ public class WLCPGameClient {
     private WLCPGameClientCallback displayPhotoRequestCallback = null;
     private WLCPGameClientCallback playSoundRequestCallback = null;
     private WLCPGameClientCallback playVideoRequestCallback = null;
+    private WLCPGameClientCallback displayTextAndPhotoRequestCallback = null;
+    private WLCPGameClientCallback displayTextAndSoundRequestCallback = null;
+    private WLCPGameClientCallback displayTextAndVideoRequestCallback = null;
+    private WLCPGameClientCallback displayPhotoAndSoundRequestCallback = null;
 
     public WLCPGameClientCallback noTransitionRequestCallback = () -> {};
     public WLCPGameClientCallback singleButtonPressRequestCallback = () -> {};
     public WLCPGameClientCallback sequenceButtonPressRequestCallback = () -> {};
     public WLCPGameClientCallback keyboardInputRequestCallback = () -> {};
-    private WLCPGameClientCallback randomInputRequestCallback = null;
     private WLCPGameClientCallback timerDurationRequestCallback = null;
+    private WLCPGameClientCallback randomInputRequestCallback = null;
 
     private static WLCPGameClient instance = null;
     private WLCPGameClient() {}
