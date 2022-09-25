@@ -68,9 +68,9 @@ public class WLCPGameClient {
 
     public WLCPGameClientCallback noStateRequestCallback = () -> {};
     public WLCPGameClientCallbackDisplayText displayTextRequestCallback = (DisplayTextMessage msg) -> {};
-    private WLCPGameClientCallbackDisplayPhoto displayPhotoRequestCallback = (DisplayPhotoMessage msg) -> {};
-    private WLCPGameClientCallbackPlaySound playSoundRequestCallback = (PlaySoundMessage msg) -> {};
-    private WLCPGameClientCallbackPlayVideo playVideoRequestCallback = (PlayVideoMessage msg) -> {};
+    public WLCPGameClientCallbackDisplayPhoto displayPhotoRequestCallback = (DisplayPhotoMessage msg) -> {};
+    public WLCPGameClientCallbackPlaySound playSoundRequestCallback = (PlaySoundMessage msg) -> {};
+    public WLCPGameClientCallbackPlayVideo playVideoRequestCallback = (PlayVideoMessage msg) -> {};
     private WLCPGameClientCallback displayTextAndPhotoRequestCallback = null;
     private WLCPGameClientCallback displayTextAndSoundRequestCallback = null;
     private WLCPGameClientCallback displayTextAndVideoRequestCallback = null;
