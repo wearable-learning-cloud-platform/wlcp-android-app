@@ -6,9 +6,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import org.wlcp.wlcpgameserverapi.dto.DisplayPhotoMessage;
 import org.wlcp.wlcpgameserverapi.dto.DisplayTextMessage;
 import org.wlcp.wlcpgameserverapi.dto.GameInstance;
 import org.wlcp.wlcpgameserverapi.dto.KeyboardInputMessage;
+import org.wlcp.wlcpgameserverapi.dto.PlaySoundMessage;
+import org.wlcp.wlcpgameserverapi.dto.PlayVideoMessage;
 import org.wlcp.wlcpgameserverapi.dto.PlayerAvailableMessage;
 import org.wlcp.wlcpgameserverapi.dto.SequenceButtonPressMessage;
 import org.wlcp.wlcpgameserverapi.dto.SingleButtonPressMessage;
@@ -39,8 +42,20 @@ public class WLCPGameClient {
         void callback();
     }
 
-    public interface WLCPGameClientCallbackString {
-        void callback(String s);
+    public interface WLCPGameClientCallbackDisplayText {
+        void callback(DisplayTextMessage msg);
+    }
+
+    public interface WLCPGameClientCallbackDisplayPhoto {
+        void callback(DisplayPhotoMessage msg);
+    }
+
+    public interface WLCPGameClientCallbackPlaySound {
+        void callback(PlaySoundMessage msg);
+    }
+
+    public interface WLCPGameClientCallbackPlayVideo {
+        void callback(PlayVideoMessage msg);
     }
 
     public WLCPGameClientCallback connectionOpenedCallback = () -> {};
@@ -52,10 +67,10 @@ public class WLCPGameClient {
     public WLCPGameClientCallback disconnectFromGameInstanceCallback = () -> {};
 
     public WLCPGameClientCallback noStateRequestCallback = () -> {};
-    public WLCPGameClientCallbackString displayTextRequestCallback = (String s) -> {};
-    private WLCPGameClientCallback displayPhotoRequestCallback = null;
-    private WLCPGameClientCallback playSoundRequestCallback = null;
-    private WLCPGameClientCallback playVideoRequestCallback = null;
+    public WLCPGameClientCallbackDisplayText displayTextRequestCallback = (DisplayTextMessage msg) -> {};
+    private WLCPGameClientCallbackDisplayPhoto displayPhotoRequestCallback = (DisplayPhotoMessage msg) -> {};
+    private WLCPGameClientCallbackPlaySound playSoundRequestCallback = (PlaySoundMessage msg) -> {};
+    private WLCPGameClientCallbackPlayVideo playVideoRequestCallback = (PlayVideoMessage msg) -> {};
     private WLCPGameClientCallback displayTextAndPhotoRequestCallback = null;
     private WLCPGameClientCallback displayTextAndSoundRequestCallback = null;
     private WLCPGameClientCallback displayTextAndVideoRequestCallback = null;
@@ -199,7 +214,22 @@ public class WLCPGameClient {
         stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/displayText/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
             Gson gson = new GsonBuilder().create();
             DisplayTextMessage msg = gson.fromJson(subscriptionMessage.getPayload(), DisplayTextMessage.class);
-            displayTextRequestCallback.callback(msg.displayText);
+            displayTextRequestCallback.callback(msg);
+        });
+        stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/displayPhoto/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
+            Gson gson = new GsonBuilder().create();
+            DisplayPhotoMessage msg = gson.fromJson(subscriptionMessage.getPayload(), DisplayPhotoMessage.class);
+            displayPhotoRequestCallback.callback(msg);
+        });
+        stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/playSound/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
+            Gson gson = new GsonBuilder().create();
+            PlaySoundMessage msg = gson.fromJson(subscriptionMessage.getPayload(), PlaySoundMessage.class);
+            playSoundRequestCallback.callback(msg);
+        });
+        stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/playVideo/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
+            Gson gson = new GsonBuilder().create();
+            PlayVideoMessage msg = gson.fromJson(subscriptionMessage.getPayload(), PlayVideoMessage.class);
+            playVideoRequestCallback.callback(msg);
         });
         stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/noTransition/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
             noStateRequestCallback.callback();
