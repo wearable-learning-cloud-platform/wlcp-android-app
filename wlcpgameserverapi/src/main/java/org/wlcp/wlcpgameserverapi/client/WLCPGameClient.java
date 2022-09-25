@@ -75,6 +75,16 @@ public class WLCPGameClient {
         return instance;
     }
 
+    public static WLCPGameClient getInstance(String baseURL, int port)
+    {
+        if (instance == null)
+            instance = new WLCPGameClient();
+            instance.baseURL = baseURL;
+            instance.port = port;
+
+        return instance;
+    }
+
     public List<String> fetchGameInstanceList() throws InterruptedException {
         AtomicReference<List<String>> returnList = new AtomicReference<>();
         Thread thread = new Thread(() -> {
