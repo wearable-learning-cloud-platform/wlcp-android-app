@@ -104,8 +104,8 @@ public class WLCPGameClient {
     public WLCPGameClientCallback singleButtonPressRequestCallback = () -> {};
     public WLCPGameClientCallback sequenceButtonPressRequestCallback = () -> {};
     public WLCPGameClientCallback keyboardInputRequestCallback = () -> {};
-    public WLCPGameClientCallbackTimerDelay timerDurationRequestCallback = (int duration) -> {};
     public WLCPGameClientCallback randomInputRequestCallback = () -> {};
+    public WLCPGameClientCallbackTimerDelay timerDurationRequestCallback = (int duration) -> {};
 
     private static WLCPGameClient instance = null;
     private WLCPGameClient() {}
@@ -276,7 +276,7 @@ public class WLCPGameClient {
                                 displayTextPlaySoundRequestCallback.callback(displayTextMessage, playSoundMessage);
                                 break;
                             case PLAY_VIDEO:
-                                PlayVideoMessage playVideoMessage = gson.fromJson(msg.outputMessages.get(0).msg, PlayVideoMessage.class);
+                                PlayVideoMessage playVideoMessage = gson.fromJson(msg.outputMessages.get(1).msg, PlayVideoMessage.class);
                                 displayTextPlayVideoRequestCallback.callback(displayTextMessage, playVideoMessage);
                                 break;
                         }
