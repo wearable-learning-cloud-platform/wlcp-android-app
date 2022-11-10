@@ -1,20 +1,24 @@
 package org.wlcp.wlcpgameserverapi.client;
 
 import android.util.Log;
+import android.view.Display;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import org.wlcp.wlcpgameserverapi.dto.CombinedMessage;
 import org.wlcp.wlcpgameserverapi.dto.DisplayPhotoMessage;
 import org.wlcp.wlcpgameserverapi.dto.DisplayTextMessage;
 import org.wlcp.wlcpgameserverapi.dto.GameInstance;
 import org.wlcp.wlcpgameserverapi.dto.KeyboardInputMessage;
+import org.wlcp.wlcpgameserverapi.dto.MessageType;
 import org.wlcp.wlcpgameserverapi.dto.PlaySoundMessage;
 import org.wlcp.wlcpgameserverapi.dto.PlayVideoMessage;
 import org.wlcp.wlcpgameserverapi.dto.PlayerAvailableMessage;
 import org.wlcp.wlcpgameserverapi.dto.SequenceButtonPressMessage;
 import org.wlcp.wlcpgameserverapi.dto.SingleButtonPressMessage;
+import org.wlcp.wlcpgameserverapi.dto.TimerDurationMessage;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -58,6 +62,26 @@ public class WLCPGameClient {
         void callback(PlayVideoMessage msg);
     }
 
+    public interface WLCPGameClientCallbackDisplayTextDisplayPhoto {
+        void callback(DisplayTextMessage displayTextMessage, DisplayPhotoMessage displayPhotoMessage);
+    }
+
+    public interface WLCPGameClientCallbackDisplayTextPlaySound {
+        void callback(DisplayTextMessage displayTextMessage, PlaySoundMessage playSoundMessage);
+    }
+
+    public interface WLCPGameClientCallbackDisplayTextPlayVideo {
+        void callback(DisplayTextMessage displayTextMessage, PlayVideoMessage playVideoMessage);
+    }
+
+    public interface WLCPGameClientCallbackDisplayPhotoPlaySound {
+        void callback(DisplayPhotoMessage displayPhotoMessage, PlaySoundMessage playSoundMessage);
+    }
+
+    public interface WLCPGameClientCallbackTimerDelay {
+        void callback(int duration);
+    }
+
     public WLCPGameClientCallback connectionOpenedCallback = () -> {};
     public WLCPGameClientCallback connectionClosedCallback = () -> {};
     public WLCPGameClientCallback connectionErrorCallback = () -> {};
@@ -71,17 +95,17 @@ public class WLCPGameClient {
     public WLCPGameClientCallbackDisplayPhoto displayPhotoRequestCallback = (DisplayPhotoMessage msg) -> {};
     public WLCPGameClientCallbackPlaySound playSoundRequestCallback = (PlaySoundMessage msg) -> {};
     public WLCPGameClientCallbackPlayVideo playVideoRequestCallback = (PlayVideoMessage msg) -> {};
-    private WLCPGameClientCallback displayTextAndPhotoRequestCallback = null;
-    private WLCPGameClientCallback displayTextAndSoundRequestCallback = null;
-    private WLCPGameClientCallback displayTextAndVideoRequestCallback = null;
-    private WLCPGameClientCallback displayPhotoAndSoundRequestCallback = null;
+    public WLCPGameClientCallbackDisplayTextDisplayPhoto displayTextDisplayPhotoRequestCallback = (DisplayTextMessage displayTextMessage, DisplayPhotoMessage displayPhotoMessage) -> {};
+    public WLCPGameClientCallbackDisplayTextPlaySound displayTextPlaySoundRequestCallback = (DisplayTextMessage displayTextMessage, PlaySoundMessage playSoundMessage) -> {};
+    public WLCPGameClientCallbackDisplayTextPlayVideo displayTextPlayVideoRequestCallback = (DisplayTextMessage displayTextMessage, PlayVideoMessage playVideoMessage) -> {};
+    public WLCPGameClientCallbackDisplayPhotoPlaySound displayPhotoPlaySoundRequestCallback = (DisplayPhotoMessage displayPhotoMessage, PlaySoundMessage playSoundMessage) -> {};
 
     public WLCPGameClientCallback noTransitionRequestCallback = () -> {};
     public WLCPGameClientCallback singleButtonPressRequestCallback = () -> {};
     public WLCPGameClientCallback sequenceButtonPressRequestCallback = () -> {};
     public WLCPGameClientCallback keyboardInputRequestCallback = () -> {};
-    private WLCPGameClientCallback timerDurationRequestCallback = null;
-    private WLCPGameClientCallback randomInputRequestCallback = null;
+    public WLCPGameClientCallbackTimerDelay timerDurationRequestCallback = (int duration) -> {};
+    public WLCPGameClientCallback randomInputRequestCallback = () -> {};
 
     private static WLCPGameClient instance = null;
     private WLCPGameClient() {}
@@ -211,37 +235,95 @@ public class WLCPGameClient {
         stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/noState/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
             noStateRequestCallback.callback();
         });
-        stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/displayText/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
-            Gson gson = new GsonBuilder().create();
-            DisplayTextMessage msg = gson.fromJson(subscriptionMessage.getPayload(), DisplayTextMessage.class);
-            displayTextRequestCallback.callback(msg);
-        });
-        stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/displayPhoto/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
-            Gson gson = new GsonBuilder().create();
-            DisplayPhotoMessage msg = gson.fromJson(subscriptionMessage.getPayload(), DisplayPhotoMessage.class);
-            displayPhotoRequestCallback.callback(msg);
-        });
-        stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/playSound/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
-            Gson gson = new GsonBuilder().create();
-            PlaySoundMessage msg = gson.fromJson(subscriptionMessage.getPayload(), PlaySoundMessage.class);
-            playSoundRequestCallback.callback(msg);
-        });
-        stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/playVideo/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
-            Gson gson = new GsonBuilder().create();
-            PlayVideoMessage msg = gson.fromJson(subscriptionMessage.getPayload(), PlayVideoMessage.class);
-            playVideoRequestCallback.callback(msg);
-        });
         stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/noTransition/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
             noStateRequestCallback.callback();
         });
-        stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/singleButtonPressRequest/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
-            singleButtonPressRequestCallback.callback();
-        });
-        stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/sequenceButtonPressRequest/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
-            sequenceButtonPressRequestCallback.callback();
-        });
-        stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/keyboardInputRequest/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
-            keyboardInputRequestCallback.callback();
+        stompClient.topic("/subscription/gameInstance/" + this.gameInstanceId + "/combinedMessage/" + this.usernameId + "/" + this.player.team + "/" + this.player.player).subscribe(subscriptionMessage -> {
+            Gson gson = new GsonBuilder().create();
+            CombinedMessage msg = gson.fromJson(subscriptionMessage.getPayload(), CombinedMessage.class);
+
+            //Parse the output messages
+            if(msg.outputMessages.size() == 1) {
+                switch(msg.outputMessages.get(0).type) {
+                    case DISPLAY_TEXT:
+                        DisplayTextMessage displayTextMessage = gson.fromJson(msg.outputMessages.get(0).msg, DisplayTextMessage.class);
+                        displayTextRequestCallback.callback(displayTextMessage);
+                        break;
+                    case DISPLAY_PHOTO:
+                        DisplayPhotoMessage displayPhotoMessage = gson.fromJson(msg.outputMessages.get(0).msg, DisplayPhotoMessage.class);
+                        displayPhotoRequestCallback.callback(displayPhotoMessage);
+                        break;
+                    case PLAY_SOUND:
+                        PlaySoundMessage playSoundMessage = gson.fromJson(msg.outputMessages.get(0).msg, PlaySoundMessage.class);
+                        playSoundRequestCallback.callback(playSoundMessage);
+                        break;
+                    case PLAY_VIDEO:
+                        PlayVideoMessage playVideoMessage = gson.fromJson(msg.outputMessages.get(0).msg, PlayVideoMessage.class);
+                        playVideoRequestCallback.callback(playVideoMessage);
+                        break;
+                }
+            } else if(msg.outputMessages.size() == 2) {
+                switch(msg.outputMessages.get(0).type) {
+                    case DISPLAY_TEXT:
+                        DisplayTextMessage displayTextMessage = gson.fromJson(msg.outputMessages.get(0).msg, DisplayTextMessage.class);
+                        switch(msg.outputMessages.get(1).type) {
+                            case DISPLAY_PHOTO:
+                                DisplayPhotoMessage displayPhotoMessage = gson.fromJson(msg.outputMessages.get(1).msg, DisplayPhotoMessage.class);
+                                displayTextDisplayPhotoRequestCallback.callback(displayTextMessage, displayPhotoMessage);
+                                break;
+                            case PLAY_SOUND:
+                                PlaySoundMessage playSoundMessage = gson.fromJson(msg.outputMessages.get(1).msg, PlaySoundMessage.class);
+                                displayTextPlaySoundRequestCallback.callback(displayTextMessage, playSoundMessage);
+                                break;
+                            case PLAY_VIDEO:
+                                PlayVideoMessage playVideoMessage = gson.fromJson(msg.outputMessages.get(0).msg, PlayVideoMessage.class);
+                                displayTextPlayVideoRequestCallback.callback(displayTextMessage, playVideoMessage);
+                                break;
+                        }
+                    case DISPLAY_PHOTO:
+                        DisplayPhotoMessage displayPhotoMessage = gson.fromJson(msg.outputMessages.get(0).msg, DisplayPhotoMessage.class);
+                        switch(msg.outputMessages.get(1).type) {
+                            case PLAY_SOUND:
+                                PlaySoundMessage playSoundMessage = gson.fromJson(msg.outputMessages.get(1).msg, PlaySoundMessage.class);
+                                displayPhotoPlaySoundRequestCallback.callback(displayPhotoMessage, playSoundMessage);
+                                break;
+                        }
+                        break;
+                }
+            } else {
+                //Not supported
+                throw new Exception("More than 2 output states is not supported.");
+            }
+
+            //Parse the input messages
+            if(msg.inputMessages.size() == 1) {
+                switch(msg.inputMessages.get(0).type) {
+                    case SINGLE_BUTTON_PRESS:
+                        singleButtonPressRequestCallback.callback();
+                        break;
+                    case SEQUENCE_BUTTON_PRESS:
+                        sequenceButtonPressRequestCallback.callback();
+                        break;
+                    case KEYBOARD_INPUT:
+                        keyboardInputRequestCallback.callback();
+                        break;
+                    case RANDOM:
+                        randomInputRequestCallback.callback();
+                        break;
+                    case TIMER_DURATION:
+                        TimerDurationMessage timerDurationMessage = gson.fromJson(msg.inputMessages.get(0).msg, TimerDurationMessage.class);
+                        if(!timerDurationMessage.isTimer) {
+                            timerDurationRequestCallback.callback(timerDurationMessage.duration);
+                        }
+                        break;
+                }
+            } else if(msg.inputMessages.size() == 2) {
+                //Not supported... yet this will come soon
+                throw new Exception("2 input transitions is not supported.");
+            } else {
+                //Not supported
+                throw new Exception("More than 2 input transitions is not supported.");
+            }
         });
     }
 
@@ -275,6 +357,10 @@ public class WLCPGameClient {
         msg.keyboardInput = keyboardInput;
         Gson gson = new GsonBuilder().create();
         stompClient.send("/app/gameInstance/" + this.gameInstanceId + "/keyboardInput/" + this.usernameId + "/" + this.player.team + "/" + this.player.player, gson.toJson(msg)).subscribe();
+    }
+
+    public void sendRandomInput() {
+        stompClient.send("/app/gameInstance/" + this.gameInstanceId + "/randomInput/" + this.usernameId + "/" + this.player.team + "/" + this.player.player, "{}").subscribe();
     }
 
 }
