@@ -34,7 +34,8 @@ import ua.naiksoftware.stomp.StompClient;
 
 public class WLCPGameClient {
 
-    private String baseURL = "10.0.2.2";
+    private String httpBaseURL = "http://10.0.2.2";
+    private String wsBaseURL = "ws://10.0.2.2";
     private int port = 8050;
     public String gameInstanceId;
     public String usernameId;
@@ -123,11 +124,12 @@ public class WLCPGameClient {
         return instance;
     }
 
-    public static WLCPGameClient getInstance(String baseURL, int port)
+    public static WLCPGameClient getInstance(String httpBaseURL, String wsBaseURL, int port)
     {
         if (instance == null)
             instance = new WLCPGameClient();
-            instance.baseURL = baseURL;
+            instance.httpBaseURL = httpBaseURL;
+            instance.wsBaseURL = wsBaseURL;
             instance.port = port;
 
         return instance;
@@ -148,7 +150,7 @@ public class WLCPGameClient {
     }
 
     private List<String> fetchGameInstanceListInternal() throws IOException {
-        URL url = new URL("http://" + baseURL + ":" + port + "/wlcp-gameserver/gameInstanceController/allGameInstances");
+        URL url = new URL(httpBaseURL + ":" + port + "/wlcp-gameserver/gameInstanceController/allGameInstances");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Content-Type", "application/json");
@@ -183,7 +185,7 @@ public class WLCPGameClient {
     }
 
     private List<PlayerAvailableMessage> fetchPlayersAvailableFromGamePinInternal(String gameInstanceId, String usernameId) throws IOException {
-        URL url = new URL("http://" + baseURL + ":" + port + "/wlcp-gameserver/gameInstanceController/playersAvaliable/" + gameInstanceId + "/" + usernameId);
+        URL url = new URL(httpBaseURL + ":" + port + "/wlcp-gameserver/gameInstanceController/playersAvaliable/" + gameInstanceId + "/" + usernameId);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Content-Type", "application/json");
@@ -206,7 +208,7 @@ public class WLCPGameClient {
         m.team = team;
         m.player = player;
         this.player = m;
-        stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "ws://" + baseURL + ":" + port + "/wlcp-gameserver/wlcpGameServer-ws/0");
+        stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, wsBaseURL + ":" + port + "/wlcp-gameserver/wlcpGameServer-ws/0");
         stompClient.lifecycle().subscribe(lifecycleEvent -> {
             switch (lifecycleEvent.getType()) {
                 case OPENED:
