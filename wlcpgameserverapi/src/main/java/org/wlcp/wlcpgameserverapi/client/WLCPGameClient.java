@@ -82,6 +82,10 @@ public class WLCPGameClient {
         void callback(int duration);
     }
 
+    public interface WLCPGameCLientCallbackTimer {
+        void callback(int duration, MessageType type);
+    }
+
     public WLCPGameClientCallback connectionOpenedCallback = () -> {};
     public WLCPGameClientCallback connectionClosedCallback = () -> {};
     public WLCPGameClientCallback connectionErrorCallback = () -> {};
@@ -106,6 +110,7 @@ public class WLCPGameClient {
     public WLCPGameClientCallback keyboardInputRequestCallback = () -> {};
     public WLCPGameClientCallback randomInputRequestCallback = () -> {};
     public WLCPGameClientCallbackTimerDelay timerDurationRequestCallback = (int duration) -> {};
+    public WLCPGameCLientCallbackTimer timerRequestCallback = (int duration, MessageType type) -> {};
 
     private static WLCPGameClient instance = null;
     private WLCPGameClient() {}
@@ -280,6 +285,7 @@ public class WLCPGameClient {
                                 displayTextPlayVideoRequestCallback.callback(displayTextMessage, playVideoMessage);
                                 break;
                         }
+                        break;
                     case DISPLAY_PHOTO:
                         DisplayPhotoMessage displayPhotoMessage = gson.fromJson(msg.outputMessages.get(0).msg, DisplayPhotoMessage.class);
                         switch(msg.outputMessages.get(1).type) {
@@ -318,8 +324,14 @@ public class WLCPGameClient {
                         break;
                 }
             } else if(msg.inputMessages.size() == 2) {
-                //Not supported... yet this will come soon
-                throw new Exception("2 input transitions is not supported.");
+                switch(msg.inputMessages.get(0).type) {
+                    case TIMER_DURATION:
+                        TimerDurationMessage timerDurationMessage = gson.fromJson(msg.inputMessages.get(0).msg, TimerDurationMessage.class);
+                        if(timerDurationMessage.isTimer) {
+                            timerRequestCallback.callback(timerDurationMessage.duration, msg.inputMessages.get(1).type);
+                        }
+                        break;
+                }
             } else {
                 //Not supported
                 throw new Exception("More than 2 input transitions is not supported.");
