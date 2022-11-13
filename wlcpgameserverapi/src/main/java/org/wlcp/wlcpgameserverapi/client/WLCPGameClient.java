@@ -299,8 +299,10 @@ public class WLCPGameClient {
                         break;
                 }
             } else {
-                //Not supported
-                throw new Exception("More than 2 output states is not supported.");
+                if(msg.outputMessages.size() != 0) {
+                    //Not supported
+                    throw new Exception("More than 2 output states is not supported.");
+                }
             }
 
             //Parse the input messages
@@ -335,8 +337,10 @@ public class WLCPGameClient {
                         break;
                 }
             } else {
-                //Not supported
-                throw new Exception("More than 2 input transitions is not supported.");
+                if(msg.inputMessages.size() != 0) {
+                    //Not supported
+                    throw new Exception("More than 2 input transitions is not supported.");
+                }
             }
         });
     }
