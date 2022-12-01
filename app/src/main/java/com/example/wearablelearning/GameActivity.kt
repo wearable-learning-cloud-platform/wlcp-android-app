@@ -3,12 +3,18 @@ package com.example.wearablelearning
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.Display
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.json.JSONArray
+import org.wlcp.wlcpgameserverapi.client.WLCPGameClient
+import org.wlcp.wlcpgameserverapi.dto.DisplayPhotoMessage
+import org.wlcp.wlcpgameserverapi.dto.DisplayTextMessage
+import org.wlcp.wlcpgameserverapi.dto.PlaySoundMessage
+import org.wlcp.wlcpgameserverapi.dto.PlayVideoMessage
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.format.DateTimeFormatter
@@ -48,6 +54,8 @@ class GameActivity : AppCompatActivity() {
          */
         gameInfo = (intent.getSerializableExtra("gameInfo") as? GameInfo)!!
 
+        /** OLD CODE
+
         /**
          * Retrieve the [GameInfo] object's _gamePin_ if _gameInfo_ is not _null_.
          */
@@ -80,6 +88,108 @@ class GameActivity : AppCompatActivity() {
             LogUtils.logGamePlay("player", gameInfo, false, applicationContext)
             LogUtils.logGamePlay("gamePlay", gameInfo, false, applicationContext)
         }
+
+        **/
+
+        /**
+         * The fragment manager that swaps out state and transition fragments.
+         */
+        val fm: FragmentManager = supportFragmentManager
+
+        /** Socket */
+        WLCPGameClient.getInstance().connectionOpenedCallback = WLCPGameClient.WLCPGameClientCallback {
+            //Socket has been opened, now connect to the game instance
+            WLCPGameClient.getInstance().connectToGameInstance()
+        }
+
+        WLCPGameClient.getInstance().connectionClosedCallback = WLCPGameClient.WLCPGameClientCallback {
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().connectionErrorCallback = WLCPGameClient.WLCPGameClientCallback {
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().connectionFailedServerHeartbeatCallback = WLCPGameClient.WLCPGameClientCallback {
+            // TODO IMPLEMENT
+        }
+
+        /** Game Instance*/
+        WLCPGameClient.getInstance().connectToGameInstanceCallback = WLCPGameClient.WLCPGameClientCallback {
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().disconnectFromGameInstanceCallback = WLCPGameClient.WLCPGameClientCallback {
+            // TODO IMPLEMENT
+        }
+
+        /** State */
+        WLCPGameClient.getInstance().noStateRequestCallback = WLCPGameClient.WLCPGameClientCallback {
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().displayTextRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayText { msg: DisplayTextMessage ->
+            // TODO IMPLEMENT - EXAMPLE BELOW
+            //changeState(fm, 1, "text", msg.displayText as Object);
+        }
+
+        WLCPGameClient.getInstance().displayPhotoRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayPhoto { msg: DisplayPhotoMessage ->
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().playSoundRequestCallback = WLCPGameClient.WLCPGameClientCallbackPlaySound { msg: PlaySoundMessage ->
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().playVideoRequestCallback = WLCPGameClient.WLCPGameClientCallbackPlayVideo { msg: PlayVideoMessage ->
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().displayTextDisplayPhotoRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayTextDisplayPhoto { displayTextMessage : DisplayTextMessage, displayPhotoMessage: DisplayPhotoMessage ->
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().displayTextPlaySoundRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayTextPlaySound { displayTextMessage : DisplayTextMessage, playSoundMessage: PlaySoundMessage ->
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().displayTextPlayVideoRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayTextPlayVideo { displayTextMessage: DisplayTextMessage, playVideoMessage: PlayVideoMessage ->
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().displayPhotoPlaySoundRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayPhotoPlaySound { displayPhotoMessage: DisplayPhotoMessage, playSoundMessage: PlaySoundMessage ->
+            // TODO IMPLEMENT
+        }
+
+        /** Transition */
+        WLCPGameClient.getInstance().noTransitionRequestCallback = WLCPGameClient.WLCPGameClientCallback {
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().singleButtonPressRequestCallback = WLCPGameClient.WLCPGameClientCallback {
+            // TODO IMPLEMENT - EXAMPLE BELOW
+            //changeTransition(fm, "", "button_press");
+        }
+
+        WLCPGameClient.getInstance().sequenceButtonPressRequestCallback = WLCPGameClient.WLCPGameClientCallback {
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().keyboardInputRequestCallback = WLCPGameClient.WLCPGameClientCallback {
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().randomInputRequestCallback = WLCPGameClient.WLCPGameClientCallback {
+            // TODO IMPLEMENT
+        }
+
+        WLCPGameClient.getInstance().timerDurationRequestCallback = WLCPGameClient.WLCPGameClientCallbackTimerDelay { duration: Int ->
+            // TODO IMPLEMENT
+        }
+
+        //Call connect (open socket connection). On success connectionOpenedCallback will be called
+        WLCPGameClient.getInstance().connect(gameInfo.gamePin, gameInfo.name, Integer.valueOf(gameInfo.team!!.replace("Team ", "", false)) - 1, Integer.valueOf(gameInfo.player!!.replace("Player ", "", false)) - 1);
+
     }
 
     /**
