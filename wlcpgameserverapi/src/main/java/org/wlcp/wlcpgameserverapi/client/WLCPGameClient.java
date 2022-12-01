@@ -124,7 +124,7 @@ public class WLCPGameClient {
         return instance;
     }
 
-    public static WLCPGameClient getInstance(String httpBaseURL, String wsBaseURL, int port)
+    private static WLCPGameClient getInstance(String httpBaseURL, String wsBaseURL, int port)
     {
         if (instance == null)
             instance = new WLCPGameClient();
@@ -132,6 +132,46 @@ public class WLCPGameClient {
             instance.wsBaseURL = wsBaseURL;
             instance.port = port;
 
+        return instance;
+    }
+
+    public enum Environment {
+        LOCAL,
+        LOCAL_ANDROID,
+        DEV,
+        PROD
+    }
+
+    public static WLCPGameClient getInstance(Environment environment) {
+        if (instance == null)
+            instance = new WLCPGameClient();
+            switch(environment) {
+                case LOCAL:
+                    instance.httpBaseURL = "http://localhost";
+                    instance.wsBaseURL = "ws://localhost";
+                    instance.port = 8050;
+                    break;
+                case LOCAL_ANDROID:
+                    instance.httpBaseURL = "http://10.0.2.2";
+                    instance.wsBaseURL = "ws://10.0.2.2";
+                    instance.port = 8050;
+                    break;
+                case DEV:
+                    instance.httpBaseURL = "https://dev.wearablelearning.org";
+                    instance.wsBaseURL = "wss://dev.wearablelearning.org";
+                    instance.port = 443;
+                    break;
+                case PROD:
+                    instance.httpBaseURL = "https://prod.wearablelearning.org";
+                    instance.wsBaseURL = "wss://prod.wearablelearning.org";
+                    instance.port = 443;
+                    break;
+                default:
+                    instance.httpBaseURL = "http://10.0.2.2";
+                    instance.wsBaseURL = "ws://10.0.2.2";
+                    instance.port = 8050;
+                    break;
+            }
         return instance;
     }
 
