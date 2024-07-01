@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.wlcp.wlcpgameserverapi.client.WLCPGameClient
+import org.wlcp.wlcpgameserverapi.dto.PlayerAvailableMessage
 import java.util.*
 
 /**
@@ -32,8 +34,29 @@ class ChooseTeamActivity : AppCompatActivity() {
             gamePin = gameInfo.gamePin.toString()
         }
 
+        /** OLD CODE
+
         val teamArr = getDropdownList("team")
         val playerArr = getDropdownList("player")
+
+        **/
+
+        /** START MODIFICATIONS **/
+
+        var players: List<PlayerAvailableMessage> = WLCPGameClient.getInstance().fetchPlayersAvailableFromGamePin(gameInfo!!.gamePin.toString(), gameInfo!!.name.toString());
+
+        val teamArr = ArrayList<String>();
+        val playerArr = ArrayList<String>();
+
+        for(i in 0..(players.maxByOrNull { it.team }?.team ?: 0)) {
+            teamArr.add("Team " + (i + 1))
+        }
+
+        for(i in 0..(players.maxByOrNull { it.player }?.player ?: 0)) {
+            playerArr.add("Player " + (i + 1))
+        }
+
+        /** END MODIFICATIONS **/
 
         /** Create Team dropdown. */
         val spinnerTeam: Spinner = findViewById(R.id.team_spinner)

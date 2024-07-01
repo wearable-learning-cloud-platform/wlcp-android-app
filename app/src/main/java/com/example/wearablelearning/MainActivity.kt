@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import org.wlcp.wlcpgameserverapi.client.WLCPGameClient
 
 /**
  * The [MainActivity] class is the app entry point and displays the first screen on launch
@@ -106,8 +107,18 @@ class MainActivity : AppCompatActivity() {
         /** The string-converted user-input game PIN value of [editText]. */
         val gamePinUserInput: String = editText.text.toString()
 
+        /** OLD CODE
+
         /** An array of valid game PINs from the [R.raw.data] JSON for validating input. */
         val validInputs: List<String> = StringUtils.getValuesFromJSON(resources, R.raw.data, "game_pins")
+
+        **/
+
+        /** START MODIFICATIONS **/
+
+        val validInputs: List<String> = WLCPGameClient.getInstance(WLCPGameClient.Environment.DEV).fetchGameInstanceList();
+
+        /** END MODIFICATIONS **/
 
         /** Error: If the game PIN is missing, show [R.string.game_pin_missing_error]. */
         if (StringUtils.isEmptyOrBlank(gamePinUserInput)) {
