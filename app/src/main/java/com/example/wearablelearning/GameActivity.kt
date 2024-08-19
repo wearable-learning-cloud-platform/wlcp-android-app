@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.Display
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -40,6 +41,8 @@ class GameActivity : AppCompatActivity() {
     }
 
     lateinit var gameInfo: GameInfo
+    val env: WLCPGameClient.Environment = WLCPGameClient.Environment.PROD
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,98 +100,156 @@ class GameActivity : AppCompatActivity() {
         val fm: FragmentManager = supportFragmentManager
 
         /** Socket */
-        WLCPGameClient.getInstance().connectionOpenedCallback = WLCPGameClient.WLCPGameClientCallback {
+        WLCPGameClient.getInstance(env).connectionOpenedCallback = WLCPGameClient.WLCPGameClientCallback {
             //Socket has been opened, now connect to the game instance
-            WLCPGameClient.getInstance().connectToGameInstance()
+            WLCPGameClient.getInstance(env).connectToGameInstance()
+            println("Here")
         }
 
-        WLCPGameClient.getInstance().connectionClosedCallback = WLCPGameClient.WLCPGameClientCallback {
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).connectionClosedCallback = WLCPGameClient.WLCPGameClientCallback {
+            WLCPGameClient.getInstance(env).disconnectFromGameInstance()
         }
 
-        WLCPGameClient.getInstance().connectionErrorCallback = WLCPGameClient.WLCPGameClientCallback {
+        WLCPGameClient.getInstance(env).connectionErrorCallback = WLCPGameClient.WLCPGameClientCallback {
             // TODO IMPLEMENT
+            runOnUiThread {
+                Toast.makeText(this, "Connection error occurred. Reloading page.", Toast.LENGTH_LONG).show()
+            }
+            WLCPGameClient.getInstance(env).connect(gameInfo.gamePin, gameInfo.name, Integer.valueOf(gameInfo.team!!.replace("Team ", "", false)) - 1, Integer.valueOf(gameInfo.player!!.replace("Player ", "", false)) - 1);
         }
 
-        WLCPGameClient.getInstance().connectionFailedServerHeartbeatCallback = WLCPGameClient.WLCPGameClientCallback {
+        WLCPGameClient.getInstance(env).connectionFailedServerHeartbeatCallback = WLCPGameClient.WLCPGameClientCallback {
             // TODO IMPLEMENT
+            runOnUiThread {
+                Toast.makeText(this, "Connection to server lost. Reloading page.", Toast.LENGTH_LONG).show()
+            }
+            WLCPGameClient.getInstance(env).connect(gameInfo.gamePin, gameInfo.name, Integer.valueOf(gameInfo.team!!.replace("Team ", "", false)) - 1, Integer.valueOf(gameInfo.player!!.replace("Player ", "", false)) - 1);
         }
 
         /** Game Instance*/
-        WLCPGameClient.getInstance().connectToGameInstanceCallback = WLCPGameClient.WLCPGameClientCallback {
+        WLCPGameClient.getInstance(env).connectToGameInstanceCallback = WLCPGameClient.WLCPGameClientCallback {
             // TODO IMPLEMENT
+            runOnUiThread {
+                // Popup to show that the game has started
+                Toast.makeText(this, "Connected to game successfully!", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        WLCPGameClient.getInstance().disconnectFromGameInstanceCallback = WLCPGameClient.WLCPGameClientCallback {
+        WLCPGameClient.getInstance(env).disconnectFromGameInstanceCallback = WLCPGameClient.WLCPGameClientCallback {
             // TODO IMPLEMENT
+            runOnUiThread {
+                //Popup to show that user has disconnected.
+                Toast.makeText(this, "Disconnected from the game", Toast.LENGTH_SHORT).show()
+            }
         }
 
         /** State */
-        WLCPGameClient.getInstance().noStateRequestCallback = WLCPGameClient.WLCPGameClientCallback {
+        WLCPGameClient.getInstance(env).noStateRequestCallback = WLCPGameClient.WLCPGameClientCallback {
             // TODO IMPLEMENT
+            println("no state")
+            runOnUiThread {
+                //Popup to show that user has disconnected.
+                Toast.makeText(this, "The game is empty, try another game.", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        WLCPGameClient.getInstance().displayTextRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayText { msg: DisplayTextMessage ->
-            // TODO IMPLEMENT - EXAMPLE BELOW
-            //changeState(fm, 1, "text", msg.displayText as Object);
+        WLCPGameClient.getInstance(env).displayTextRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayText { msg: DisplayTextMessage ->
+            println("display text")
+            runOnUiThread {
+                changeState(fm, 1, "text", msg.displayText)
+            }
         }
 
-        WLCPGameClient.getInstance().displayPhotoRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayPhoto { msg: DisplayPhotoMessage ->
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).displayPhotoRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayPhoto { msg: DisplayPhotoMessage ->
+            println("photo")
+            runOnUiThread {
+                changeState(fm, 1, "photo", displayPhotoMessage = msg.url)
+            }
         }
 
-        WLCPGameClient.getInstance().playSoundRequestCallback = WLCPGameClient.WLCPGameClientCallbackPlaySound { msg: PlaySoundMessage ->
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).playSoundRequestCallback = WLCPGameClient.WLCPGameClientCallbackPlaySound { msg: PlaySoundMessage ->
+            println("sound")
+            runOnUiThread {
+                changeState(fm, 1, "sound", displaySoundMessage = msg.url)
+            }
         }
 
-        WLCPGameClient.getInstance().playVideoRequestCallback = WLCPGameClient.WLCPGameClientCallbackPlayVideo { msg: PlayVideoMessage ->
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).playVideoRequestCallback = WLCPGameClient.WLCPGameClientCallbackPlayVideo { msg: PlayVideoMessage ->
+            println("video")
+            runOnUiThread {
+                changeState(fm, 1, "text&video", displayVideoMessage = msg.url)
+            }
         }
 
-        WLCPGameClient.getInstance().displayTextDisplayPhotoRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayTextDisplayPhoto { displayTextMessage : DisplayTextMessage, displayPhotoMessage: DisplayPhotoMessage ->
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).displayTextDisplayPhotoRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayTextDisplayPhoto { displayTextMessage: DisplayTextMessage, displayPhotoMessage: DisplayPhotoMessage ->
+            runOnUiThread {
+                changeState(fm, 1, "text&photo", displayText = displayTextMessage.displayText, displayPhotoMessage = displayPhotoMessage.url)
+            }
         }
 
-        WLCPGameClient.getInstance().displayTextPlaySoundRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayTextPlaySound { displayTextMessage : DisplayTextMessage, playSoundMessage: PlaySoundMessage ->
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).displayTextPlaySoundRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayTextPlaySound { displayTextMessage: DisplayTextMessage, playSoundMessage: PlaySoundMessage ->
+            println("text, sound")
+            runOnUiThread {
+                changeState(fm, 1, "text&sound", displayText = displayTextMessage.displayText, displaySoundMessage = playSoundMessage.url)
+            }
         }
 
-        WLCPGameClient.getInstance().displayTextPlayVideoRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayTextPlayVideo { displayTextMessage: DisplayTextMessage, playVideoMessage: PlayVideoMessage ->
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).displayTextPlayVideoRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayTextPlayVideo { displayTextMessage: DisplayTextMessage, playVideoMessage: PlayVideoMessage ->
+            println("text, video")
+            runOnUiThread {
+                changeState(fm, 1, "text&video", displayText = displayTextMessage.displayText, displayVideoMessage = playVideoMessage.url)
+            }
         }
 
-        WLCPGameClient.getInstance().displayPhotoPlaySoundRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayPhotoPlaySound { displayPhotoMessage: DisplayPhotoMessage, playSoundMessage: PlaySoundMessage ->
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).displayPhotoPlaySoundRequestCallback = WLCPGameClient.WLCPGameClientCallbackDisplayPhotoPlaySound { displayPhotoMessage: DisplayPhotoMessage, playSoundMessage: PlaySoundMessage ->
+            println("photo, sound")
+            runOnUiThread {
+                changeState(fm, 1, "photo&sound", displayPhotoMessage = displayPhotoMessage.url, displaySoundMessage = playSoundMessage.url)
+            }
         }
 
         /** Transition */
-        WLCPGameClient.getInstance().noTransitionRequestCallback = WLCPGameClient.WLCPGameClientCallback {
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).noTransitionRequestCallback = WLCPGameClient.WLCPGameClientCallback {
+            println("no trans")
+            runOnUiThread {
+                Toast.makeText(this, "Congratulations! You've completed the game!", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        WLCPGameClient.getInstance().singleButtonPressRequestCallback = WLCPGameClient.WLCPGameClientCallback {
-            // TODO IMPLEMENT - EXAMPLE BELOW
-            //changeTransition(fm, "", "button_press");
+        WLCPGameClient.getInstance(env).singleButtonPressRequestCallback = WLCPGameClient.WLCPGameClientCallback {
+            runOnUiThread {
+                changeTransition(fm, "button_press")
+            }
         }
 
-        WLCPGameClient.getInstance().sequenceButtonPressRequestCallback = WLCPGameClient.WLCPGameClientCallback {
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).sequenceButtonPressRequestCallback = WLCPGameClient.WLCPGameClientCallback {
+            runOnUiThread {
+                changeTransition(fm, "sequence_button_press")
+            }
         }
 
-        WLCPGameClient.getInstance().keyboardInputRequestCallback = WLCPGameClient.WLCPGameClientCallback {
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).keyboardInputRequestCallback = WLCPGameClient.WLCPGameClientCallback {
+            print("Keyboard input")
+            runOnUiThread {
+                changeTransition(fm, "keyboard_input")
+            }
         }
 
-        WLCPGameClient.getInstance().randomInputRequestCallback = WLCPGameClient.WLCPGameClientCallback {
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).randomInputRequestCallback = WLCPGameClient.WLCPGameClientCallback {
+            runOnUiThread {
+                changeTransition(fm, "random_input")
+            }
         }
 
-        WLCPGameClient.getInstance().timerDurationRequestCallback = WLCPGameClient.WLCPGameClientCallbackTimerDelay { duration: Int ->
-            // TODO IMPLEMENT
+        WLCPGameClient.getInstance(env).timerDurationRequestCallback = WLCPGameClient.WLCPGameClientCallbackTimerDelay { duration: Int ->
+            runOnUiThread {
+                Toast.makeText(this, "Timer set for $duration seconds.", Toast.LENGTH_SHORT).show()
+                changeTransition(fm, "timer_duration")
+            }
         }
 
         //Call connect (open socket connection). On success connectionOpenedCallback will be called
-        WLCPGameClient.getInstance().connect(gameInfo.gamePin, gameInfo.name, Integer.valueOf(gameInfo.team!!.replace("Team ", "", false)) - 1, Integer.valueOf(gameInfo.player!!.replace("Player ", "", false)) - 1);
+        WLCPGameClient.getInstance(env).connect(gameInfo.gamePin, gameInfo.name, Integer.valueOf(gameInfo.team!!.replace("Team ", "", false)) - 1, Integer.valueOf(gameInfo.player!!.replace("Player ", "", false)) - 1);
 
     }
 
@@ -240,6 +301,7 @@ class GameActivity : AppCompatActivity() {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     fun callTransition(transId: String, isStart: Boolean, prevAnswer: String, prevTransType: String) {
+        println(transId)
         currTransId = transId
         var stateId: Int = stateWithInputTransition(transId)
 
@@ -351,6 +413,8 @@ class GameActivity : AppCompatActivity() {
                 stateStr.substringAfter(", trans_outputs=").substringBefore("}")
             )
 
+            println("Mapping")
+
             states[stateId] = newState
         }
     }
@@ -382,6 +446,7 @@ class GameActivity : AppCompatActivity() {
      * @return The string of output transitions.
      */
     private fun getOutputTransition(idx: Int): String {
+        println("idx" + idx)
         val outputs: List<String> = states["state_$idx"]!!.trans_outputs
 
         if(outputs.size == 1) {
@@ -464,99 +529,195 @@ class GameActivity : AppCompatActivity() {
      * @param [fm] The fragment manager.
      * @param [idx] The idx/id of the state.
      */
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    private fun changeState(fm: FragmentManager, idx: Int) {
+//        val ft: FragmentTransaction = fm.beginTransaction()
+//        val bundle = Bundle()
+//
+//        val type = states["state_$idx"]?.let { determineType(it) }
+//
+//        gameInfo.currState = "state_$idx"
+//        gameInfo.currStateStartTime = getTimeStamp()
+//
+//        /** Text state fragment. */
+//        if(type == "text") {
+//            val text = states["state_$idx"]?.text.toString()
+//
+//            val fragInfo = StateTextFragment()
+//            bundle.putString("text", text)
+//            fragInfo.arguments = bundle
+//            ft.replace(R.id.frameLayout1, fragInfo)
+//            ft.commit()
+//        }
+//        /** Photo state fragment. */
+//        else if(type == "photo") {
+//            val text = String()
+//            val image = states["state_$idx"]?.photo.toString()
+//
+//            val fragInfo = StatePhotoFragment()
+//            bundle.putString("text", text)
+//            bundle.putString("image", image)
+//            fragInfo.arguments = bundle
+//            ft.replace(R.id.frameLayout1, fragInfo)
+//            ft.commit()
+//        }
+//        /** Sound state fragment. */
+//        else if(type == "sound") {
+//            val text = String()
+//            val sound = states["state_$idx"]?.sound.toString()
+//
+//            val fragInfo = StateSoundFragment()
+//            bundle.putString("text", text)
+//            bundle.putString("sound", sound)
+//            fragInfo.arguments = bundle
+//            ft.replace(R.id.frameLayout1, fragInfo)
+//            ft.commit()
+//        }
+//        /** Text & Photo state fragment. */
+//        else if(type == "text&photo") {
+//            val text = states["state_$idx"]?.text.toString()
+//            val image = states["state_$idx"]?.photo.toString()
+//
+//            val fragInfo = StatePhotoFragment()
+//            bundle.putString("text", text)
+//            bundle.putString("image", image)
+//            fragInfo.arguments = bundle
+//            ft.replace(R.id.frameLayout1, fragInfo)
+//            ft.commit()
+//        }
+//        /** Text & Sound state fragment. */
+//        else if(type == "text&sound") {
+//            val text = states["state_$idx"]?.text.toString()
+//            val sound = states["state_$idx"]?.sound.toString()
+//
+//            val fragInfo = StateSoundFragment()
+//            bundle.putString("text", text)
+//            bundle.putString("sound", sound)
+//            fragInfo.arguments = bundle
+//            ft.replace(R.id.frameLayout1, fragInfo)
+//            ft.commit()
+//        }
+//        /** Text & Video state fragment. */
+//        else if(type == "text&video") {
+//            val text = states["state_$idx"]?.text.toString()
+//            val video = states["state_$idx"]?.video.toString()
+//
+//            val fragInfo = StateVideoFragment()
+//            bundle.putString("text", text)
+//            bundle.putString("video", video)
+//            fragInfo.arguments = bundle
+//            ft.replace(R.id.frameLayout1, fragInfo)
+//            ft.commit()
+//        }
+//        /** Photo & Sound state fragment. */
+//        else if(type == "photo&sound") {
+//            val photo = states["state_$idx"]?.photo.toString()
+//            val sound = states["state_$idx"]?.sound.toString()
+//
+//            val fragInfo = StatePhotoAndSoundFragment()
+//            bundle.putString("photo", photo)
+//            bundle.putString("sound", sound)
+//            fragInfo.arguments = bundle
+//            ft.replace(R.id.frameLayout1, fragInfo)
+//            ft.commit()
+//        }
+//    }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun changeState(fm: FragmentManager, idx: Int) {
+    private fun changeState(
+        fm: FragmentManager,
+        idx: Int,
+        type: String? = null,
+        displayText: String? = null,
+        displayPhotoMessage: String? = null,
+        displaySoundMessage: String? = null,
+        displayVideoMessage: String? = null
+    ) {
         val ft: FragmentTransaction = fm.beginTransaction()
         val bundle = Bundle()
 
-        val type = states["state_$idx"]?.let { determineType(it) }
+        val actualType = type ?: states["state_$idx"]?.let { determineType(it) }
+        val state = states["state_$idx"]
 
         gameInfo.currState = "state_$idx"
         gameInfo.currStateStartTime = getTimeStamp()
 
-        /** Text state fragment. */
-        if(type == "text") {
-            val text = states["state_$idx"]?.text.toString()
 
-            val fragInfo = StateTextFragment()
-            bundle.putString("text", text)
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout1, fragInfo)
-            ft.commit()
-        }
-        /** Photo state fragment. */
-        else if(type == "photo") {
-            val text = String()
-            val image = states["state_$idx"]?.photo.toString()
-
-            val fragInfo = StatePhotoFragment()
-            bundle.putString("text", text)
-            bundle.putString("image", image)
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout1, fragInfo)
-            ft.commit()
-        }
-        /** Sound state fragment. */
-        else if(type == "sound") {
-            val text = String()
-            val sound = states["state_$idx"]?.sound.toString()
-
-            val fragInfo = StateSoundFragment()
-            bundle.putString("text", text)
-            bundle.putString("sound", sound)
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout1, fragInfo)
-            ft.commit()
-        }
-        /** Text & Photo state fragment. */
-        else if(type == "text&photo") {
-            val text = states["state_$idx"]?.text.toString()
-            val image = states["state_$idx"]?.photo.toString()
-
-            val fragInfo = StatePhotoFragment()
-            bundle.putString("text", text)
-            bundle.putString("image", image)
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout1, fragInfo)
-            ft.commit()
-        }
-        /** Text & Sound state fragment. */
-        else if(type == "text&sound") {
-            val text = states["state_$idx"]?.text.toString()
-            val sound = states["state_$idx"]?.sound.toString()
-
-            val fragInfo = StateSoundFragment()
-            bundle.putString("text", text)
-            bundle.putString("sound", sound)
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout1, fragInfo)
-            ft.commit()
-        }
-        /** Text & Video state fragment. */
-        else if(type == "text&video") {
-            val text = states["state_$idx"]?.text.toString()
-            val video = states["state_$idx"]?.video.toString()
-
-            val fragInfo = StateVideoFragment()
-            bundle.putString("text", text)
-            bundle.putString("video", video)
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout1, fragInfo)
-            ft.commit()
-        }
-        /** Photo & Sound state fragment. */
-        else if(type == "photo&sound") {
-            val photo = states["state_$idx"]?.photo.toString()
-            val sound = states["state_$idx"]?.sound.toString()
-
-            val fragInfo = StatePhotoAndSoundFragment()
-            bundle.putString("photo", photo)
-            bundle.putString("sound", sound)
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout1, fragInfo)
-            ft.commit()
+        when (actualType) {
+            "text" -> {
+                println("text")
+                val text = displayText ?: state?.text.toString()
+                val fragInfo = StateTextFragment()
+                bundle.putString("text", text)
+                fragInfo.arguments = bundle
+                ft.replace(R.id.frameLayout1, fragInfo)
+                ft.commit()
+            }
+            "photo" -> {
+                println("hi")
+                val image = displayPhotoMessage ?: state?.photo.toString()
+                val fragInfo = StatePhotoFragment()
+                bundle.putString("image", image)
+                fragInfo.arguments = bundle
+                ft.replace(R.id.frameLayout1, fragInfo)
+                ft.commit()
+            }
+            "sound" -> {
+                println("hi")
+                val sound = displaySoundMessage ?: state?.sound.toString()
+                val fragInfo = StateSoundFragment()
+                bundle.putString("sound", sound)
+                fragInfo.arguments = bundle
+                ft.replace(R.id.frameLayout1, fragInfo)
+                ft.commit()
+            }
+            "text&photo" -> {
+                println("tp")
+                val text = displayText ?: state?.text.toString()
+                val image = displayPhotoMessage ?: state?.photo.toString()
+                val fragInfo = StatePhotoFragment()
+                bundle.putString("text", text)
+                bundle.putString("image", image)
+                fragInfo.arguments = bundle
+                ft.replace(R.id.frameLayout1, fragInfo)
+                ft.commit()
+            }
+            "text&sound" -> {
+                println("ts")
+                val text = displayText ?: state?.text.toString()
+                val sound = displaySoundMessage ?: state?.sound.toString()
+                val fragInfo = StateSoundFragment()
+                bundle.putString("text", text)
+                bundle.putString("sound", sound)
+                fragInfo.arguments = bundle
+                ft.replace(R.id.frameLayout1, fragInfo)
+                ft.commit()
+            }
+            "text&video" -> {
+                println("tv")
+                val text = displayText ?: state?.text.toString()
+                val video = displayVideoMessage ?: state?.video.toString()
+                val fragInfo = StateVideoFragment()
+                bundle.putString("text", text)
+                bundle.putString("video", video)
+                fragInfo.arguments = bundle
+                ft.replace(R.id.frameLayout1, fragInfo)
+                ft.commit()
+            }
+            "photo&sound" -> {
+                println("ps")
+                val photo = displayPhotoMessage ?: state?.photo.toString()
+                val sound = displaySoundMessage ?: state?.sound.toString()
+                val fragInfo = StatePhotoAndSoundFragment()
+                bundle.putString("photo", photo)
+                bundle.putString("sound", sound)
+                fragInfo.arguments = bundle
+                ft.replace(R.id.frameLayout1, fragInfo)
+                ft.commit()
+            }
         }
     }
+
 
     /**
      * The [determineType] utility function determines the type of state fragment to be called by
@@ -689,45 +850,41 @@ class GameActivity : AppCompatActivity() {
         bundle.putString("content", content)
         bundle.putString("frameLayout", "frameLayout2")
 
-        /** Button Press transition fragment. */
-        if(type.contains("button_press")) {
-            val fragInfo = TransitionBtnPressFragment()
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout2, fragInfo)
+        if (transition == "button_press") {
+            print("Button Press transition")
+            val fragment = TransitionBtnPressFragment.newInstance()
+            fragment.setWLCPGameClient(WLCPGameClient.getInstance(env))
+            ft.replace(R.id.frameLayout2, fragment)
             ft.commit()
-        }
-        /** Color Sequence transition fragment. */
-        else if(type.contains("color_sequence")) {
-            val fragInfo = TransitionSequenceFragment()
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout2, fragInfo)
+        } else if (transition == "color_sequence") {
+            print("Color Sequence transition")
+            val fragment = TransitionSequenceFragment.newInstance()
+            fragment.setWLCPGameClient(WLCPGameClient.getInstance(env))
+            ft.replace(R.id.frameLayout2, fragment)
             ft.commit()
-        }
-        /** Text Entry transition fragment. */
-        else if(type.contains("text_entry")) {
-            val fragInfo = TransitionTextEntryFragment()
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout2, fragInfo)
+        } else if (transition == "keyboard_input") {
+            print("Text Entry transition")
+            val fragment = TransitionTextEntryFragment.newInstance()
+            fragment.setWLCPGameClient(WLCPGameClient.getInstance(env))
+            ft.replace(R.id.frameLayout2, fragment)
             ft.commit()
-        }
-        /** Random transition fragment. */
-        else if(type.contains("random")) {
-            val fragInfo = TransitionRandomFragment()
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout2, fragInfo)
+        } else if (transition == "random") {
+            print("Random transition")
+            val fragment = TransitionRandomFragment.newInstance()
+            fragment.setWLCPGameClient(WLCPGameClient.getInstance(env))
+            ft.replace(R.id.frameLayout2, fragment)
             ft.commit()
-        }
-        /** Timer transition fragment. */
-        else if(type.contains("timer")) {
-            val fragInfo = TransitionTimerFragment()
-            fragInfo.arguments = bundle
-            ft.replace(R.id.frameLayout2, fragInfo)
+        } else if (transition == "timer") {
+            print("Timer transition")
+            val fragment = TransitionTimerFragment.newInstance()
+            fragment.setWLCPGameClient(WLCPGameClient.getInstance(env))
+            ft.replace(R.id.frameLayout2, fragment)
             ft.commit()
-        }
-        /** End Game transition fragment. */
-        else {
-            val fragInfo = TransitionEndGameFragment()
-            ft.replace(R.id.frameLayout2, fragInfo)
+        } else {
+            print("End Game transition")
+            val fragment = TransitionEndGameFragment.newInstance()
+            fragment.setWLCPGameClient(WLCPGameClient.getInstance(env))
+            ft.replace(R.id.frameLayout2, fragment)
             ft.commit()
         }
     }

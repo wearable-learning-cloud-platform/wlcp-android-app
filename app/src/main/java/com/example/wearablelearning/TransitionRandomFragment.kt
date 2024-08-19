@@ -8,8 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.annotation.RequiresApi
+import org.wlcp.wlcpgameserverapi.client.WLCPGameClient
 
 class TransitionRandomFragment : Fragment() {
+    private lateinit var wlcpGameClient: WLCPGameClient
+
+    companion object {
+        fun newInstance(): TransitionRandomFragment {
+            return TransitionRandomFragment()
+        }
+    }
+
+    fun setWLCPGameClient(wlcpGameClient: WLCPGameClient) {
+        this.wlcpGameClient = wlcpGameClient
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,29 +39,9 @@ class TransitionRandomFragment : Fragment() {
 
         val continueButton = view.findViewById<Button>(R.id.continue_btn)
 
-        /**
-         * Retrieve the [GameInfo] object from the intent that started [GameActivity].
-         *
-         * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
-         * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
-         */
-        val gameInfo = (activity as GameActivity).gameInfo
-
-        /**
-         * If only button in fragment is selected, then callTransition in [GameActivity] is called
-         * on a random transition selected from a list of possible transitions listed in the
-         * json.
-         */
         continueButton.setOnClickListener {
-            gameInfo.interactionType = "continueBtnPress"
-
-            val transitions = id?.split(";;")
-            val transitionsCnt = transitions?.size
-            val randomIdx = (0 until transitionsCnt!!).random()
-
-            id = transitions[randomIdx]
-
-            id?.let { transId -> (activity as GameActivity).callTransition(transId, false, "", "random") }
+            // Send the random input to the backend API
+            wlcpGameClient.sendRandomInput()
         }
     }
 }

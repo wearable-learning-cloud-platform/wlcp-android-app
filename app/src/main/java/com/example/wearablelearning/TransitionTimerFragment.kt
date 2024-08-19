@@ -10,8 +10,23 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import com.google.android.material.textview.MaterialTextView
+import org.wlcp.wlcpgameserverapi.client.WLCPGameClient
+
 
 class TransitionTimerFragment : Fragment() {
+
+    private lateinit var wlcpGameClient: WLCPGameClient
+
+    companion object {
+        fun newInstance(): TransitionTimerFragment {
+            return TransitionTimerFragment()
+        }
+    }
+
+    fun setWLCPGameClient(wlcpGameClient: WLCPGameClient) {
+        this.wlcpGameClient = wlcpGameClient
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,9 +76,8 @@ class TransitionTimerFragment : Fragment() {
 
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onFinish() {
-                val gameInfo = (activity as? GameActivity)?.gameInfo
-                gameInfo?.interactionType = seconds.plus("s timer expired")
-                id?.let { transId -> (activity as? GameActivity)?.callTransition(transId, false, seconds.plus("s timer"), seconds.plus("s timer")) }
+                // Send the timer duration input to the backend API
+                wlcpGameClient.sendRandomInput()
             }
         }
         timer.start()

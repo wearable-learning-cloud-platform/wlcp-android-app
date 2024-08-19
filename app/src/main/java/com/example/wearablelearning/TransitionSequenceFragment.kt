@@ -14,11 +14,21 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.roundToInt
+import org.wlcp.wlcpgameserverapi.client.WLCPGameClient
 
 class TransitionSequenceFragment : Fragment() {
     companion object {
         private var colorBtnClicks = 0
         private var colorSequence: String = ""
+        fun newInstance(): TransitionBtnPressFragment {
+            return TransitionBtnPressFragment()
+        }
+    }
+
+    private lateinit var wlcpGameClient: WLCPGameClient
+
+    fun setWLCPGameClient(wlcpGameClient: WLCPGameClient) {
+        this.wlcpGameClient = wlcpGameClient
     }
 
     override fun onCreateView(
@@ -32,11 +42,11 @@ class TransitionSequenceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /** The _id_ is the current transition's id. */
-        val id = this.requireArguments().getString("id")
-
-        /** The _solution_ is the current transition's correct answer (i.e. expected user input). */
-        val solution = this.requireArguments().getString("content")
+//        /** The _id_ is the current transition's id. */
+//        val id = this.requireArguments().getString("id")
+//
+//        /** The _solution_ is the current transition's correct answer (i.e. expected user input). */
+//        val solution = this.requireArguments().getString("content")
 
         /** The _submitButton_ checks the current answer to _solution_. */
         val submitButton = view.findViewById<Button>(R.id.transition_submit_btn)
@@ -101,20 +111,9 @@ class TransitionSequenceFragment : Fragment() {
              * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
              * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
              */
-            val gameInfo = (activity as GameActivity).gameInfo
-
-            gameInfo.interactionType = "submitButton"
-
-            if(colorSequence == solution) {
-                colorBtnClicks = 0
-                colorSequence = ""
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, solution, "color_sequence") }
-            }
-            else {
-                gameInfo.currTransAnswer = colorSequence
-                context?.let { context -> LogUtils.logGamePlay("player", (activity as GameActivity).gameInfo, false, context) }
-                context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
-            }
+            wlcpGameClient.sendSequenceButtonPress(colorSequence)
+            colorBtnClicks = 0
+            colorSequence = ""
         }
 
         /**

@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
         /** START MODIFICATIONS **/
 
-        val validInputs: List<String> = WLCPGameClient.getInstance(WLCPGameClient.Environment.DEV).fetchGameInstanceList();
+        val validInputs: List<String> = WLCPGameClient.getInstance(WLCPGameClient.Environment.PROD).fetchGameInstanceList();
 
         /** END MODIFICATIONS **/
 

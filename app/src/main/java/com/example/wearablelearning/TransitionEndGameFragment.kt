@@ -9,8 +9,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.annotation.RequiresApi
+import org.wlcp.wlcpgameserverapi.client.WLCPGameClient
+
 
 class TransitionEndGameFragment : Fragment() {
+    private lateinit var wlcpGameClient: WLCPGameClient
+
+    companion object {
+        fun newInstance(): TransitionEndGameFragment {
+            return TransitionEndGameFragment()
+        }
+    }
+
+    fun setWLCPGameClient(wlcpGameClient: WLCPGameClient) {
+        this.wlcpGameClient = wlcpGameClient
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,10 +55,17 @@ class TransitionEndGameFragment : Fragment() {
             if (gameInfo != null) {
                 gameInfo.interactionType = "endOfGameButton"
 
-                activity?.let { activity -> LogUtils.logGamePlay("player", gameInfo, true, activity.applicationContext) }
-                activity?.let { activity -> LogUtils.logGamePlay("gamePlay", gameInfo, true, activity.applicationContext) }
+                // Log the end of the game
+                activity?.let { activity ->
+                    LogUtils.logGamePlay("player", gameInfo, true, activity.applicationContext)
+                    LogUtils.logGamePlay("gamePlay", gameInfo, true, activity.applicationContext)
+                }
+
+                // Send end game request via WLCPGameClient
+                wlcpGameClient.disconnectFromGameInstance()
             }
 
+            // Navigate to LoginActivity
             val intent = Intent(activity, LoginActivity::class.java)
             intent.putExtra("gameInfo", gameInfo)
             startActivity(intent)

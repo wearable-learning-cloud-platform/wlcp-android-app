@@ -11,9 +11,22 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent.setEventListener
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
-
+import org.wlcp.wlcpgameserverapi.client.WLCPGameClient
 
 class TransitionTextEntryFragment : Fragment() {
+
+    private lateinit var wlcpGameClient: WLCPGameClient
+
+    companion object {
+        fun newInstance(): TransitionTextEntryFragment {
+            return TransitionTextEntryFragment()
+        }
+    }
+
+    fun setWLCPGameClient(wlcpGameClient: WLCPGameClient) {
+        this.wlcpGameClient = wlcpGameClient
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,61 +38,64 @@ class TransitionTextEntryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /** The _id_ is the current transition's id. */
-        val id = this.requireArguments().getString("id")
-
-        /** The _content_ is the current transition's correct answer (i.e. expected user input). */
-        val content = this.requireArguments().getString("content")
-
         val textEntryEditText = view.findViewById<EditText>(R.id.text_entry_edittext)
         val errorTextView = view.findViewById<TextView>(R.id.error_textview)
 
-        /**
-         * The _submitButton_ checks the user's input to the correct solution _content_.
-         */
+        /** The _submitButton_ sends the user's input to the backend via WLCPGameClient. */
         val submitButton = view.findViewById<Button>(R.id.transition_submit_btn)
 
         submitButton.setOnClickListener {
             val input = textEntryEditText.text.toString()
 
-            /**
-             * Retrieve the [GameInfo] object from the intent that started [GameActivity].
-             *
-             * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
-             * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
-             */
-            val gameInfo = (activity as GameActivity).gameInfo
-            gameInfo.interactionType = "submitButton"
+            // Send the input to the backend API
+            wlcpGameClient.sendKeyboardInput(input)
 
-            //one possible transition and correct input
-            if(!id.toString().contains(";;") && checkInput(input.lowercase(), content.toString())) {
-                gameInfo.prevTransAnswer = "text_entry"
-                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, input, "text_entry") }
-            }
-            //one possible transition and incorrect input
-            else if(!id.toString().contains(";;")) {
-                errorTextView.visibility = TextView.VISIBLE
-
-                gameInfo.currTransAnswer = input.lowercase()
-                context?.let { context -> LogUtils.logGamePlay("player", (activity as GameActivity).gameInfo, false, context) }
-                context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
-            }
-            //multiple possible transitions
-            else {
-                val matchedId = checkInputOnMultipleTransitions(input.lowercase(), content.toString(), id.toString())
-
-                if(!StringUtils.isEmptyOrBlank(matchedId)) {
-                    gameInfo.prevTransAnswer = "text_entry"
-                    matchedId.let { it1 -> (activity as GameActivity).callTransition(it1, false, input, "text_entry") }
-                }
-                else {
-                    val gameInfo = (activity as GameActivity).gameInfo
-                    gameInfo.currTransAnswer = input.lowercase()
-                    context?.let { context -> LogUtils.logGamePlay("player", (activity as GameActivity).gameInfo, false, context) }
-                    context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
-                }
-            }
+            // Clear the input field after sending
+            textEntryEditText.text.clear()
+            errorTextView.visibility = TextView.INVISIBLE
         }
+
+//        submitButton.setOnClickListener {
+//            val input = textEntryEditText.text.toString()
+//
+//            /**
+//             * Retrieve the [GameInfo] object from the intent that started [GameActivity].
+//             *
+//             * The _gameInfo_ is a [GameInfo] object and is used to track user input about the game
+//             * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
+//             */
+//            val gameInfo = (activity as GameActivity).gameInfo
+//            gameInfo.interactionType = "submitButton"
+//
+//            //one possible transition and correct input
+//            if(!id.toString().contains(";;") && checkInput(input.lowercase(), content.toString())) {
+//                gameInfo.prevTransAnswer = "text_entry"
+//                id?.let { it1 -> (activity as GameActivity).callTransition(it1, false, input, "text_entry") }
+//            }
+//            //one possible transition and incorrect input
+//            else if(!id.toString().contains(";;")) {
+//                errorTextView.visibility = TextView.VISIBLE
+//
+//                gameInfo.currTransAnswer = input.lowercase()
+//                context?.let { context -> LogUtils.logGamePlay("player", (activity as GameActivity).gameInfo, false, context) }
+//                context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
+//            }
+//            //multiple possible transitions
+//            else {
+//                val matchedId = checkInputOnMultipleTransitions(input.lowercase(), content.toString(), id.toString())
+//
+//                if(!StringUtils.isEmptyOrBlank(matchedId)) {
+//                    gameInfo.prevTransAnswer = "text_entry"
+//                    matchedId.let { it1 -> (activity as GameActivity).callTransition(it1, false, input, "text_entry") }
+//                }
+//                else {
+//                    val gameInfo = (activity as GameActivity).gameInfo
+//                    gameInfo.currTransAnswer = input.lowercase()
+//                    context?.let { context -> LogUtils.logGamePlay("player", (activity as GameActivity).gameInfo, false, context) }
+//                    context?.let { context -> LogUtils.logGamePlay("gamePlay", (activity as GameActivity).gameInfo, false, context) }
+//                }
+//            }
+//        }
 
         /**
          * The _clearButton_ deletes the user's input (after a confirmation dialog is approved).
@@ -137,45 +153,45 @@ class TransitionTextEntryFragment : Fragment() {
             })
     }
 
-    /**
-     * The [checkInput] function compares the user's answer to the correct answer on submit.
-     * @param [input] The user's input.
-     * @param [content] The solution.
-     */
-    private fun checkInput(input: String, content:String): Boolean {
-        val solutionStr = content.lowercase()
-        val solutionsList = solutionStr.split(";") ?: listOf("")
+//    /**
+//     * The [checkInput] function compares the user's answer to the correct answer on submit.
+//     * @param [input] The user's input.
+//     * @param [content] The solution.
+//     */
+//    private fun checkInput(input: String, content:String): Boolean {
+//        val solutionStr = content.lowercase()
+//        val solutionsList = solutionStr.split(";") ?: listOf("")
+//
+//        if(content == "ALL_OTHER_INPUTS") {
+//            return true
+//        }
+//
+//        return input in solutionsList
+//    }
+//
+//    /**
+//     * The [checkInputOnMultipleTransitions] function calls [checkInput] for each possible output
+//     * transition.
+//     * @param [input] The user's input.
+//     * @param [content] The solution.
+//     * @param [id] The id of the transition.
+//     */
+//    private fun checkInputOnMultipleTransitions(input: String, content: String, id: String): String {
+//        val ids = id.split(";;")
+//        val contents = content.split(";;")
+//
+//        if(ids.size == contents.size) {
+//            ids.zip(contents).forEach {(i, c) ->
+//                if(checkInput(input, c)) {
+//                    return i
+//                }
+//            }
+//        }
+//
+//        return ""
+//    }
 
-        if(content == "ALL_OTHER_INPUTS") {
-            return true
-        }
-
-        return input in solutionsList
-    }
-
-    /**
-     * The [checkInputOnMultipleTransitions] function calls [checkInput] for each possible output
-     * transition.
-     * @param [input] The user's input.
-     * @param [content] The solution.
-     * @param [id] The id of the transition.
-     */
-    private fun checkInputOnMultipleTransitions(input: String, content: String, id: String): String {
-        val ids = id.split(";;")
-        val contents = content.split(";;")
-
-        if(ids.size == contents.size) {
-            ids.zip(contents).forEach {(i, c) ->
-                if(checkInput(input, c)) {
-                    return i
-                }
-            }
-        }
-
-        return ""
-    }
-
-//    fun spToPx(sp: Float): Float {
+//    fun spToPx(sp: Float): Float {4
 //        return sp * resources.displayMetrics.scaledDensity
 //    }
 }

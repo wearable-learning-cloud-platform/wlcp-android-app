@@ -37,15 +37,14 @@
         android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="@string/game_pin_hint"
         android:importantForAutofill="no"
         android:inputType="number"
-        android:minHeight="48dp" >
-    </EditText>
+        android:minHeight="48dp"></EditText>
 
     <!--
     Note - Francisco:
