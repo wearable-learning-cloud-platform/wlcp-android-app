@@ -103,15 +103,17 @@ class GameActivity : AppCompatActivity() {
         WLCPGameClient.getInstance(env).connectionOpenedCallback = WLCPGameClient.WLCPGameClientCallback {
             //Socket has been opened, now connect to the game instance
             WLCPGameClient.getInstance(env).connectToGameInstance()
-            println("Here")
+            println("connection Opened callback")
         }
 
         WLCPGameClient.getInstance(env).connectionClosedCallback = WLCPGameClient.WLCPGameClientCallback {
+            print("connection closed callback triggered");
             WLCPGameClient.getInstance(env).disconnectFromGameInstance()
         }
 
         WLCPGameClient.getInstance(env).connectionErrorCallback = WLCPGameClient.WLCPGameClientCallback {
             // TODO IMPLEMENT
+            print("connection error callback triggered");
             runOnUiThread {
                 Toast.makeText(this, "Connection error occurred. Reloading page.", Toast.LENGTH_LONG).show()
             }
@@ -120,6 +122,7 @@ class GameActivity : AppCompatActivity() {
 
         WLCPGameClient.getInstance(env).connectionFailedServerHeartbeatCallback = WLCPGameClient.WLCPGameClientCallback {
             // TODO IMPLEMENT
+            print("connection failed server heartbeat callback triggered");
             runOnUiThread {
                 Toast.makeText(this, "Connection to server lost. Reloading page.", Toast.LENGTH_LONG).show()
             }
@@ -856,7 +859,7 @@ class GameActivity : AppCompatActivity() {
             fragment.setWLCPGameClient(WLCPGameClient.getInstance(env))
             ft.replace(R.id.frameLayout2, fragment)
             ft.commit()
-        } else if (transition == "color_sequence") {
+        } else if (transition == "sequence_button_press") {
             print("Color Sequence transition")
             val fragment = TransitionSequenceFragment.newInstance()
             fragment.setWLCPGameClient(WLCPGameClient.getInstance(env))

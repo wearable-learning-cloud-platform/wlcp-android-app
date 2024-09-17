@@ -249,6 +249,7 @@ public class WLCPGameClient {
         m.player = player;
         this.player = m;
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, wsBaseURL + ":" + port + "/wlcp-gameserver/wlcpGameServer-ws/0");
+        stompClient.withClientHeartbeat(10000).withServerHeartbeat(10000);
         stompClient.lifecycle().subscribe(lifecycleEvent -> {
             switch (lifecycleEvent.getType()) {
                 case OPENED:
@@ -262,9 +263,11 @@ public class WLCPGameClient {
                 case ERROR:
                     Log.i("CLOSED", "CLOSED");
                     connectionErrorCallback.callback();
+                    break;
                 case FAILED_SERVER_HEARTBEAT:
                     Log.i("CLOSED", "CLOSED");
                     connectionFailedServerHeartbeatCallback.callback();
+                    break;
             }
         }).toString();
         stompClient.connect();
