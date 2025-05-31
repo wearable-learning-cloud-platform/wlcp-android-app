@@ -8,6 +8,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.wlcp.wlcpgameserverapi.client.WLCPGameClient
 import org.wlcp.wlcpgameserverapi.dto.PlayerAvailableMessage
 import java.util.*
+import android.view.View
 
 /**
  * The [ChooseTeamActivity] class is launched from [LoginActivity] and is used to request the
@@ -38,8 +39,6 @@ class ChooseTeamActivity : AppCompatActivity() {
 
         val teamArr = getDropdownList("team")
         val playerArr = getDropdownList("player")
-
-        **/
 
         /** START MODIFICATIONS **/
 
@@ -82,6 +81,50 @@ class ChooseTeamActivity : AppCompatActivity() {
                 playerArr.first { elem -> elem == gameInfo.player }
             ))
         }
+        **/
+
+        /** START MODIFICATIONS **/
+
+        var players: List<PlayerAvailableMessage> = WLCPGameClient.getInstance().fetchPlayersAvailableFromGamePin(gameInfo!!.gamePin.toString(), gameInfo!!.name.toString());
+
+        val teamSet = players.map { "Team ${it.team + 1}" }.toSet().toList()
+        val playersByTeam = players.groupBy { "Team ${it.team + 1}" }
+
+//        players.forEach {
+//            println("Team " + it.team + " Player" + it.player)
+//        }
+
+        /** Create Team dropdown. */
+        val spinnerTeam: Spinner = findViewById(R.id.team_spinner)
+        val adapterTeam = ArrayAdapter(this, android.R.layout.simple_spinner_item, teamSet)
+        adapterTeam.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerTeam.adapter = adapterTeam
+
+        /** Create Player dropdown based on the current team selection*/
+        val spinnerPlayer: Spinner = findViewById(R.id.player_spinner)
+        spinnerTeam.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedTeam = teamSet[position]
+                val playersForTeam = playersByTeam[selectedTeam]?.map { "Player ${it.player + 1}" } ?: emptyList()
+                val adapterPlayer = ArrayAdapter(this@ChooseTeamActivity, android.R.layout.simple_spinner_item, playersForTeam)
+                adapterPlayer.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinnerPlayer.adapter = adapterPlayer
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // No action needed
+            }
+        }
+
+        /**
+         * Initialize Team dropdowns to first option in its list. The Player dropdown adjusts automatically based on team selection.
+         */
+
+        if (teamSet.isNotEmpty()) {
+            spinnerTeam.setSelection(0)
+        }
+
+        /** END MODIFICATIONS **/
 
         /**
          * The 'Join Team' button that triggers a switch from [ChooseTeamActivity] to [GameActivity].

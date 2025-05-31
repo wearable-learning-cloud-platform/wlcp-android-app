@@ -3,7 +3,7 @@
     <dimen name="login_frag_padding_sides">20dp</dimen>
     <dimen name="login_frag_padding_top">0dp</dimen>
 
-    <dimen name="text_size_large">36sp</dimen>
+    <dimen name="text_size_large">25sp</dimen>
     <dimen name="btn_text_size_large">28sp</dimen>
     <dimen name="padding_side">14sp</dimen>
     <dimen name="padding_side_large_btns">28sp</dimen>

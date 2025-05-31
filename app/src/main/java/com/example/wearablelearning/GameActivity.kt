@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Display
 import android.widget.Toast
+import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -56,6 +57,12 @@ class GameActivity : AppCompatActivity() {
          * (e.g., gamePin, name, etc. - See the [GameInfo] class for all relevant fields).
          */
         gameInfo = (intent.getSerializableExtra("gameInfo") as? GameInfo)!!
+
+        /** START MODIFICATIONS **/
+
+        val closeBtn: Button = findViewById(R.id.close_btn)
+
+        /** END MODIFICATIONS **/
 
         /** OLD CODE
 
@@ -254,6 +261,33 @@ class GameActivity : AppCompatActivity() {
         //Call connect (open socket connection). On success connectionOpenedCallback will be called
         WLCPGameClient.getInstance(env).connect(gameInfo.gamePin, gameInfo.name, Integer.valueOf(gameInfo.team!!.replace("Team ", "", false)) - 1, Integer.valueOf(gameInfo.player!!.replace("Player ", "", false)) - 1);
 
+        /** START MODIFICATIONS */
+        /** Set the _joinGameBtn_ listener to switch from [GameActivity] to [MainActivity]. */
+        closeBtn.setOnClickListener {
+            onBackPressed()
+//            val msg = resources.getString(R.string.confirm_back_text)
+//
+//            /** Display a dialog box to confirm the user's name/credential entries. */
+//            MaterialAlertDialogBuilder(this, R.style.Theme_WearableLearning_AlertDialog)
+//                .setMessage(msg)
+//                .setNegativeButton(resources.getString(R.string.no_text)) { dialog, _ ->
+//                    dialog.cancel()
+//                }
+//                .setPositiveButton(resources.getString(R.string.yes_text)) { _, _ ->
+//                    /**
+//                     * The intent to switch activities from [LoginActivity] to [ChooseTeamActivity].
+//                     */
+//                    val intent = Intent(this@GameActivity, MainActivity::class.java)
+//
+//                    /** Add the [GameInfo] objects into _intent_ */
+//                    intent.putExtra("gameInfo", gameInfo)
+//
+//                    /** Launch [ChooseTeamActivity] */
+//                    startActivity(intent)
+//                }
+//                .show()
+        }
+        /** END MODIFICATIONS */
     }
 
     /**
